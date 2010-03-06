@@ -1,8 +1,9 @@
-
 `ifndef REGFILE_V
 `define REGFILE_V
 
 module regfile (
+   input	     clk,
+   input             rst,
    input      [31:0] wen_rf,
    input      [31:0] write_data_rf,
    input      [ 4:0] rsaddr_rf,
@@ -17,26 +18,26 @@ module regfile (
    input      [ 6:0] rttag_rst
 );
 
-   reg  [31:0] reg_file [0:31];
-   wire [31:0] dispatch_rs_data, dispatch_rt_data;
+   reg  [31:0] reg_file   [0:31];
+   reg  [31:0] reg_file_r [0:31];
 
-   //7 bits comparators
-   assign sel_rs = (rttag_rst == cdb_token) ? 1'b1: 1'b0;
-   assign sel_rt = (rstag_rst == cdb_token) ? 1'b1: 1'b0;
-
-   // select rs: either from rsdata or cdb
-   assign dispatch_rs_data = sel_rs ? rsdata_dis: cdb_data;
-   // select rt
-   assign dispatch_rt_data = sel_rt ? rtdata_dis: cdb_data;
+   always @(*) begin: reg_file_proc
+      integer i; 
+      for (i=0; i<32; i=i+1) begin
+          reg_file[i] = (wen_rf == i) ? write_data_rf : reg_file_r[i];
+      end  
+   end
+ 
+   always @(posedge clk) begin : reg_file_reg
+	integer i;
+	for (i=0; i<32; i= i+1) begin
+	   reg_file_r[i] <= (rst) ? 'h0: reg_file[i];
+	end
+   end
 
    always @(*) begin
-      if (wen_rf) begin
-         //case (write_data_rf)
-            //32'h1: reg_file[0]= ;
-            //32'h2: reg_file[1]= ;
-            //32'h4: reg_file[2]= ;
-         //endcase
-      end
+      rsdata_rf <= reg_file_r[rsaddr_rf];
+      rtdata_rf <= reg_file_r[rtaddr_rf];
    end
 
 endmodule

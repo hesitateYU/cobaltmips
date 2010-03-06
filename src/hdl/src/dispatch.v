@@ -43,7 +43,7 @@ module dispatch(
       .rtdata_rf    ()
    );
 
-   rst rst (
+  reg_status_table reg_status_table (
       .wdata0_rst     (),
       .waddr0_rst     (),
       .wen0_rst       (),
@@ -58,7 +58,7 @@ module dispatch(
       .cdb_valid      (),
       .cdb_tag_rst    (),
       .wen_regfile_rst()
-   );
+   ); 
 
    tagfifo tagfifo (
       .tagout_tf (),

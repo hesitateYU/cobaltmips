@@ -1,8 +1,8 @@
 
-`ifndef REG_STATUS_TABLE_V
-`define REG_STATUS_TABLE_V
+`ifndef RST_V
+`define RST_V
 
-module reg_status_table(
+module rst(
    input      [ 6:0] wdata0_rst,
    input      [ 4:0] waddr0_rst,
    input             wen0_rst,

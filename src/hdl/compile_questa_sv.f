@@ -3,7 +3,6 @@
 src/ifq.v
 src/icache.v
 src/dispatch.v
-src/dispatch_unit.v
 src/dispatcher.v
 src/idecoder.v
 src/regfile.v

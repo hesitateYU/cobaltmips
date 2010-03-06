@@ -69,11 +69,11 @@ module dispatch(
    //   .cdb_tag_tf // esta repetida en el diagrama, typo del profe.
    );
 
-   branch_stall brst();
+   //branch_stall brst();
 
-   branch_jmpaddr_calc brjmpcalc();
+   //branch_jmpaddr_calc brjmpcalc();
 
-   jmp_exec jmp_exec();
+   //jmp_exec jmp_exec();
 
    dispatcher dispatcher(
       // common signals to all queues

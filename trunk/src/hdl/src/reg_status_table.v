@@ -2,7 +2,7 @@
 `ifndef RST_V
 `define RST_V
 
-module rst(
+module reg_status_table(
    input      [ 6:0] wdata0_rst,
    input      [ 4:0] waddr0_rst,
    input             wen0_rst,

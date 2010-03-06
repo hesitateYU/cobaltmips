@@ -1,0 +1,4300 @@
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;  Alberto del Rio/Oscar Monroy
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;  Diseno de microprocesadores
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Provee el control para leer los registros del microprocesador.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; via UART a la PC corriendo HyperTerminal o similar
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;**************************************************************************************
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Port definitions
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;**************************************************************************************
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-PORT_LEDS
+   OPERAND2-80
+    COMMENT-; 8 simple LEDs
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-LED0
+   OPERAND2-01
+    COMMENT-;     LED 0 - bit0
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-LED1
+   OPERAND2-02
+    COMMENT-;         1 - bit1
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-LED2
+   OPERAND2-04
+    COMMENT-;         2 - bit2
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-LED3
+   OPERAND2-08
+    COMMENT-;         3 - bit3
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-LED4
+   OPERAND2-10
+    COMMENT-;         4 - bit4
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-LED5
+   OPERAND2-20
+    COMMENT-;         5 - bit5
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-LED6
+   OPERAND2-40
+    COMMENT-;         6 - bit6
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-LED7
+   OPERAND2-80
+    COMMENT-;         7 - bit7
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-PORT_SIMPLE_IO
+   OPERAND2-7F
+    COMMENT-; 4 simple outputs
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-simple_IO9
+   OPERAND2-01
+    COMMENT-;  Header  IO9  - bit0
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-simple_IO10
+   OPERAND2-02
+    COMMENT-;          IO10 - bit1
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-simple_IO11
+   OPERAND2-04
+    COMMENT-;          IO11 - bit2
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-simple_IO12
+   OPERAND2-08
+    COMMENT-;          IO12 - bit3
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-PORT_CPU_CMD
+   OPERAND2-30
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-FLAG_CPU_HALT
+   OPERAND2-00
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-FLAG_CPU_GO
+   OPERAND2-01
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-PORT_CPU_REGADDR
+   OPERAND2-00
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-PORT_CPU_REGDATA0
+   OPERAND2-01
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-PORT_CPU_REGDATA1
+   OPERAND2-02
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-PORT_CPU_REGDATA2
+   OPERAND2-03
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-PORT_CPU_REGDATA3
+   OPERAND2-04
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-PORT_CPU_MEMADDR
+   OPERAND2-10
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-PORT_CPU_MEMDATA0
+   OPERAND2-11
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-PORT_CPU_MEMDATA1
+   OPERAND2-12
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-PORT_CPU_MEMDATA2
+   OPERAND2-13
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-PORT_CPU_MEMDATA3
+   OPERAND2-14
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-PORT_STATUS
+   OPERAND2-20
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-PORT_UART_TX
+   OPERAND2-21
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-PORT_UART_RX
+   OPERAND2-22
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-tx_half_full
+   OPERAND2-01
+    COMMENT-;  Transmitter     half full - bit0
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-tx_full
+   OPERAND2-02
+    COMMENT-;    FIFO               full - bit1
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-rx_data_present
+   OPERAND2-04
+    COMMENT-;  Receiver     data present - bit2
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-rx_half_full
+   OPERAND2-08
+    COMMENT-;    FIFO          half full - bit3
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-rx_full
+   OPERAND2-10
+    COMMENT-;                   full - bit4
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-cpu_halt
+   OPERAND2-20
+    COMMENT-;                  spare '0' - bit5
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-spare2
+   OPERAND2-40
+    COMMENT-;                  spare '0' - bit6
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-spare3
+   OPERAND2-80
+    COMMENT-;                  spare '0' - bit7
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;**************************************************************************************
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Special Register usage
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;**************************************************************************************
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-NAMEREG
+   OPERAND1-sF
+   OPERAND2-UART_data
+    COMMENT-;used to pass data to and from the UART
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;**************************************************************************************
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;Scratch Pad Memory Locations
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;**************************************************************************************
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-PWM_duty_counter
+   OPERAND2-00
+    COMMENT-;Duty Counter 0 to 255 within 1KHz period (1ms)
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-PWM_channel0
+   OPERAND2-01
+    COMMENT-;PWM settings for each channel
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-PWM_channel1
+   OPERAND2-02
+    COMMENT-; Channels 0 to 7 = LEDs 0 to 7
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-PWM_channel2
+   OPERAND2-03
+    COMMENT-; Channels 8 to 11 = IO9 to IO12
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-PWM_channel3
+   OPERAND2-04
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-PWM_channel4
+   OPERAND2-05
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-PWM_channel5
+   OPERAND2-06
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-PWM_channel6
+   OPERAND2-07
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-PWM_channel7
+   OPERAND2-08
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-PWM_channel8
+   OPERAND2-09
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-PWM_channel9
+   OPERAND2-0A
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-PWM_channel10
+   OPERAND2-0B
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-PWM_channel11
+   OPERAND2-0C
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-ISR_preserve_s0
+   OPERAND2-0D
+    COMMENT-;preserve register contents during Interrupt Service Routine
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-ISR_preserve_s1
+   OPERAND2-0E
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-ISR_preserve_s2
+   OPERAND2-0F
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;UART character strings will be stored in scratch pad memory ending in carriage return.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;A string can be up to 16 characters with the start location defined by this constant.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-string_start
+   OPERAND2-30
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;**************************************************************************************
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;Useful data constants
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;**************************************************************************************
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;ASCII table
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_a
+   OPERAND2-61
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_b
+   OPERAND2-62
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_c
+   OPERAND2-63
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_d
+   OPERAND2-64
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_e
+   OPERAND2-65
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_f
+   OPERAND2-66
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_g
+   OPERAND2-67
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_h
+   OPERAND2-68
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_i
+   OPERAND2-69
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_j
+   OPERAND2-6A
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_k
+   OPERAND2-6B
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_l
+   OPERAND2-6C
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_m
+   OPERAND2-6D
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_n
+   OPERAND2-6E
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_o
+   OPERAND2-6F
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_p
+   OPERAND2-70
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_q
+   OPERAND2-71
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_r
+   OPERAND2-72
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_s
+   OPERAND2-73
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_t
+   OPERAND2-74
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_u
+   OPERAND2-75
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_v
+   OPERAND2-76
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_w
+   OPERAND2-77
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_x
+   OPERAND2-78
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_y
+   OPERAND2-79
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_z
+   OPERAND2-7A
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_A
+   OPERAND2-41
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_B
+   OPERAND2-42
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_C
+   OPERAND2-43
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_D
+   OPERAND2-44
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_E
+   OPERAND2-45
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_F
+   OPERAND2-46
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_G
+   OPERAND2-47
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_H
+   OPERAND2-48
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_I
+   OPERAND2-49
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_J
+   OPERAND2-4A
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_K
+   OPERAND2-4B
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_L
+   OPERAND2-4C
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_M
+   OPERAND2-4D
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_N
+   OPERAND2-4E
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_O
+   OPERAND2-4F
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_P
+   OPERAND2-50
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_Q
+   OPERAND2-51
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_R
+   OPERAND2-52
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_S
+   OPERAND2-53
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_T
+   OPERAND2-54
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_U
+   OPERAND2-55
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_V
+   OPERAND2-56
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_W
+   OPERAND2-57
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_X
+   OPERAND2-58
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_Y
+   OPERAND2-59
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_Z
+   OPERAND2-5A
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_0
+   OPERAND2-30
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_1
+   OPERAND2-31
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_2
+   OPERAND2-32
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_3
+   OPERAND2-33
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_4
+   OPERAND2-34
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_5
+   OPERAND2-35
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_6
+   OPERAND2-36
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_7
+   OPERAND2-37
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_8
+   OPERAND2-38
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_9
+   OPERAND2-39
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_colon
+   OPERAND2-3A
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_stop
+   OPERAND2-2E
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_semi_colon
+   OPERAND2-3B
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_minus
+   OPERAND2-2D
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_divide
+   OPERAND2-2F
+    COMMENT-;'/'
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_plus
+   OPERAND2-2B
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_comma
+   OPERAND2-2C
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_less_than
+   OPERAND2-3C
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_greater_than
+   OPERAND2-3E
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_equals
+   OPERAND2-3D
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_space
+   OPERAND2-20
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_CR
+   OPERAND2-0D
+    COMMENT-;carriage return
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_question
+   OPERAND2-3F
+    COMMENT-;'?'
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_dollar
+   OPERAND2-24
+    COMMENT-
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_exclaim
+   OPERAND2-21
+    COMMENT-;'!'
+      LABEL-
+INSTRUCTION-CONSTANT
+   OPERAND1-character_BS
+   OPERAND2-08
+    COMMENT-;Back Space command character
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;**************************************************************************************
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;Initialise the system
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;**************************************************************************************
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Each PWM channels will be set to a different initial value just for the purposes
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; of demonstration. In practice, the initial duty values will depend on the requirements
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; of a given system but completely off (zero) is normally the safe option.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Note that it is difficult to distinguish difference between the intensity of LEDs driven
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; with duty factors more than 40% (40% = 102/256 or 66Hex). So using relatively small values
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; will better demonstrate the PWM control of intensity.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Initial values for LEDs give graduated intensity. Large change required for brighter LEDs.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-cold_start
+INSTRUCTION-LOAD
+   OPERAND1-s0
+   OPERAND2-05
+    COMMENT-;5/256 = 2%
+      LABEL-
+INSTRUCTION-STORE
+   OPERAND1-s0
+   OPERAND2-PWM_channel0
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-s0
+   OPERAND2-0D
+    COMMENT-;13/256 = 5%
+      LABEL-
+INSTRUCTION-STORE
+   OPERAND1-s0
+   OPERAND2-PWM_channel1
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-s0
+   OPERAND2-14
+    COMMENT-;26/256 = 8%
+      LABEL-
+INSTRUCTION-STORE
+   OPERAND1-s0
+   OPERAND2-PWM_channel2
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-s0
+   OPERAND2-26
+    COMMENT-;38/256 = 15%
+      LABEL-
+INSTRUCTION-STORE
+   OPERAND1-s0
+   OPERAND2-PWM_channel3
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-s0
+   OPERAND2-40
+    COMMENT-;64/256 = 25%
+      LABEL-
+INSTRUCTION-STORE
+   OPERAND1-s0
+   OPERAND2-PWM_channel4
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-s0
+   OPERAND2-58
+    COMMENT-;88/256 = 34%
+      LABEL-
+INSTRUCTION-STORE
+   OPERAND1-s0
+   OPERAND2-PWM_channel5
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-s0
+   OPERAND2-80
+    COMMENT-;128/256 = 50%
+      LABEL-
+INSTRUCTION-STORE
+   OPERAND1-s0
+   OPERAND2-PWM_channel6
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-s0
+   OPERAND2-FF
+    COMMENT-;255/256 = 99.6% Maximum possible
+      LABEL-
+INSTRUCTION-STORE
+   OPERAND1-s0
+   OPERAND2-PWM_channel7
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Initial values for simple outputs match documentation example
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-s0
+   OPERAND2-11
+    COMMENT-;17/256 = 7%
+      LABEL-
+INSTRUCTION-STORE
+   OPERAND1-s0
+   OPERAND2-PWM_channel8
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-s0
+   OPERAND2-BC
+    COMMENT-;188/256 = 73%
+      LABEL-
+INSTRUCTION-STORE
+   OPERAND1-s0
+   OPERAND2-PWM_channel9
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-s0
+   OPERAND2-EF
+    COMMENT-;239/256 = 93%
+      LABEL-
+INSTRUCTION-STORE
+   OPERAND1-s0
+   OPERAND2-PWM_channel10
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-s0
+   OPERAND2-22
+    COMMENT-;34/256 = 13%
+      LABEL-
+INSTRUCTION-STORE
+   OPERAND1-s0
+   OPERAND2-PWM_channel11
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-ENABLE
+   OPERAND1-INTERRUPT
+   OPERAND2-
+    COMMENT-;interrupts used to drive servo
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_welcome
+   OPERAND2-
+    COMMENT-;Write welcome message to UART
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;**************************************************************************************
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Main program
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;**************************************************************************************
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Provides a prompt to which an input with one of the following formats is expected...
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;     LDn hh
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;     IOk hh
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;     IOkk hh
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;  Where
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;     'LD' is a command to set one of the LED channels.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;     'IO' is a command to set one of the simple I/O outputs on J4.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;     'n' is an LED number in the range 0 to 7.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;     'k' or 'kk' is a simple I/O number in the range 9 to 12.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;     'hh' is a 2 digit hex value to specify the PWM duty factor (range 00 to FF).
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; The input allows a degree of editing to be performed and upper and lower case letters
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; to be used.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-warm_start
+INSTRUCTION-CALL
+   OPERAND1-send_prompt
+   OPERAND2-
+    COMMENT-;Prompt 'KCPSM3>'
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-receive_string
+   OPERAND2-
+    COMMENT-;obtain input string of up to 16 characters
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-upper_case_string
+   OPERAND2-
+    COMMENT-;convert string to upper case
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-sE
+   OPERAND2-string_start
+    COMMENT-;sE is memory pointer
+      LABEL-
+INSTRUCTION-FETCH
+   OPERAND1-s0
+   OPERAND2-(sE)
+    COMMENT-;test for carriage return
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s0
+   OPERAND2-character_CR
+    COMMENT-
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-Z
+   OPERAND2-warm_start
+    COMMENT-
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s0
+   OPERAND2-character_R
+    COMMENT-;test for 'R' of 'REG' command
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-Z
+   OPERAND2-R_command
+    COMMENT-
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s0
+   OPERAND2-character_M
+    COMMENT-;test for 'M' of 'MEM' command
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-Z
+   OPERAND2-M_command
+    COMMENT-
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s0
+   OPERAND2-character_H
+    COMMENT-;test for 'H' of 'HALT' command
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-Z
+   OPERAND2-H_command
+    COMMENT-
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s0
+   OPERAND2-character_G
+    COMMENT-;test for 'G' of 'GO' command
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-Z
+   OPERAND2-G_command
+    COMMENT-
+      LABEL-bad_command
+INSTRUCTION-CALL
+   OPERAND1-send_CR
+   OPERAND2-
+    COMMENT-;no valid command entered
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_Error
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-warm_start
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;---------------------------------------------------------+
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;Processing potential 'REG' command
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;---------------------------------------------------------+
+      LABEL-R_command
+INSTRUCTION-CALL
+   OPERAND1-read_next_char
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s0
+   OPERAND2-character_E
+    COMMENT-;test for 'E' of 'REG' command
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-NZ
+   OPERAND2-bad_command
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-read_next_char
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s0
+   OPERAND2-character_G
+    COMMENT-;test for 'G' of 'REG' command
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-NZ
+   OPERAND2-bad_command
+    COMMENT-
+      LABEL-read_value
+INSTRUCTION-CALL
+   OPERAND1-read_next_char
+   OPERAND2-
+    COMMENT-;test for a space
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s0
+   OPERAND2-character_space
+    COMMENT-
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-NZ
+   OPERAND2-bad_command
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-read_next_char
+   OPERAND2-
+    COMMENT-;read two character hex value
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-s3
+   OPERAND2-s0
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-read_next_char
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-s2
+   OPERAND2-s0
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-ASCII_byte_to_hex
+   OPERAND2-
+    COMMENT-;convert to value in s0
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-C
+   OPERAND2-bad_command
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-sC
+   OPERAND2-s0
+    COMMENT-;remember value
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-read_next_char
+   OPERAND2-
+    COMMENT-;test for carriage return to end command
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s0
+   OPERAND2-character_CR
+    COMMENT-
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-NZ
+   OPERAND2-bad_command
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; read 32 bit register (sC) from uProc registers
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-OUTPUT
+   OPERAND1-sC
+   OPERAND2-PORT_CPU_REGADDR
+    COMMENT-; select register address
+      LABEL-
+INSTRUCTION-INPUT
+   OPERAND1-s2
+   OPERAND2-PORT_CPU_REGDATA3
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-print_ASCII
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-INPUT
+   OPERAND1-s2
+   OPERAND2-PORT_CPU_REGDATA2
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-print_ASCII
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-INPUT
+   OPERAND1-s2
+   OPERAND2-PORT_CPU_REGDATA1
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-print_ASCII
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-INPUT
+   OPERAND1-s2
+   OPERAND2-PORT_CPU_REGDATA0
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-print_ASCII
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_CR
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-warm_start
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;---------------------------------------------------------+
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;Processing potential 'MEM' command             |
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;---------------------------------------------------------+
+      LABEL-M_command
+INSTRUCTION-CALL
+   OPERAND1-read_next_char
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s0
+   OPERAND2-character_E
+    COMMENT-;test for 'E' of 'MEM' command
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-NZ
+   OPERAND2-bad_command
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-read_next_char
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s0
+   OPERAND2-character_M
+    COMMENT-;test for 'M' of 'MEM' command
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-NZ
+   OPERAND2-bad_command
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-read_next_char
+   OPERAND2-
+    COMMENT-;test for a space
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s0
+   OPERAND2-character_space
+    COMMENT-
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-NZ
+   OPERAND2-bad_command
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-read_next_char
+   OPERAND2-
+    COMMENT-;read two character hex value
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-s3
+   OPERAND2-s0
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-read_next_char
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-s2
+   OPERAND2-s0
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-ASCII_byte_to_hex
+   OPERAND2-
+    COMMENT-;convert to value in s0
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-C
+   OPERAND2-bad_command
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-sC
+   OPERAND2-s0
+    COMMENT-;remember value
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-read_next_char
+   OPERAND2-
+    COMMENT-;test for carriage return to end command
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s0
+   OPERAND2-character_CR
+    COMMENT-
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-NZ
+   OPERAND2-bad_command
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; read 32 bit value (sC) from uProc memory address
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-OUTPUT
+   OPERAND1-sC
+   OPERAND2-PORT_CPU_MEMADDR
+    COMMENT-; select register address
+      LABEL-
+INSTRUCTION-INPUT
+   OPERAND1-s2
+   OPERAND2-PORT_CPU_MEMDATA0
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-print_ASCII
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-INPUT
+   OPERAND1-s2
+   OPERAND2-PORT_CPU_MEMDATA1
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-print_ASCII
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-INPUT
+   OPERAND1-s2
+   OPERAND2-PORT_CPU_MEMDATA2
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-print_ASCII
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-INPUT
+   OPERAND1-s2
+   OPERAND2-PORT_CPU_MEMDATA3
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-print_ASCII
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_CR
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-warm_start
+   OPERAND2-
+    COMMENT-
+      LABEL-print_ASCII
+INSTRUCTION-CALL
+   OPERAND1-hex_byte_to_ASCII
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-s4
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-s3
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-RETURN
+   OPERAND1-
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;---------------------------------------------------------+
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;Processing potential 'HALT' command             |
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;---------------------------------------------------------+
+      LABEL-H_command
+INSTRUCTION-CALL
+   OPERAND1-read_next_char
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s0
+   OPERAND2-character_A
+    COMMENT-;test for 'A' of 'HALT' command
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-NZ
+   OPERAND2-bad_command
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-read_next_char
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s0
+   OPERAND2-character_L
+    COMMENT-;test for 'L' of 'HALT' command
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-NZ
+   OPERAND2-bad_command
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-read_next_char
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s0
+   OPERAND2-character_T
+    COMMENT-;test for 'T' of 'HALT' command
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-NZ
+   OPERAND2-bad_command
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-s2
+   OPERAND2-FLAG_CPU_HALT
+    COMMENT-
+      LABEL-
+INSTRUCTION-OUTPUT
+   OPERAND1-s2
+   OPERAND2-PORT_CPU_CMD
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_OK
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-warm_start
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;---------------------------------------------------------+
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;Processing potential 'GO' command
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;---------------------------------------------------------+
+      LABEL-G_command
+INSTRUCTION-CALL
+   OPERAND1-read_next_char
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s0
+   OPERAND2-character_O
+    COMMENT-;test for 'O' of 'GO' command
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-NZ
+   OPERAND2-bad_command
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-s2
+   OPERAND2-FLAG_CPU_GO
+    COMMENT-
+      LABEL-
+INSTRUCTION-OUTPUT
+   OPERAND1-s2
+   OPERAND2-PORT_CPU_CMD
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_OK
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-warm_start
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;Read next character from scratch pad memory
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-read_next_char
+INSTRUCTION-ADD
+   OPERAND1-sE
+   OPERAND2-01
+    COMMENT-
+      LABEL-
+INSTRUCTION-FETCH
+   OPERAND1-s0
+   OPERAND2-(sE)
+    COMMENT-;test for space
+      LABEL-
+INSTRUCTION-RETURN
+   OPERAND1-
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;**************************************************************************************
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; UART communication routines
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;**************************************************************************************
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Read one character from the UART
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Character read will be returned in a register called 'UART_data'.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; The routine first tests the receiver FIFO buffer to see if data is present.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; If the FIFO is empty, the routine waits until there is a character to read.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; As this could take any amount of time the wait loop could include a call to a
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; subroutine which performs a useful function.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Registers used s0 and UART_data
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-read_from_UART
+INSTRUCTION-INPUT
+   OPERAND1-s0
+   OPERAND2-PORT_STATUS
+    COMMENT-;test Rx_FIFO buffer
+      LABEL-
+INSTRUCTION-TEST
+   OPERAND1-s0
+   OPERAND2-rx_data_present
+    COMMENT-;wait if empty
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-NZ
+   OPERAND2-read_character
+    COMMENT-
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-read_from_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-read_character
+INSTRUCTION-INPUT
+   OPERAND1-UART_data
+   OPERAND2-PORT_UART_RX
+    COMMENT-;read from FIFO
+      LABEL-
+INSTRUCTION-RETURN
+   OPERAND1-
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Transmit one character to the UART
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Character supplied in register called 'UART_data'.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; The routine first tests the transmit FIFO buffer to see if it is full.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; If the FIFO is full, then the routine waits until it there is space.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Registers used s0
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-send_to_UART
+INSTRUCTION-INPUT
+   OPERAND1-s0
+   OPERAND2-PORT_STATUS
+    COMMENT-;test Tx_FIFO buffer
+      LABEL-
+INSTRUCTION-TEST
+   OPERAND1-s0
+   OPERAND2-tx_full
+    COMMENT-;wait if full
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-Z
+   OPERAND2-UART_write
+    COMMENT-
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-UART_write
+INSTRUCTION-OUTPUT
+   OPERAND1-UART_data
+   OPERAND2-PORT_UART_TX
+    COMMENT-
+      LABEL-
+INSTRUCTION-RETURN
+   OPERAND1-
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;Receive ASCII string from UART
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;An ASCII string will be read from the UART and stored in scratch pad memory
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;commencing at the location specified by a constant named 'string_start'.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;The string will have a maximum length of 16 characters including a
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;carriage return (0D) denoting the end of the string.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;As each character is read, it is echoed to the UART transmitter.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;Some minor editing is supported using backspace (BS=08) which is used
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;to adjust what is stored in scratch pad memory and adjust the display
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;on the terminal screen using characters sent to the UART transmitter.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;A test is made for the receiver FIFO becoming full. A full status is treated as
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;a potential error situation and will result in a 'Overflow Error' message being
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;transmitted to the UART, the receiver FIFO being purged of all data and an
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;empty string being stored (carriage return at first location).
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;Registers used s0, s1, s2 and 'UART_data'.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-receive_string
+INSTRUCTION-LOAD
+   OPERAND1-s1
+   OPERAND2-string_start
+    COMMENT-;locate start of string
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-s2
+   OPERAND2-s1
+    COMMENT-;compute 16 character address
+      LABEL-
+INSTRUCTION-ADD
+   OPERAND1-s2
+   OPERAND2-10
+    COMMENT-
+      LABEL-receive_full_test
+INSTRUCTION-INPUT
+   OPERAND1-s0
+   OPERAND2-PORT_STATUS
+    COMMENT-;test Rx_FIFO buffer for full
+      LABEL-
+INSTRUCTION-TEST
+   OPERAND1-s0
+   OPERAND2-rx_full
+    COMMENT-
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-NZ
+   OPERAND2-read_error
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-read_from_UART
+   OPERAND2-
+    COMMENT-;obtain and echo character
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-STORE
+   OPERAND1-UART_data
+   OPERAND2-(s1)
+    COMMENT-;write to memory
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-UART_data
+   OPERAND2-character_CR
+    COMMENT-;test for end of string
+      LABEL-
+INSTRUCTION-RETURN
+   OPERAND1-Z
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-UART_data
+   OPERAND2-character_BS
+    COMMENT-;test for back space
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-Z
+   OPERAND2-BS_edit
+    COMMENT-
+      LABEL-
+INSTRUCTION-ADD
+   OPERAND1-s1
+   OPERAND2-01
+    COMMENT-;increment memory pointer
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s1
+   OPERAND2-s2
+    COMMENT-;test for pointer exceeding 16 characters
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-NZ
+   OPERAND2-receive_full_test
+    COMMENT-;next character
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_backspace
+   OPERAND2-
+    COMMENT-;hold end of string position on terminal display
+      LABEL-BS_edit
+INSTRUCTION-SUB
+   OPERAND1-s1
+   OPERAND2-01
+    COMMENT-;memory pointer back one
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s1
+   OPERAND2-string_start
+    COMMENT-;test for under flow
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-C
+   OPERAND2-string_start_again
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_space
+   OPERAND2-
+    COMMENT-;clear character at current position
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_backspace
+   OPERAND2-
+    COMMENT-;position cursor
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-receive_full_test
+   OPERAND2-
+    COMMENT-;next character
+      LABEL-string_start_again
+INSTRUCTION-CALL
+   OPERAND1-send_greater_than
+   OPERAND2-
+    COMMENT-;restore '>' at prompt
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-receive_string
+   OPERAND2-
+    COMMENT-;begin again
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;Receiver buffer overflow condition
+      LABEL-read_error
+INSTRUCTION-CALL
+   OPERAND1-send_CR
+   OPERAND2-
+    COMMENT-;Transmit error message
+      LABEL-
+INSTRUCTION-STORE
+   OPERAND1-UART_data
+   OPERAND2-string_start
+    COMMENT-;empty string in memory (start with CR)
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_Overflow_Error
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_CR
+   OPERAND2-
+    COMMENT-
+      LABEL-clear_UART_Rx_loop
+INSTRUCTION-INPUT
+   OPERAND1-s0
+   OPERAND2-PORT_STATUS
+    COMMENT-;test Rx_FIFO buffer for data
+      LABEL-
+INSTRUCTION-TEST
+   OPERAND1-s0
+   OPERAND2-rx_data_present
+    COMMENT-
+      LABEL-
+INSTRUCTION-RETURN
+   OPERAND1-Z
+   OPERAND2-
+    COMMENT-;finish when buffer is empty
+      LABEL-
+INSTRUCTION-INPUT
+   OPERAND1-UART_data
+   OPERAND2-PORT_UART_RX
+    COMMENT-;read from FIFO and ignore
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-clear_UART_Rx_loop
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;**************************************************************************************
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Useful hex to ASCII conversion and handling routines
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;**************************************************************************************
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Convert hex byte to ascii
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;  input: hex byte in s2
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; output: ascii high nibble in s4
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; output: ascii low nibble in s3
+      LABEL-hex_byte_to_ASCII
+INSTRUCTION-LOAD
+   OPERAND1-s3
+   OPERAND2-s2
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-s4
+   OPERAND2-s2
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; first: low nibble in s3
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-AND
+   OPERAND1-s2
+   OPERAND2-0F
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-nibble_to_ASCII
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-s3
+   OPERAND2-s2
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; second: high nibble in s4
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-SR0
+   OPERAND1-s4
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-SR0
+   OPERAND1-s4
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-SR0
+   OPERAND1-s4
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-SR0
+   OPERAND1-s4
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-s2
+   OPERAND2-s4
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-nibble_to_ASCII
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-s4
+   OPERAND2-s2
+    COMMENT-
+      LABEL-
+INSTRUCTION-RETURN
+   OPERAND1-
+   OPERAND2-
+    COMMENT-
+      LABEL-nibble_to_ASCII
+INSTRUCTION-COMPARE
+   OPERAND1-s2
+   OPERAND2-0A
+    COMMENT-
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-C
+   OPERAND2-nibble_ASCII_number
+    COMMENT-
+      LABEL-
+INSTRUCTION-ADD
+   OPERAND1-s2
+   OPERAND2-37
+    COMMENT-; convert to ascii letter a, b, c, d, e, or f
+      LABEL-
+INSTRUCTION-RETURN
+   OPERAND1-
+   OPERAND2-
+    COMMENT-
+      LABEL-nibble_ASCII_number
+INSTRUCTION-ADD
+   OPERAND1-s2
+   OPERAND2-30
+    COMMENT-; convert to ascii number 0 - 9
+      LABEL-
+INSTRUCTION-RETURN
+   OPERAND1-
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;**************************************************************************************
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Useful ASCII conversion and handling routines
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;**************************************************************************************
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Convert character to upper case
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; The character supplied in register s0.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; If the character is in the range 'a' to 'z', it is converted
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; to the equivalent upper case character in the range 'A' to 'Z'.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; All other characters remain unchanged.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Registers used s0.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-upper_case
+INSTRUCTION-COMPARE
+   OPERAND1-s0
+   OPERAND2-61
+    COMMENT-;eliminate character codes below 'a' (61 hex)
+      LABEL-
+INSTRUCTION-RETURN
+   OPERAND1-C
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s0
+   OPERAND2-7B
+    COMMENT-;eliminate character codes above 'z' (7A hex)
+      LABEL-
+INSTRUCTION-RETURN
+   OPERAND1-NC
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-AND
+   OPERAND1-s0
+   OPERAND2-DF
+    COMMENT-;mask bit5 to convert to upper case
+      LABEL-
+INSTRUCTION-RETURN
+   OPERAND1-
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Convert string held in scratch pad memory to upper case.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Registers used s0, s1
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-upper_case_string
+INSTRUCTION-LOAD
+   OPERAND1-s1
+   OPERAND2-string_start
+    COMMENT-
+      LABEL-ucs_loop
+INSTRUCTION-FETCH
+   OPERAND1-s0
+   OPERAND2-(s1)
+    COMMENT-
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s0
+   OPERAND2-character_CR
+    COMMENT-
+      LABEL-
+INSTRUCTION-RETURN
+   OPERAND1-Z
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-upper_case
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-STORE
+   OPERAND1-s0
+   OPERAND2-(s1)
+    COMMENT-
+      LABEL-
+INSTRUCTION-ADD
+   OPERAND1-s1
+   OPERAND2-01
+    COMMENT-
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-ucs_loop
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Convert character '0' to '9' to numerical value in range 0 to 9
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; The character supplied in register s0. If the character is in the
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; range '0' to '9', it is converted to the equivalent decimal value.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Characters not in the range '0' to '9' are signified by the return
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; with the CARRY flag set.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Registers used s0.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-1char_to_value
+INSTRUCTION-ADD
+   OPERAND1-s0
+   OPERAND2-C6
+    COMMENT-;reject character codes above '9' (39 hex)
+      LABEL-
+INSTRUCTION-RETURN
+   OPERAND1-C
+   OPERAND2-
+    COMMENT-;carry flag is set
+      LABEL-
+INSTRUCTION-SUB
+   OPERAND1-s0
+   OPERAND2-F6
+    COMMENT-;reject character codes below '0' (30 hex)
+      LABEL-
+INSTRUCTION-RETURN
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;carry is set if value not in range
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Convert the HEX ASCII characters contained in 's3' and 's2' into
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; an equivalent hexadecimal value in register 's0'.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;     The upper nibble is represented by an ASCII character in register s3.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;     The lower nibble is represented by an ASCII character in register s2.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Input characters must be in the range 00 to FF hexadecimal or the CARRY flag
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; will be set on return.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Registers used s0, s2 and s3.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-ASCII_byte_to_hex
+INSTRUCTION-LOAD
+   OPERAND1-s0
+   OPERAND2-s3
+    COMMENT-;Take upper nibble
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-ASCII_to_hex
+   OPERAND2-
+    COMMENT-;convert to value
+      LABEL-
+INSTRUCTION-RETURN
+   OPERAND1-C
+   OPERAND2-
+    COMMENT-;reject if out of range
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-s3
+   OPERAND2-s0
+    COMMENT-;remember value
+      LABEL-
+INSTRUCTION-SL0
+   OPERAND1-s3
+   OPERAND2-
+    COMMENT-;multiply value by 16 to put in upper nibble
+      LABEL-
+INSTRUCTION-SL0
+   OPERAND1-s3
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-SL0
+   OPERAND1-s3
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-SL0
+   OPERAND1-s3
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-s0
+   OPERAND2-s2
+    COMMENT-;Take lower nibble
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-ASCII_to_hex
+   OPERAND2-
+    COMMENT-;convert to value
+      LABEL-
+INSTRUCTION-RETURN
+   OPERAND1-C
+   OPERAND2-
+    COMMENT-;reject if out of range
+      LABEL-
+INSTRUCTION-OR
+   OPERAND1-s0
+   OPERAND2-s3
+    COMMENT-;merge in the upper nibble with CARRY reset
+      LABEL-
+INSTRUCTION-RETURN
+   OPERAND1-
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Routine to convert ASCII data in 's0' to an equivalent HEX value.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; If character is not valid for hex, then CARRY is set on return.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Register used s0
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-ASCII_to_hex
+INSTRUCTION-ADD
+   OPERAND1-s0
+   OPERAND2-B9
+    COMMENT-;test for above ASCII code 46 ('F')
+      LABEL-
+INSTRUCTION-RETURN
+   OPERAND1-C
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-SUB
+   OPERAND1-s0
+   OPERAND2-E9
+    COMMENT-;normalise 0 to 9 with A-F in 11 to 16 hex
+      LABEL-
+INSTRUCTION-RETURN
+   OPERAND1-C
+   OPERAND2-
+    COMMENT-;reject below ASCII code 30 ('0')
+      LABEL-
+INSTRUCTION-SUB
+   OPERAND1-s0
+   OPERAND2-11
+    COMMENT-;isolate A-F down to 00 to 05 hex
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-NC
+   OPERAND2-ASCII_letter
+    COMMENT-
+      LABEL-
+INSTRUCTION-ADD
+   OPERAND1-s0
+   OPERAND2-07
+    COMMENT-;test for above ASCII code 46 ('F')
+      LABEL-
+INSTRUCTION-RETURN
+   OPERAND1-C
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-SUB
+   OPERAND1-s0
+   OPERAND2-F6
+    COMMENT-;convert to range 00 to 09
+      LABEL-
+INSTRUCTION-RETURN
+   OPERAND1-
+   OPERAND2-
+    COMMENT-
+      LABEL-ASCII_letter
+INSTRUCTION-ADD
+   OPERAND1-s0
+   OPERAND2-0A
+    COMMENT-;convert to range 0A to 0F
+      LABEL-
+INSTRUCTION-RETURN
+   OPERAND1-
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;**************************************************************************************
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Text messages
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;**************************************************************************************
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Send Carriage Return to the UART
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-send_CR
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_CR
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-RETURN
+   OPERAND1-
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Send a space to the UART
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-send_space
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_space
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-RETURN
+   OPERAND1-
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;Send a back space to the UART
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-send_backspace
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_BS
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-RETURN
+   OPERAND1-
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Send 'PicoBlaze Servo Control' string to the UART
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-send_welcome
+INSTRUCTION-CALL
+   OPERAND1-send_CR
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_CR
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_B
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_e
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_t
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_o
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_space
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_a
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_n
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_d
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_space
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_M
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_o
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_n
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_r
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_o
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_y
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_s
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_space
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_CR
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_d
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_e
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_b
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_u
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_g
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_g
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_e
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_r
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_CR
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-RETURN
+   OPERAND1-
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;Send 'KCPSM3>' prompt to the UART
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-send_prompt
+INSTRUCTION-CALL
+   OPERAND1-send_CR
+   OPERAND2-
+    COMMENT-;start new line
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_u
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_C
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_O
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_B
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_A
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_L
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_T
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;Send '>' character to the UART
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-send_greater_than
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_greater_than
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-RETURN
+   OPERAND1-
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;Send 'Overflow Error' to the UART
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-send_Overflow_Error
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_O
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_v
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_e
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_r
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_f
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_l
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_o
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_w
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-send_space_Error
+INSTRUCTION-CALL
+   OPERAND1-send_space
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;Send 'Error' to the UART
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-send_Error
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_E
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_r
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_o
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_r
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-send_CR
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;Send 'OK' to the UART
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-send_OK
+INSTRUCTION-CALL
+   OPERAND1-send_CR
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_O
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-LOAD
+   OPERAND1-UART_data
+   OPERAND2-character_K
+    COMMENT-
+      LABEL-
+INSTRUCTION-CALL
+   OPERAND1-send_to_UART
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-send_CR
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;**************************************************************************************
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Interrupt Service Routine (ISR)
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;**************************************************************************************
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Interrupts occur at 3.92us intervals and are used to generate the PWM pulses generated
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; at a PRF of 1KHz. The 3.92us interrupt rate corresponds with a resolution of 256 steps
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; over the 1ms associated with the 1KHz PRF.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; The ISR is self contained and all registers used are preserved. Scratch pad memory
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; locations are used to determine the desired duty factor for each of 12 channels.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Note that an interrupt is generated every 196 clock cycles. This means that there is
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; only time to execute 98 instructions between each interrupt. This ISR is 48 instructions
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; long. A further 3 instructions are also consumed by the interrupt process
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; (abandoned instruction, virtual CALL to 3FF and the interrupt vector JUMP) and hence
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; PicoBlaze has approximately half of its time available for other tasks in the main program.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Although a loop would normal be employed in software to process each of 12 channels,
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; the implementation of a loop would increase the number of instructions which needed to
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; be executed to such an extent that this 12 channel implementation would not be possible.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Consequently the code is written out in a linear fashion which consumes more program
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; space but which executes faster.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-ISR
+INSTRUCTION-STORE
+   OPERAND1-s0
+   OPERAND2-ISR_preserve_s0
+    COMMENT-;preserve registers to be used
+      LABEL-
+INSTRUCTION-STORE
+   OPERAND1-s1
+   OPERAND2-ISR_preserve_s1
+    COMMENT-
+      LABEL-
+INSTRUCTION-STORE
+   OPERAND1-s2
+   OPERAND2-ISR_preserve_s2
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;Determine the number of steps currently through the 1ms PWM cycle
+      LABEL-
+INSTRUCTION-FETCH
+   OPERAND1-s1
+   OPERAND2-PWM_duty_counter
+    COMMENT-;read 8-bit counter of steps
+      LABEL-
+INSTRUCTION-ADD
+   OPERAND1-s1
+   OPERAND2-01
+    COMMENT-;increment counter (will roll over to zero)
+      LABEL-
+INSTRUCTION-STORE
+   OPERAND1-s1
+   OPERAND2-PWM_duty_counter
+    COMMENT-;update count value in memory for next interrupt.
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;Read duty factor for each channel and compare it with the duty counter and set or
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;reset a bit in register s2 accordingly.
+      LABEL-
+INSTRUCTION-FETCH
+   OPERAND1-s0
+   OPERAND2-PWM_channel11
+    COMMENT-;read desired setting of pulse width
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s1
+   OPERAND2-s0
+    COMMENT-;set carry flag if duty factor > duty counter
+      LABEL-
+INSTRUCTION-SLA
+   OPERAND1-s2
+   OPERAND2-
+    COMMENT-;shift carry into register s2
+      LABEL-
+INSTRUCTION-FETCH
+   OPERAND1-s0
+   OPERAND2-PWM_channel10
+    COMMENT-;read desired setting of pulse width
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s1
+   OPERAND2-s0
+    COMMENT-;set carry flag if duty factor > duty counter
+      LABEL-
+INSTRUCTION-SLA
+   OPERAND1-s2
+   OPERAND2-
+    COMMENT-;shift carry into register s2
+      LABEL-
+INSTRUCTION-FETCH
+   OPERAND1-s0
+   OPERAND2-PWM_channel9
+    COMMENT-;read desired setting of pulse width
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s1
+   OPERAND2-s0
+    COMMENT-;set carry flag if duty factor > duty counter
+      LABEL-
+INSTRUCTION-SLA
+   OPERAND1-s2
+   OPERAND2-
+    COMMENT-;shift carry into register s2
+      LABEL-
+INSTRUCTION-FETCH
+   OPERAND1-s0
+   OPERAND2-PWM_channel8
+    COMMENT-;read desired setting of pulse width
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s1
+   OPERAND2-s0
+    COMMENT-;set carry flag if duty factor > duty counter
+      LABEL-
+INSTRUCTION-SLA
+   OPERAND1-s2
+   OPERAND2-
+    COMMENT-;shift carry into register s2
+      LABEL-
+INSTRUCTION-OUTPUT
+   OPERAND1-s2
+   OPERAND2-PORT_SIMPLE_IO
+    COMMENT-;drive pins on connector J4
+      LABEL-
+INSTRUCTION-FETCH
+   OPERAND1-s0
+   OPERAND2-PWM_channel7
+    COMMENT-;read desired setting of pulse width
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s1
+   OPERAND2-s0
+    COMMENT-;set carry flag if duty factor > duty counter
+      LABEL-
+INSTRUCTION-SLA
+   OPERAND1-s2
+   OPERAND2-
+    COMMENT-;shift carry into register s2
+      LABEL-
+INSTRUCTION-FETCH
+   OPERAND1-s0
+   OPERAND2-PWM_channel6
+    COMMENT-;read desired setting of pulse width
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s1
+   OPERAND2-s0
+    COMMENT-;set carry flag if duty factor > duty counter
+      LABEL-
+INSTRUCTION-SLA
+   OPERAND1-s2
+   OPERAND2-
+    COMMENT-;shift carry into register s2
+      LABEL-
+INSTRUCTION-FETCH
+   OPERAND1-s0
+   OPERAND2-PWM_channel5
+    COMMENT-;read desired setting of pulse width
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s1
+   OPERAND2-s0
+    COMMENT-;set carry flag if duty factor > duty counter
+      LABEL-
+INSTRUCTION-SLA
+   OPERAND1-s2
+   OPERAND2-
+    COMMENT-;shift carry into register s2
+      LABEL-
+INSTRUCTION-FETCH
+   OPERAND1-s0
+   OPERAND2-PWM_channel4
+    COMMENT-;read desired setting of pulse width
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s1
+   OPERAND2-s0
+    COMMENT-;set carry flag if duty factor > duty counter
+      LABEL-
+INSTRUCTION-SLA
+   OPERAND1-s2
+   OPERAND2-
+    COMMENT-;shift carry into register s2
+      LABEL-
+INSTRUCTION-FETCH
+   OPERAND1-s0
+   OPERAND2-PWM_channel3
+    COMMENT-;read desired setting of pulse width
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s1
+   OPERAND2-s0
+    COMMENT-;set carry flag if duty factor > duty counter
+      LABEL-
+INSTRUCTION-SLA
+   OPERAND1-s2
+   OPERAND2-
+    COMMENT-;shift carry into register s2
+      LABEL-
+INSTRUCTION-FETCH
+   OPERAND1-s0
+   OPERAND2-PWM_channel2
+    COMMENT-;read desired setting of pulse width
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s1
+   OPERAND2-s0
+    COMMENT-;set carry flag if duty factor > duty counter
+      LABEL-
+INSTRUCTION-SLA
+   OPERAND1-s2
+   OPERAND2-
+    COMMENT-;shift carry into register s2
+      LABEL-
+INSTRUCTION-FETCH
+   OPERAND1-s0
+   OPERAND2-PWM_channel1
+    COMMENT-;read desired setting of pulse width
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s1
+   OPERAND2-s0
+    COMMENT-;set carry flag if duty factor > duty counter
+      LABEL-
+INSTRUCTION-SLA
+   OPERAND1-s2
+   OPERAND2-
+    COMMENT-;shift carry into register s2
+      LABEL-
+INSTRUCTION-FETCH
+   OPERAND1-s0
+   OPERAND2-PWM_channel0
+    COMMENT-;read desired setting of pulse width
+      LABEL-
+INSTRUCTION-COMPARE
+   OPERAND1-s1
+   OPERAND2-s0
+    COMMENT-;set carry flag if duty factor > duty counter
+      LABEL-
+INSTRUCTION-SLA
+   OPERAND1-s2
+   OPERAND2-
+    COMMENT-;shift carry into register s2
+      LABEL-
+INSTRUCTION-OUTPUT
+   OPERAND1-s2
+   OPERAND2-PORT_LEDS
+    COMMENT-;drive LEDs
+      LABEL-
+INSTRUCTION-FETCH
+   OPERAND1-s0
+   OPERAND2-ISR_preserve_s0
+    COMMENT-;restore register values
+      LABEL-
+INSTRUCTION-FETCH
+   OPERAND1-s1
+   OPERAND2-ISR_preserve_s1
+    COMMENT-
+      LABEL-
+INSTRUCTION-FETCH
+   OPERAND1-s2
+   OPERAND2-ISR_preserve_s2
+    COMMENT-
+      LABEL-
+INSTRUCTION-RETURNI
+   OPERAND1-ENABLE
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;**************************************************************************************
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-; Interrupt Vector
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;**************************************************************************************
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-ADDRESS
+   OPERAND1-3FF
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-JUMP
+   OPERAND1-ISR
+   OPERAND2-
+    COMMENT-
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;
+      LABEL-
+INSTRUCTION-
+   OPERAND1-
+   OPERAND2-
+    COMMENT-;

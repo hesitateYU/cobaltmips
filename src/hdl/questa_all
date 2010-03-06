@@ -1,0 +1,4 @@
+vlib work
+vlog -f compile_questa_sv.f
+vsim -novopt -do vsim.do -c tb_top
+

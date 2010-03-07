@@ -22,14 +22,13 @@ module equeuels(
    always @(*) begin : equeuels_oreg_assign
       dispatch_ready = 1'b1;
 
-      cdb_data = 
+/*      cdb_data = 
       cdb_tag =
       cdb_valid =
       cdb_branch
-      cdb_branch_taken 
+      cdb_branch_taken  */
    end
-
 endmodule
 
-`endif EQUEUELS_V
+`endif
 

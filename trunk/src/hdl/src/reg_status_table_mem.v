@@ -36,8 +36,8 @@ module reg_status_table_mem(
       //
       // TODO: use an assertion.
       //
-      if (!(wport0_addr == wport1_addr && wport0_wen && wport1_wen))
-         $fatal($sformatf("Can't write data from different ports at the same address 0x%h", rport0_addr));
+      //if (!(wport0_addr == wport1_addr && wport0_wen && wport1_wen))
+      //   $fatal($sformatf("Can't write data from different ports at the same address 0x%h", rport0_addr));
    end
 
    always @(*) begin : reg_status_table_mem_read_proc

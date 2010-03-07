@@ -16,20 +16,19 @@ module equeueint(
    output reg [ 5:0] cdb_tag,
    output reg        cdb_valid,
    output reg        cdb_branch,
-   output reg        cdb_branch_taken
+   output reg        cdb_branch_taken 
 );
 
    always @(*) begin : equeueint_oreg_assign
-      dispatch_ready = 1'b1;
-
+/*      dispatch_ready = 1'b1;
       cdb_data = 
       cdb_tag =
       cdb_valid =
       cdb_branch
-      cdb_branch_taken 
-   end
+      cdb_branch_taken   */
+   end 
 
 endmodule
 
-`endif EQUEUEINT_V
+`endif
 

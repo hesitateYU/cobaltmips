@@ -23,6 +23,43 @@ module cpu(
    wire  [31:0] dispatch_ifq_jump_branch_address;
    wire         dispatch_ifq_jump_branch_valid;
 
+   wire         dispatch_equeueint_en;
+   wire         equeueint_dispatch_ready;
+   wire [31:0]  equeueint_cdb_data;
+   wire [ 5:0]  equeueint_cdb_tag;
+   wire         equeueint_cdb_valid;
+   wire         equeueint_cdb_branch;
+   wire         equeueint_cdb_taken;
+
+
+   wire         dispatch_equeuels_en;
+   wire         equeuels_dispatch_ready;
+   wire [31:0]  equeuels_cdb_data;
+   wire [ 5:0]  equeuels_cdb_tag;
+   wire         equeuels_cdb_valid;
+   wire         equeuels_cdb_branch;
+   wire         equeuels_cdb_taken;
+
+   wire         dispatch_equeuediv_en;
+   wire         equeuediv_dispatch_ready;
+   wire [31:0]  equeuediv_cdb_data;
+   wire [ 5:0]  equeuediv_cdb_tag;
+   wire         equeuediv_cdb_valid;
+   wire         equeuediv_cdb_branch;
+   wire         equeuediv_cdb_taken;
+
+   wire [31:0]  dispatch_equeue_inst;
+   wire         dispatch_equeue_rsvalid;
+   wire         dispatch_equeue_rtvalid;
+   wire         dispatch_equeue_en;
+   wire         equeuemult_dispatch_ready;
+   wire [31:0]  equeuemult_cdb_data;
+   wire [ 5:0]  equeuemult_cdb_tag;
+   wire         equeuemult_cdb_valid;
+   wire         equeuemult_cdb_branch;
+   wire         equeuemult_cdb_taken;
+
+
    icache#(
       .INC_OREG       (1'b0                 )
    )icache(
@@ -68,7 +105,7 @@ module cpu(
       .dispatch_inst   (dispatch_equeue_inst    ),
       .dispatch_rsvalid(dispatch_equeue_rsvalid ),
       .dispatch_rtvalid(dispatch_equeue_rtvalid ),
-      .dispatch_en     (dispatch_equeue_en      ),
+      .dispatch_en     (dispatch_equeuels_en    ),
       .dispatch_ready  (equeueint_dispatch_ready),
       .cdb_data        (equeueint_cdb_data      ),
       .cdb_tag         (equeueint_cdb_tag       ),
@@ -83,7 +120,7 @@ module cpu(
       .dispatch_inst   (dispatch_equeue_inst   ),
       .dispatch_rsvalid(dispatch_equeue_rsvalid),
       .dispatch_rtvalid(dispatch_equeue_rtvalid),
-      .dispatch_en     (dispatch_equeue_en     ),
+      .dispatch_en     (dispatch_equeuels_en   ),
       .dispatch_ready  (equeuels_dispatch_ready),
       .cdb_data        (equeuels_cdb_data      ),
       .cdb_tag         (equeuels_cdb_tag       ),
@@ -98,7 +135,7 @@ module cpu(
       .dispatch_inst   (dispatch_equeue_inst    ),
       .dispatch_rsvalid(dispatch_equeue_rsvalid ),
       .dispatch_rtvalid(dispatch_equeue_rtvalid ),
-      .dispatch_en     (dispatch_equeue_en      ),
+      .dispatch_en     (dispatch_equeuediv_en   ),
       .dispatch_ready  (equeuediv_dispatch_ready),
       .cdb_data        (equeuediv_cdb_data      ),
       .cdb_tag         (equeuediv_cdb_tag       ),
@@ -113,7 +150,7 @@ module cpu(
       .dispatch_inst   (dispatch_equeue_inst     ),
       .dispatch_rsvalid(dispatch_equeue_rsvalid  ),
       .dispatch_rtvalid(dispatch_equeue_rtvalid  ),
-      .dispatch_en     (dispatch_equeue_en       ),
+      .dispatch_en     (dispatch_equeuemult_en   ),
       .dispatch_ready  (equeuemult_dispatch_ready),
       .cdb_data        (equeuemult_cdb_data      ),
       .cdb_tag         (equeuemult_cdb_tag       ),

@@ -109,9 +109,9 @@ module dispatch(
    reg         equeue_rsvalid_r;
    reg         equeue_rtvalid_r;
    always @(posedge clk) begin : dispatch_equeue_reg
-      equeue_inst_r    <= (rst) ? equeue_inst;
-      equeue_rsvalid_r <= (rst) ? equeue_rsvalid;
-      equeue_rtvalid_r <= (rst) ? equeue_rtvalid;
+      equeue_inst_r    <= (rst) ? 'h0 : equeue_inst;
+      equeue_rsvalid_r <= (rst) ? 'h0 : equeue_rsvalid;
+      equeue_rtvalid_r <= (rst) ? 'h0 : equeue_rtvalid;
    end
 
    // Instruction given to execution queues could be assembled in any of its
@@ -149,11 +149,11 @@ module dispatch(
          equeue_inst_type[`INST_JTYPE_BIT]: equeue_inst = equeue_inst_jtype;
          default                          : equeue_inst = `INST_ERROR;
       endcase
-      assert (equeue_inst_type != `INST_ERROR) else
-         $fatal($sformatf("Instruction type not valid %b.", equeue_inst_type));
+      //assert (equeue_inst_type != `INST_ERROR) else
+      //   $fatal($sformatf("Instruction type not valid %b.", equeue_inst_type));
 
-      equeue_rsvalid = ;
-      equeue_rtvalid = ;
+      //equeue_rsvalid = ;
+      //equeue_rtvalid = ;
    end
    `undef INST_RTYPE_BIT
    `undef INST_ITYPE_BIT

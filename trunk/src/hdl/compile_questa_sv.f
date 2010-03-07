@@ -7,6 +7,7 @@ src/dispatcher.v
 src/idecoder.v
 src/regfile.v
 src/reg_status_table.v
+src/reg_status_table_mem.v
 src/tagfifo.v
 src/cpu.v
 tb/tb_top.v

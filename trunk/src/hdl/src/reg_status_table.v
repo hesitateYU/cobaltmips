@@ -4,65 +4,108 @@
 module reg_status_table(
    input             clk,
    input             rst,
-   input      [ 6:0] wdata0_rst,
-   input      [ 4:0] waddr0_rst,
-   input             wen0_rst,
-   input      [ 6:0] wdata_rst1,
-   input      [31:0] wen_rst1,
-   input      [ 4:0] rsaddr_rst,
-   output reg [ 5:0] rstag_rst,
-   output reg        rsvalid_rst,
-   input      [ 4:0] rtaddr_rst,
-   output reg [ 5:0] rttag_rst,
-   output reg        rtvalid_rst,
+
+   // Write port 0.
+   input      [ 5:0] dispatch_tag,
+   input             dispatch_valid,
+   input      [ 4:0] dispatch_addr,
+   input             dispatch_wen,
+
+   // Write port 1 (clear port), signaled by CDB.
+   input      [ 5:0] cdb_tag,
    input             cdb_valid,
-   input      [ 5:0] cdb_tag_rst,
-   output reg [31:0] wen_regfile_rst
+
+   // Write enable for Register File which value has
+   // been published by the CDB.
+   output reg [31:0] regfile_wen_onehot,
+
+   // Read port RS.
+   output reg [ 5:0] dispatch_rstag,
+   output reg        dispatch_rsvalid,
+   input      [ 4:0] dispatch_rsaddr,
+
+   // Read port RT.
+   output reg [ 5:0] dispatch_rttag,
+   output reg        dispatch_rtvalid,
+   input      [ 4:0] dispatch_rtaddr
 );
 
-   reg [6:0] reg_status_table   [0:31];
-   reg [6:0] reg_status_table_r [0:31];
-
-   always @(*) begin : reg_status_table_wrport1
-      integer i; 
-      for (i=0; i<32; i=i+1) begin
-          reg_status_table[i] = (wen_rst1 == i) ? wdata_rst1 : reg_status_table_r[i];
-      end  
+   // Tag comparator: CDB published tag VS tag ready to write from dispatch
+   // unit.
+   reg [31:0] comp_cdb_dispatch_tag;
+   always @(*) begin : reg_status_table_comp_proc
+      integer i;
+      for (i = 0; i < 31; i = i + 1) begin
+         comp_cdb_dispatch_tag = (cdb_tag == dispatch_tag);
+      end
    end
 
-   always @(*) begin : reg_status_table_wrport0
-       reg_status_table[waddr0_rst] = (wen0_rst) ? wdata0_rst : reg_status_table_r[waddr0_rst];
+   // Signal interface with internal memory register file (which also acts
+   // as a look up table).
+   reg  [6:0] wport0_data, wport1_data;
+   wire [6:0] rport0_data, rport1_data;
+   reg  [4:0] wport0_addr, wport1_addr, rport0_addr, rport1_addr;
+   reg        wport0_wen,  wport1_wen;
+   reg  [5:0] lookup_tag;
+   wire       lookup_found;
+   wire [4:0] lookup_addr;
+   always @(*) begin
+      // Read port for both RS and RT register fields.
+      rport0_addr      = dispatch_rsaddr;
+      dispatch_rstag   = rport1_data[5:0];
+      dispatch_rsvalid = rport1_data[6];
+      rport1_addr      = dispatch_rtaddr;
+      dispatch_rttag   = rport0_data[5:0];
+      dispatch_rtvalid = rport0_data[6];
+
+      // Write data from dispatch unit only if the CDB published tag and
+      // tag for dispatch are different and wen is set.
+      wport0_data = {dispatch_valid, dispatch_tag};
+      wport0_addr = dispatch_addr;
+      wport0_wen  = dispatch_wen && comp_cdb_dispatch_tag[wport0_addr] == 0;
+
+      // Clear data specified by CDB is valid (cdb_valid) and if,
+      // after looking up the tag published by the CDB, it is found
+      // and is valid (inside the rst).
+      wport1_data = 7'h0;
+      wport1_addr = lookup_addr;
+      wport1_wen  = lookup_found && cdb_valid;
    end
 
-   always @(posedge clk) begin : reg_status_table_reg
-	integer i;
-	for (i=0; i<32; i= i+1) begin
-	   reg_status_table_r[i] <= (rst) ? 'h0: reg_status_table[i];
-	end
+   // One-hot encoder for register file write enable.
+   always @(*) begin : reg_status_table_onehot_proc
+      integer i;
+      for (i = 0; i < 31; i = i + 1) begin
+         regfile_wen_onehot= (lookup_addr == i) && lookup_found;
+      end
    end
 
-   always @(*) begin : reg_status_table_reg_rdproc
+   reg_status_table_mem reg_status_table_mem(
+      .clk         (clk         ),
+      .rst         (rst         ),
 
-       rstag_rst       = reg_status_table_r [rsaddr_rst][5:0];
-       rsvalid_rst     = reg_status_table_r [rsaddr_rst][6]; 
-       rttag_rst       = reg_status_table_r [rtaddr_rst][5:0];
-       rtvalid_rst     = reg_status_table_r [rtaddr_rst][6]; 
-   end
+      // 2 read ports: RS and RT register fields.
+      .rport0_addr (rport0_addr ),
+      .rport0_data (rport0_data ),
+      .rport1_addr (rport1_addr ),
+      .rport1_data (rport1_data ),
 
-   always @(*) begin : reg_status_table_wen_proc
-     integer i;
-     for (i=0; i<32; i=i+1) begin
-        reg_status_table[i]= reg_status_table_r[i];
-        wen_regfile_rst[i]  = 1'b0;
-     end
+      // 2 write ports: write and clear.
+      .wport0_addr (wport0_addr ),
+      .wport0_data (wport0_data ),
+      .wport0_wen  (wport0_wen  ),
+      .wport1_addr (wport1_addr ),
+      .wport1_data (wport1_data ),
+      .wport1_wen  (wport1_wen  ),
 
-     for (i=0; i<32; i=i+1) begin
-	     if (reg_status_table [i][6] && cdb_valid && cdb_tag_rst == reg_status_table[i]) begin
-            reg_status_table[i] = 32'h0;	   
-            wen_regfile_rst[i]  = 1'b1;
-	     end	
-	  end
-   end  
+      // Lookup port, send a tag and it indicates if it was found and
+      // it's index. If tag is found but is not valid, then it will
+      // report as tag not found.
+      .lookup_tag  (lookup_tag  ),
+      .lookup_found(lookup_found),
+      .lookup_addr (lookup_addr )
+   );
+
 endmodule
 
 `endif

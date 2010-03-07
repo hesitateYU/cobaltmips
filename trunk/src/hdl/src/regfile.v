@@ -1,46 +1,45 @@
 `ifndef REGFILE_V
 `define REGFILE_V
 
-module regfile (
-   input	     clk,
+module regfile(
+   input             clk,
    input             rst,
-   input      [ 4:0] debugaddr_rf,
-   input      [31:0] wen_rf,
-   input      [31:0] write_data_rf,
-   input      [ 4:0] rsaddr_rf,
-   output reg [31:0] rsdata_rf,
-   input      [ 4:0] rtaddr_rf,
-   output reg [31:0] rtdata_rf,
-   input      [31:0] rsdata_dis,
-   input      [31:0] cdb_data,
-   input      [31:0] rtdata_dis,
-   input      [ 6:0] rstag_rst,
-   input      [ 6:0] cdb_token,
-   input      [ 6:0] rttag_rst,
-   output reg [31:0] debugdata_rf
+
+   // Single write port, data comes from CDB and address is
+   // encoded as one-hot from register status table.
+   input      [31:0] cdb_wdata,
+   input      [31:0] rst_wen_onehot,
+
+   // 2 read ports for RS and RT registers.
+   input      [ 4:0] dispatch_rs_addr,
+   output reg [31:0] dispatch_rs_data,
+   input      [ 4:0] dispatch_rt_addr,
+   output reg [31:0] dispatch_rt_data,
+   input      [ 4:0] debug_addr,
+   output reg [31:0] debug_data
 );
 
-   reg  [31:0] reg_file   [0:31];
-   reg  [31:0] reg_file_r [0:31];
+   reg  [31:0] mem   [31:0];
+   reg  [31:0] mem_r [31:0];
 
-   always @(*) begin: reg_file_proc
-      integer i; 
-      for (i=0; i<32; i=i+1) begin
-          reg_file[i] = (wen_rf == i) ? write_data_rf : reg_file_r[i];
-      end  
-   end
- 
-   always @(posedge clk) begin : reg_file_reg
-	integer i;
-	for (i=0; i<32; i= i+1) begin
-	   reg_file_r[i] <= (rst) ? 'h0: reg_file[i];
-	end
+   always @(*) begin: reg_file_write_proc
+      integer i;
+      for (i = 0; i < 32; i = i + 1) begin
+         mem[i] = (rst_wen_onehot[i]) ? cdb_wdata : mem_r[i];
+      end
    end
 
-   always @(*) begin
-      rsdata_rf    = reg_file_r[rsaddr_rf];
-      rtdata_rf    = reg_file_r[rtaddr_rf];
-      debugdata_rf = reg_file_r[debugaddr_rf];
+   always @(*) begin : reg_file_read_proc
+      dispatch_rs_data = mem_r[dispatch_rs_addr];
+      dispatch_rt_data = mem_r[dispatch_rt_addr];
+      debug_data       = mem_r[debug_addr];
+   end
+
+   always @(posedge clk) begin : reg_file_mem_assign
+      integer i;
+      for (i=0; i<32; i= i+1) begin
+         mem_r[i] <= (rst) ? 'h0 : mem[i];
+      end
    end
 
 endmodule

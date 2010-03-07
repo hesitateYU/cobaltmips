@@ -11,8 +11,9 @@ module dispatch(
    input             ifq_empty,
    output reg        ifq_rd_en,
    output reg [31:0] ifq_jump_branch_address,
-   output reg        ifq_jump_branch_valid,
+   output reg        ifq_jump_branch_valid
 
+   /*
    // i/f with CDB
    input      [ 5:0] cdb_tag,
    input             cdb_valid,
@@ -21,44 +22,107 @@ module dispatch(
    input             cdb_branch_taken
 
    // i/f with Integer Queue
-
+   */
 );
-
-   always @(posedge clk) begin : ifq_oreg_proc
-      ifq_rd_en               <=  1'b1;
-      ifq_jump_branch_valid   <=  1'b0;
-      ifq_jump_branch_address <= 32'h0;
-   end
-
+   //
+   // Instruction decoder.
+   // Instruction formats (based in opcode):
+   //
+   //            |Opcode| | 16 |
+   //            +------+-----+-----+-----+-----+------+
+   //            |   6  |  5  |  5  |  5  |  5  |   6  |
+   //   Reg Type |000000| Rs  | Rt  | Rd  |Shamt| Func |
+   //            +------+-----+-----+-----+-----+------+
+   //  Load Word |100011| Rs  | Rt  | Address(15)      |
+   //            +------+-----+-----+------------------+
+   // Store Word |101011| Rs  | Rt  | Address(15)      |
+   //            +------+-----+-----+------------------+
+   //  Branch Eq |000100| Rs  | Rt  | Address(15)      |
+   //            +------+-----+-----+------------------+
+   //       Jump |000010| Address(26)                  |
+   //            +------+------------------------------+
+   //
+   /// </Description>
    always @(*) begin
-
+      /*
+      case (ifq_inst) begin
+         `OPCODE_RTYPE:
+         `OPCODE_BEQ:
+         `OPCODE_BNE:
+         `OPCODE_BLEZ:
+         `OPCODE_BGTZ:
+      endcase
+      */
    end
+
+   //always @(posedge clk) begin : ifq_oreg_proc
+   //   ifq_rd_en               <=  1'b1;
+   //   ifq_jump_branch_valid   <=  1'b0;
+   //   ifq_jump_branch_address <= 32'h0;
+   //end
+
+   // Signal declarations for Regfile.
+   wire [31:0] cdb_regfile_wdata;
+   wire [31:0] rst_regfile_onehot;
+   wire [ 4:0] dispatch_regfile_rs_addr;
+   wire [31:0] regfile_dispatch_rs_data;
+   wire [ 4:0] dispatch_regfile_rt_addr;
+   wire [31:0] regfile_dispatch_rt_data;
+   wire [ 4:0] top_regfile_addr;
+   wire [31:0] regfile_top_data;
+
+   // Signal declarations for Register Status Table.
+   wire [ 5:0] dispatch_rst_tag;
+   wire        dispatch_rst_valid;
+   wire [ 4:0] dispatch_rst_addr;
+   wire        dispatch_rst_wen;
+   wire [ 5:0] cdb_rst_tag;
+   wire        cdb_rst_valid;
+   wire [31:0] rst_regfile_wen_onehot;
+   wire [ 5:0] rst_dispatch_rstag;
+   wire        rst_dispatch_rsvalid;
+   wire [ 4:0] dispatch_rst_rsaddr;
+   wire [ 5:0] rst_dispatch_rttag;
+   wire        rst_dispatch_rtvalid;
+   wire [ 4:0] dispatch_rst_rtaddr;
+
 
    regfile regfile (
-      .wen_rf       (),
-      .write_data_rf(),
-      .rsaddr_rf    (),
-      .rsdata_rf    (),
-      .rtaddr_rf    (),
-      .rtdata_rf    ()
+      .clk             (clk                     ),
+      .rst             (rst                     ),
+
+      .cdb_wdata       (cdb_regfile_wdata       ),
+      .rst_wen_onehot  (rst_regfile_onehot      ),
+
+      .dispatch_rs_addr(dispatch_regfile_rs_addr),
+      .dispatch_rs_data(regfile_dispatch_rs_data),
+      .dispatch_rt_addr(dispatch_regfile_rt_addr),
+      .dispatch_rt_data(regfile_dispatch_rt_data),
+      .debug_addr      (top_regfile_addr        ),
+      .debug_data      (regfile_top_data        )
    );
 
-  reg_status_table reg_status_table (
-      .wdata0_rst     (),
-      .waddr0_rst     (),
-      .wen0_rst       (),
-      .wdata_rst1     (),
-      .wen_rst1       (),
-      .rsaddr_rst     (),
-      .rstag_rst      (),
-      .rsvalid_rst    (),
-      .rtaddr_rst     (),
-      .rttag_rst      (),
-      .rtvalid_rst    (),
-      .cdb_valid      (),
-      .cdb_tag_rst    (),
-      .wen_regfile_rst()
-   ); 
+   reg_status_table reg_status_table (
+      .clk               (clk                   ),
+      .rst               (rst                   ),
+
+      .dispatch_tag      (dispatch_rst_tag      ),
+      .dispatch_valid    (dispatch_rst_valid    ),
+      .dispatch_addr     (dispatch_rst_addr     ),
+      .dispatch_wen      (dispatch_rst_wen      ),
+
+      .cdb_tag           (cdb_rst_tag           ),
+      .cdb_valid         (cdb_rst_valid         ),
+
+      .regfile_wen_onehot(rst_regfile_wen_onehot),
+
+      .dispatch_rstag    (rst_dispatch_rstag    ),
+      .dispatch_rsvalid  (rst_dispatch_rsvalid  ),
+      .dispatch_rsaddr   (dispatch_rst_rsaddr   ),
+      .dispatch_rttag    (rst_dispatch_rttag    ),
+      .dispatch_rtvalid  (rst_dispatch_rtvalid  ),
+      .dispatch_rtaddr   (dispatch_rst_rtaddr   )
+   );
 
    tagfifo tagfifo (
       .tagout_tf (),
@@ -75,6 +139,7 @@ module dispatch(
 
    //jmp_exec jmp_exec();
 
+   /*
    dispatcher dispatcher(
       // common signals to all queues
       .dispatch_rs_data      (),
@@ -101,7 +166,7 @@ module dispatch(
       .dispatch_en_div       (),
       .issueque_full_div     ()
    );
-
+*/
 endmodule
 
 `endif

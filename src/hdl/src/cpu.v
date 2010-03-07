@@ -3,6 +3,8 @@
 `ifndef CPU_V
 `define CPU_V
 
+`include "globals.vh"
+
 module cpu(
    input clk,
    input rst

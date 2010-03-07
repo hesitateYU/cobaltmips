@@ -62,6 +62,66 @@ module cpu(
       .ifq_jump_branch_valid   (dispatch_ifq_jump_branch_valid  )
    );
 
+   equeueint equeueint(
+      .clk             (clk                     ),
+      .rst             (rst                     ),
+      .dispatch_inst   (dispatch_equeue_inst    ),
+      .dispatch_rsvalid(dispatch_equeue_rsvalid ),
+      .dispatch_rtvalid(dispatch_equeue_rtvalid ),
+      .dispatch_en     (dispatch_equeue_en      ),
+      .dispatch_ready  (equeueint_dispatch_ready),
+      .cdb_data        (equeueint_cdb_data      ),
+      .cdb_tag         (equeueint_cdb_tag       ),
+      .cdb_valid       (equeueint_cdb_valid     ),
+      .cdb_branch      (equeueint_cdb_branch    ),
+      .cdb_branch_taken(equeueint_cdb_taken     )
+   );
+
+   equeuels equeuels(
+      .clk             (clk                    ),
+      .rst             (rst                    ),
+      .dispatch_inst   (dispatch_equeue_inst   ),
+      .dispatch_rsvalid(dispatch_equeue_rsvalid),
+      .dispatch_rtvalid(dispatch_equeue_rtvalid),
+      .dispatch_en     (dispatch_equeue_en     ),
+      .dispatch_ready  (equeuels_dispatch_ready),
+      .cdb_data        (equeuels_cdb_data      ),
+      .cdb_tag         (equeuels_cdb_tag       ),
+      .cdb_valid       (equeuels_cdb_valid     ),
+      .cdb_branch      (equeuels_cdb_branch    ),
+      .cdb_branch_taken(equeuels_cdb_taken     )
+   );
+
+      equeuediv equeuediv(
+      .clk             (clk                     ),
+      .rst             (rst                     ),
+      .dispatch_inst   (dispatch_equeue_inst    ),
+      .dispatch_rsvalid(dispatch_equeue_rsvalid ),
+      .dispatch_rtvalid(dispatch_equeue_rtvalid ),
+      .dispatch_en     (dispatch_equeue_en      ),
+      .dispatch_ready  (equeuediv_dispatch_ready),
+      .cdb_data        (equeuediv_cdb_data      ),
+      .cdb_tag         (equeuediv_cdb_tag       ),
+      .cdb_valid       (equeuediv_cdb_valid     ),
+      .cdb_branch      (equeuediv_cdb_branch    ),
+      .cdb_branch_taken(equeuediv_cdb_taken     )
+   );
+
+   equeuemult equeuemult(
+      .clk             (clk                      ),
+      .rst             (rst                      ),
+      .dispatch_inst   (dispatch_equeue_inst     ),
+      .dispatch_rsvalid(dispatch_equeue_rsvalid  ),
+      .dispatch_rtvalid(dispatch_equeue_rtvalid  ),
+      .dispatch_en     (dispatch_equeue_en       ),
+      .dispatch_ready  (equeuemult_dispatch_ready),
+      .cdb_data        (equeuemult_cdb_data      ),
+      .cdb_tag         (equeuemult_cdb_tag       ),
+      .cdb_valid       (equeuemult_cdb_valid     ),
+      .cdb_branch      (equeuemult_cdb_branch    ),
+      .cdb_branch_taken(equeuemult_cdb_taken     )
+   );
+
 endmodule
 
 `endif

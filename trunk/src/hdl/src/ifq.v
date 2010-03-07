@@ -16,7 +16,7 @@ module ifq(
    output reg  [31:0] dispatch_inst,
    output reg         dispatch_empty,
    input              dispatch_rd_en,
-   input       [31:0] dispatch_jump_branch_address,
+   input       [31:0] dispatch_jump_branch_addr,
    input              dispatch_jump_branch_valid
 );
 
@@ -57,7 +57,7 @@ module ifq(
    always @(*) begin : pc_calc_proc
       // Address calculation when branch/jump detected.
       if (dispatch_jump_branch_valid) begin
-         pc_in  = dispatch_jump_branch_address;
+         pc_in  = dispatch_jump_branch_addr;
          pc_out = (~is_empty & dispatch_rd_en) ? pc_out_r + 4 : pc_out_r;
          icache_abort = 1'b1;
       end else begin

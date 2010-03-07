@@ -10,19 +10,28 @@ module dispatch(
    input      [31:0] ifq_inst,
    input             ifq_empty,
    output reg        ifq_rd_en,
-   output reg [31:0] ifq_jump_branch_address,
-   output reg        ifq_jump_branch_valid
+   output reg [31:0] ifq_jump_branch_addr,
+   output reg        ifq_jump_branch_valid,
 
-   /*
-   // i/f with CDB
    input      [ 5:0] cdb_tag,
    input             cdb_valid,
    input      [31:0] cdb_data,
    input             cdb_branch,
-   input             cdb_branch_taken
+   input             cdb_branch_taken,
 
-   // i/f with Integer Queue
-   */
+   // Common interface to all queues, including their handshake signals.
+   output reg [31:0] equeue_inst,
+   output reg        equeue_rsvalid,
+   output reg        equeue_rtvalid,
+
+   output reg        equeueint_en,
+   input             equeueint_ready,
+   output reg        equeuels_en,
+   input             equeuels_ready,
+   output reg        equeuemult_en,
+   input             equeuemult_ready,
+   output reg        equeuediv_en,
+   input             equeuediv_ready
 );
    //
    // Instruction decoder.
@@ -86,6 +95,70 @@ module dispatch(
    wire        rst_dispatch_rtvalid;
    wire [ 4:0] dispatch_rst_rtaddr;
 
+   // Signal declarations for Tag FIFO.
+   wire [ 5:0] tagfifo_dispatch_tag;
+   wire        dispatch_tagfifo_ren;
+   wire        tagfifo_dispatch_full;
+   wire        tagfifo_dispatch_empty;
+   wire [ 5:0] cdb_tagfifo_tag;
+   wire        cdb_tagfifo_valid;
+
+   // Internal registers used to flop decoded instruction to execution queues
+   // but they are not ready to receive.
+   reg  [31:0] equeue_inst_r;
+   reg         equeue_rsvalid_r;
+   reg         equeue_rtvalid_r;
+   always @(posedge clk) begin : dispatch_equeue_reg
+      equeue_inst_r    <= (rst) ? equeue_inst;
+      equeue_rsvalid_r <= (rst) ? equeue_rsvalid;
+      equeue_rtvalid_r <= (rst) ? equeue_rtvalid;
+   end
+
+   // Instruction given to execution queues could be assembled in any of its
+   // formats, identified by a one-hot vector equeue_inst_type:
+   //            |   6  |  5  |  5  |  5  |  5  |   6  |
+   //            +------+-----+-----+-----+-----+------+
+   //   Register |Opcode| Rs  | Rt  | Rd  |Shamt| Func |
+   //            +------+-----+-----+-----+-----+------+
+   //  Immediate |Opcode| Rs  | Rt  |  Immediate (16)  |
+   //            +------+-----+-----+------------------+
+   //       Jump |Opcode|                Address (26)  |
+   //            +------+-----+-----+------------------+
+   `define INST_RTYPE_BIT (0)
+   `define INST_ITYPE_BIT (1)
+   `define INST_JTYPE_BIT (2)
+   `define INST_ERROR (3'b000)
+   reg  [31:0] equeue_inst_rtype, equeue_inst_itype, equeue_inst_jtype;
+   reg  [ 5:0] equeue_inst_opcode;
+   reg  [ 4:0] equeue_inst_rs, equeue_inst_rt, equeue_inst_rd, equeue_inst_shamt;
+   reg  [15:0] equeue_inst_imm;
+   reg  [ 5:0] equeue_inst_funct;
+   reg  [25:0] equeue_inst_addr;
+   reg  [ 2:0] equeue_inst_type;
+   always @(*) begin : dispatch_inst_decode_proc
+      // Set defaults. Avoid latches and ensure instruction decoding is correct.
+      equeue_inst_type = `INST_ERROR;
+
+      equeue_inst_rtype = {equeue_inst_opcode, equeue_inst_rs, equeue_inst_rt, equeue_inst_rd, equeue_inst_shamt, equeue_inst_funct};
+      equeue_inst_itype = {equeue_inst_opcode, equeue_inst_rs, equeue_inst_rt, equeue_inst_imm};
+      equeue_inst_jtype = {equeue_inst_opcode, equeue_inst_addr};
+
+      case (1'b1)
+         equeue_inst_type[`INST_RTYPE_BIT]: equeue_inst = equeue_inst_rtype;
+         equeue_inst_type[`INST_ITYPE_BIT]: equeue_inst = equeue_inst_itype;
+         equeue_inst_type[`INST_JTYPE_BIT]: equeue_inst = equeue_inst_jtype;
+         default                          : equeue_inst = `INST_ERROR;
+      endcase
+      assert (equeue_inst_type != `INST_ERROR) else
+         $fatal($sformatf("Instruction type not valid %b.", equeue_inst_type));
+
+      equeue_rsvalid = ;
+      equeue_rtvalid = ;
+   end
+   `undef INST_RTYPE_BIT
+   `undef INST_ITYPE_BIT
+   `undef INST_JTYPE_BIT
+   `undef INST_ERROR
 
    regfile regfile (
       .clk             (clk                     ),
@@ -125,48 +198,14 @@ module dispatch(
    );
 
    tagfifo tagfifo (
-      .tagout_tf (),
-      .ren_tf    (),
-      .ff_tf     (),
-      .ef_tf     (),
-      .cdb_tag_tf()
-   //   .cdb_tag_tf // esta repetida en el diagrama, typo del profe.
+      .dispatch_tag  (tagfifo_dispatch_tag  ),
+      .dispatch_ren  (dispatch_tagfifo_ren  ),
+      .dispatch_full (tagfifo_dispatch_full ),
+      .dispatch_empty(tagfifo_dispatch_empty),
+      .cdb_tag       (cdb_tagfifo_tag       ),
+      .cdb_valid     (cdb_tagfifo_valid     )
    );
 
-   //branch_stall brst();
-
-   //branch_jmpaddr_calc brjmpcalc();
-
-   //jmp_exec jmp_exec();
-
-   /*
-   dispatcher dispatcher(
-      // common signals to all queues
-      .dispatch_rs_data      (),
-      .dispatch_rs_data_valid(),
-      .dispatch_rs_tag       (),
-      .dispatch_rt_data      (),
-      .dispatch_rt_data_valid(),
-      .dispatch_rt_tag       (),
-      .dispatch_rd_tag       (),
-      // integer queue specific signals
-      .dispatch_en_int       (),
-      .issueque_integer_full (),
-      .dispatch_opcode_int   (),
-      // load/store queue specific signals
-      .dispatch_en_ld_st     (),
-      .issueque_full_ld_st   (),
-      .dispatch_opcode_ld_st (),
-      .dispatch_imm_ld_st    (),
-      .token_ld_st           (),
-      // multiplier queue specific signals
-      .dispatch_en_mul       (),
-      .issueque_full_mul     (),
-      // division queue specific signals
-      .dispatch_en_div       (),
-      .issueque_full_div     ()
-   );
-*/
 endmodule
 
 `endif

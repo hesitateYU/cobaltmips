@@ -49,18 +49,20 @@ module reg_status_table(
        rtvalid_rst     = reg_status_table_r [rtaddr_rst][6]; 
    end
 
-   reg [31:0] wen;
-
    always @(*) begin : reg_status_table_wen_proc
-     integer j;
-     for (j=0; j<32; j=j+1)
-	wen[j] = (cdb_tag_rst == j) ? 1'b1: 1'b0;  
-     if (cdb_valid)
-	    wen_regfile_rst = wen;
-     else
-	    wen_regfile_rst = 32'h0; 
-    end
+     integer i;
+     for (i=0; i<32; i=i+1) begin
+        reg_status_table[i]= reg_status_table_r[i];
+        wen_regfile_rst[i]  = 1'b0;
+     end
 
+     for (i=0; i<32; i=i+1) begin
+	     if (reg_status_table [i][6] && cdb_valid && cdb_tag_rst == reg_status_table[i]) begin
+            reg_status_table[i] = 32'h0;	   
+            wen_regfile_rst[i]  = 1'b1;
+	     end	
+	  end
+   end  
 endmodule
 
 `endif

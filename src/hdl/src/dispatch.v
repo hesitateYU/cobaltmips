@@ -160,6 +160,51 @@ module dispatch(
    `undef INST_JTYPE_BIT
    `undef INST_ERROR
 
+/* Branch stall logic
+*
+* 
+*/
+   reg n_state, c_state;
+   parameter STATE0= 0,
+             STATE1 = 1;
+
+    always @(posedge clk) begin : branch_logic_fsm
+      c_state <= (rst) ? state0 : n_state; 
+    end
+
+   always @(*) begin : branch_logic_comb
+      case (c_state)
+         STATE0:
+         begin
+            stall_br = 1'b0;
+            if (!(branch= 1'b1 && !issue_integer_full)) begin
+               n_state = STATE0;
+            else if (branch= 1'b1 && !issue_integer_full) begin 
+               n_state = STATE1;
+            end
+            else 
+               n_state = n_state;
+         end
+         STATE1:
+         begin
+            stall_br = 1'b1;
+            if (cdb_branch)
+               if (cdb_branch_taken) begin
+               //try to dispatch current instruction
+               // 
+                  n_state = STATE0;
+               end
+               else begin
+               // do not dispatch current instruction
+            end
+            else begin
+               n_state = n_state;
+            end
+         end
+      endcase
+   end
+
+
    regfile regfile (
       .clk             (clk                     ),
       .rst             (rst                     ),

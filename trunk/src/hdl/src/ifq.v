@@ -52,13 +52,13 @@ module ifq(
       // both write/read pointers must point to the same address (0).
       // Read from icache 4 instructions at a time, and write to dispatch unit
       // only one instruction at a time.
-      rptr = dispatch_branch_valid ? 'h0 : do_inc_rptr ? rptr_r + 1 : rptr_r;
-      wptr = dispatch_branch_valid ? 'h0 : do_inc_wptr ? wptr_r + 4 : wptr_r;
+      rptr = (dispatch_branch_valid) ? 'h0 : (do_inc_rptr) ? rptr_r + 1 : rptr_r;
+      wptr = (dispatch_branch_valid) ? 'h0 : (do_inc_wptr) ? wptr_r + 4 : wptr_r;
 
       // 4 byte alignment for PC.
       // When no branch/jump, read 1 cache line (4 instructions at a time) from icache.
-      pcout = dispatch_branch_valid ? dispatch_branch_addr +  4 : do_inc_rptr ? pcout_r + 4 : pcout_r;
-      pcin  = dispatch_branch_valid ? dispatch_branch_addr + 16 : do_inc_wptr ? pcin_r + 16 : pcin_r;
+      pcout = (dispatch_branch_valid) ? dispatch_branch_addr +  4 : (do_inc_rptr) ? pcout_r + 4 : pcout_r;
+      pcin  = (dispatch_branch_valid) ? dispatch_branch_addr + 16 : (do_inc_wptr) ? pcin_r + 16 : pcin_r;
    end
 
    // Internal mux signals, one coming form memory and the other coming
@@ -98,10 +98,10 @@ module ifq(
       //       Fow now, we never set icache_abort.
       //
       icache_abort = 1'b0;
-      icache_pcin = dispatch_branch_valid ? dispatch_branch_addr : pcin_r;
+      icache_pcin = (dispatch_branch_valid) ? dispatch_branch_addr : pcin_r;
       icache_ren   = ~(dispatch_branch_valid | is_full);
 
-      dispatch_pcout_plus4 = dispatch_branch_valid ? pcout : pcout_r;
+      dispatch_pcout_plus4 = (dispatch_branch_valid) ? pcout : pcout_r;
       dispatch_inst        = bypass_mux_out;
       dispatch_empty       = is_empty;
    end

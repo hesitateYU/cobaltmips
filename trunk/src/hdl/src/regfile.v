@@ -28,10 +28,14 @@ module regfile #(
    reg  [W_DATA-1:0] mem_r [N_ENTRY-1:0];
 
    always @(*) begin: reg_file_write_proc
-      integer i;
+      integer i, count;
       for (i = 0; i < N_ENTRY; i = i + 1) begin
          mem[i] = (rst_wen_onehot[i]) ? cdb_wdata : mem_r[i];
       end
+
+      // Make sure one-hot vector has one (or zero) active bits.
+      for (i = 0; i < N_ENTRY; i = i + 1) if (rst_wen_onehot[i]) count = count + 1;
+      if (count != 0 && count != 1) $fatal("More than one write in one-hot vector");
    end
 
    always @(*) begin : reg_file_read_proc
@@ -43,7 +47,8 @@ module regfile #(
    always @(posedge clk) begin : reg_file_mem_assign
       integer i;
       for (i = 0; i < N_ENTRY; i = i + 1) begin
-         mem_r[i] <= (reset) ? 'h0 : mem[i];
+         //mem_r[i] <= (reset) ? 'h0 : mem[i];
+         mem_r[i] <= (reset) ? i : mem[i];
       end
    end
 

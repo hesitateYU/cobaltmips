@@ -152,7 +152,7 @@ module dispatch(
    always @(posedge clk) begin : dispatch_inst_imm_setx_reg
       inst_imm_sext_r <= (reset) ? 'h0 : inst_imm_sext;
    end
-
+/*
    always @(*) begin : dispatch_decode_proc
       // Set defaults.
       ifq_ren          = 1'b1;
@@ -178,7 +178,7 @@ module dispatch(
          end
       endcase
    end
-
+*/
    /*
    always @(*) begin : dispatch_inst_decode_proc
       ifq_inst_rs = () ? cdb_
@@ -209,10 +209,10 @@ module dispatch(
       .rst_wen_onehot  (rst_regfile_onehot      ),
 
       .dispatch_rs_addr(dispatch_regfile_rs_addr),
-      .dispatch_rs_data(regfile_dispatch_rs_data),
       .dispatch_rt_addr(dispatch_regfile_rt_addr),
-      .dispatch_rt_data(regfile_dispatch_rt_data),
       .debug_addr      (top_regfile_addr        ),
+      .dispatch_rs_data(regfile_dispatch_rs_data),
+      .dispatch_rt_data(regfile_dispatch_rt_data),
       .debug_data      (regfile_top_data        )
    );
 

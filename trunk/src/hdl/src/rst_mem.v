@@ -29,8 +29,8 @@ module rst_mem(
    always @(*) begin : reg_status_table_mem_write_proc
       integer i;
       for (i = 0; i < 32; i = i + 1) begin
-         mem[i] = (wport0_addr == i && wport0_wen) ? wport0_data : mem_r[i];
-         mem[i] = (wport1_addr == i && wport1_wen) ? wport1_data : mem_r[i];
+         mem[i] = (wport0_addr == i & wport0_wen) ? wport0_data : mem_r[i];
+         mem[i] = (wport1_addr == i & wport1_wen) ? wport1_data : mem_r[i];
       end
 
       //

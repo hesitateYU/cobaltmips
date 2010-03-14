@@ -18,14 +18,15 @@ module tagfifo #(
 
    parameter N_ENTRY = 2 ** W_ADDR;
 
+   // Typically, 64 tags of 6b.
    reg [W_DATA-1:0] mem   [N_ENTRY-1:0];
    reg [W_DATA-1:0] mem_r [N_ENTRY-1:0];
 
    reg [W_ADDR:0] wptr, wptr_r;
    reg [W_ADDR:0] rptr, rptr_r;
 
-   // + Pops always come from Dispatch Unit when requesting
-   //   a new tag for the RD register.
+   // + Pops always come from Dispatch Unit when requesting a new tag for the
+   //   RD register.
    // + Pushes always come from CDB when it publishes a TAG.
    reg can_pop, can_push;
    always @(*) begin  : tag_fifo_ptr_proc
@@ -41,7 +42,8 @@ module tagfifo #(
       for (i = 0; i < N_ENTRY; i = i + 1) mem[i] = mem_r[i];
 
       mem[wptr_r] = (can_push) ? cdb_tag : mem_r[wptr_r];
-      // Always dispatch the tag pointed by rptr.
+      // Dispatch tag must always be available and valid (unless fifo is
+      // empty).
       dispatch_tag = mem_r[rptr_r];
    end
 
@@ -52,6 +54,7 @@ module tagfifo #(
 
    always @(posedge clk) begin : tag_fifo_mem_reg
       integer i;
+      // FIFO must be initialized with values from 0 to (N_ENTRY-1).
       for (i = 0; i < N_ENTRY; i = i + 1) mem_r[i] <= (reset) ? i : mem[i];
    end
 

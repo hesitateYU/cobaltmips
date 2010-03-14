@@ -2,7 +2,7 @@
 `ifndef EQUEUEINT_V
 `define EQUEUEINT_V
 
-module equeueint(
+module equeueint (
    input             clk,
    input             reset,
 

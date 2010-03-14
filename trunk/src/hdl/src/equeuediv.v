@@ -2,7 +2,7 @@
 `ifndef EQUEUEDIV_V
 `define EQUEUEDIV_V
 
-module equeuediv(
+module equeuediv (
    input             clk,
    input             reset,
 

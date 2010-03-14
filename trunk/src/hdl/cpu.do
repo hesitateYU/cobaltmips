@@ -34,8 +34,8 @@ add wave -noupdate -expand -group ifq -format Literal -radix decimal /tb_top/cpu
 add wave -noupdate -expand -group ifq -format Literal -radix decimal /tb_top/cpu/ifq/pcin_r
 add wave -noupdate -expand -group ifq -format Literal -radix decimal /tb_top/cpu/ifq/pcout
 add wave -noupdate -expand -group ifq -format Literal -radix decimal /tb_top/cpu/ifq/pcout_r
-add wave -noupdate -format Literal -radix hexadecimal /tb_top/cpu/ifq_dispatch_inst
 add wave -noupdate -format Literal -radix hexadecimal /tb_top/cpu/ifq_icache_pcin
+add wave -noupdate -format Literal -radix hexadecimal /tb_top/cpu/ifq_dispatch_inst
 add wave -noupdate -format Logic -radix hexadecimal /tb_top/cpu/ifq_dispatch_empty
 add wave -noupdate -format Logic /tb_top/cpu/ifq_icache_ren
 add wave -noupdate -color Magenta -format Logic -radix hexadecimal /tb_top/cpu/dispatch_ifq_rd_en
@@ -54,17 +54,31 @@ add wave -noupdate -expand -group dispatch -format Literal -radix unsigned /tb_t
 add wave -noupdate -expand -group dispatch -format Literal -radix unsigned /tb_top/cpu/dispatch/inst_addr_sext
 add wave -noupdate -expand -group dispatch -format Literal -radix unsigned /tb_top/cpu/dispatch/inst_addr_jump
 add wave -noupdate -expand -group dispatch -format Literal -radix unsigned /tb_top/cpu/dispatch/inst_addr_branch
-add wave -noupdate -expand -group regfile -format Literal -radix unsigned /tb_top/cpu/dispatch/regfile/mem
-add wave -noupdate -expand -group regfile -format Literal -radix hexadecimal -expand /tb_top/cpu/dispatch/regfile/mem_r
-add wave -noupdate -expand -group regfile -format Literal -radix hexadecimal /tb_top/cpu/dispatch/regfile/cdb_wdata
-add wave -noupdate -expand -group regfile -format Literal -radix binary /tb_top/cpu/dispatch/regfile/rst_wen_onehot
-add wave -noupdate -expand -group regfile -format Literal -radix unsigned /tb_top/cpu/dispatch/regfile/dispatch_rs_addr
-add wave -noupdate -expand -group regfile -format Literal -radix unsigned /tb_top/cpu/dispatch/regfile/dispatch_rt_addr
-add wave -noupdate -expand -group regfile -format Literal -radix unsigned /tb_top/cpu/dispatch/regfile/debug_addr
-add wave -noupdate -expand -group regfile -format Literal -radix hexadecimal /tb_top/cpu/dispatch/regfile/dispatch_rs_data
-add wave -noupdate -expand -group regfile -format Literal -radix hexadecimal /tb_top/cpu/dispatch/regfile/dispatch_rt_data
-add wave -noupdate -expand -group regfile -format Literal -radix hexadecimal /tb_top/cpu/dispatch/regfile/debug_data
-add wave -noupdate -format Literal -radix hexadecimal /tb_top/cpu/cdb_dispatch_data
+add wave -noupdate -group regfile -format Literal -radix unsigned /tb_top/cpu/dispatch/regfile/mem
+add wave -noupdate -group regfile -format Literal -radix hexadecimal /tb_top/cpu/dispatch/regfile/mem_r
+add wave -noupdate -group regfile -format Literal -radix hexadecimal /tb_top/cpu/dispatch/regfile/cdb_wdata
+add wave -noupdate -group regfile -format Literal -radix binary /tb_top/cpu/dispatch/regfile/rst_wen_onehot
+add wave -noupdate -group regfile -format Literal -radix unsigned /tb_top/cpu/dispatch/regfile/dispatch_rs_addr
+add wave -noupdate -group regfile -format Literal -radix unsigned /tb_top/cpu/dispatch/regfile/dispatch_rt_addr
+add wave -noupdate -group regfile -format Literal -radix unsigned /tb_top/cpu/dispatch/regfile/debug_addr
+add wave -noupdate -group regfile -format Literal -radix hexadecimal /tb_top/cpu/dispatch/regfile/dispatch_rs_data
+add wave -noupdate -group regfile -format Literal -radix hexadecimal /tb_top/cpu/dispatch/regfile/dispatch_rt_data
+add wave -noupdate -group regfile -format Literal -radix hexadecimal /tb_top/cpu/dispatch/regfile/debug_data
+add wave -noupdate -expand -group tagfifo -format Literal -radix hexadecimal /tb_top/cpu/cdb_dispatch_data
+add wave -noupdate -expand -group tagfifo -format Logic /tb_top/cpu/dispatch/tagfifo/dispatch_ren
+add wave -noupdate -expand -group tagfifo -format Logic /tb_top/cpu/dispatch/tagfifo/dispatch_full
+add wave -noupdate -expand -group tagfifo -format Literal /tb_top/cpu/dispatch/tagfifo/dispatch_tag
+add wave -noupdate -expand -group tagfifo -format Logic /tb_top/cpu/dispatch/tagfifo/dispatch_empty
+add wave -noupdate -expand -group tagfifo -format Literal /tb_top/cpu/dispatch/tagfifo/cdb_tag
+add wave -noupdate -expand -group tagfifo -format Logic /tb_top/cpu/dispatch/tagfifo/cdb_valid
+add wave -noupdate -expand -group tagfifo -format Literal /tb_top/cpu/dispatch/tagfifo/mem
+add wave -noupdate -expand -group tagfifo -format Literal /tb_top/cpu/dispatch/tagfifo/mem_r
+add wave -noupdate -expand -group tagfifo -format Literal /tb_top/cpu/dispatch/tagfifo/wptr
+add wave -noupdate -expand -group tagfifo -format Literal /tb_top/cpu/dispatch/tagfifo/wptr_r
+add wave -noupdate -expand -group tagfifo -format Literal /tb_top/cpu/dispatch/tagfifo/rptr
+add wave -noupdate -expand -group tagfifo -format Literal /tb_top/cpu/dispatch/tagfifo/rptr_r
+add wave -noupdate -expand -group tagfifo -format Logic /tb_top/cpu/dispatch/tagfifo/can_pop
+add wave -noupdate -expand -group tagfifo -format Logic /tb_top/cpu/dispatch/tagfifo/can_push
 add wave -noupdate -format Literal -radix hexadecimal /tb_top/cpu/cdb_dispatch_tag
 add wave -noupdate -format Logic -radix hexadecimal /tb_top/cpu/cdb_dispatch_valid
 add wave -noupdate -format Logic -radix hexadecimal /tb_top/cpu/cdb_dispatch_branch
@@ -93,7 +107,7 @@ add wave -noupdate -divider dispatch_equeuediv
 add wave -noupdate -format Logic -radix hexadecimal /tb_top/cpu/dispatch_equeuediv_en
 add wave -noupdate -format Logic -radix hexadecimal /tb_top/cpu/equeuediv_dispatch_ready
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {119 ns} 0}
+WaveRestoreCursors {{Cursor 1} {130 ns} 0}
 configure wave -namecolwidth 197
 configure wave -valuecolwidth 82
 configure wave -justifyvalue left
@@ -108,4 +122,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {81 ns} {191 ns}
+WaveRestoreZoom {0 ns} {105 ns}

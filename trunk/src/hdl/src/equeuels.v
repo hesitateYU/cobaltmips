@@ -2,7 +2,7 @@
 `ifndef EQUEUELS_V
 `define EQUEUELS_V
 
-module equeuels(
+module equeuels (
    input             clk,
    input             reset,
 

@@ -2,14 +2,16 @@
 `ifndef DISPATCH_V
 `define DISPATCH_V
 
+`include "globals.vh"
+
 module dispatch(
    input             clk,
    input             reset,
 
-   input      [31:0] ifq_pc_out,
+   input      [31:0] ifq_pcout_plus4,
    input      [31:0] ifq_inst,
    input             ifq_empty,
-   output reg        ifq_rd_en,
+   output reg        ifq_ren,
    output reg [31:0] ifq_branch_addr,
    output reg        ifq_branch_valid,
 
@@ -43,47 +45,17 @@ module dispatch(
    output reg        equeuediv_en,
    input             equeuediv_ready
 );
-   //
-   // Instruction decoder.
-   // Instruction formats (based in opcode):
-   //
-   //            |Opcode| | 16 |
-   //            +------+-----+-----+-----+-----+------+
-   //            |   6  |  5  |  5  |  5  |  5  |   6  |
-   //   Reg Type |000000| Rs  | Rt  | Rd  |Shamt| Func |
-   //            +------+-----+-----+-----+-----+------+
-   //  Load Word |100011| Rs  | Rt  | Address(15)      |
-   //            +------+-----+-----+------------------+
-   // Store Word |101011| Rs  | Rt  | Address(15)      |
-   //            +------+-----+-----+------------------+
-   //  Branch Eq |000100| Rs  | Rt  | Address(15)      |
-   //            +------+-----+-----+------------------+
-   //       Jump |000010| Address(26)                  |
-   //            +------+------------------------------+
-   //
-   /// </Description>
-   always @(*) begin
-      /*
-      case (ifq_inst) begin
-         `OPCODE_RTYPE:
-         `OPCODE_BEQ:
-         `OPCODE_BNE:
-         `OPCODE_BLEZ:
-         `OPCODE_BGTZ:
-      endcase
-      */
-   end
 
    initial begin
       #5;
       #110; ifq_branch_valid = 1'b1; ifq_branch_addr = 32'h5;
-      #10  ifq_branch_valid = 1'b0;
-      #140 ifq_rd_en = 1'b0;
-      #40  ifq_rd_en = 1'b1;
+      #10   ifq_branch_valid = 1'b0;
+      #140  ifq_ren = 1'b0;
+      #40   ifq_ren = 1'b1;
    end
 
    always @(*) begin : ifq_oreg_proc
-      ifq_rd_en        = (reset) ? 'h0 : 1'b1;//~ifq_empty;
+      ifq_ren          = (reset) ? 'h0 : 1'b1;//~ifq_empty;
       ifq_branch_addr  = (reset) ? 'h0 : 32'h0;
       ifq_branch_valid = (reset) ? 'h0 : 1'b0;
    end
@@ -152,17 +124,61 @@ module dispatch(
    //            +------+-----+-----+------------------+
    //       Jump |Opcode|                Address (26)  |
    //            +------+-----+-----+------------------+
-   `define INST_RTYPE_BIT (0)
-   `define INST_ITYPE_BIT (1)
-   `define INST_JTYPE_BIT (2)
-   `define INST_ERROR (3'b000)
-   reg  [31:0] ifq_inst_rtype, ifq_inst_itype, ifq_inst_jtype;
-   reg  [ 5:0] ifq_inst_opcode;
-   reg  [ 4:0] ifq_inst_rs, ifq_inst_rt, ifq_inst_rd, ifq_inst_shamt;
-   reg  [15:0] ifq_inst_imm;
-   reg  [ 5:0] ifq_inst_funct;
-   reg  [25:0] ifq_inst_addr;
-   reg  [ 2:0] ifq_inst_type;
+   reg [ 5:0] inst_opcode, inst_func;
+   reg [ 4:0] inst_rdtag, inst_rstag, inst_rttag, inst_shamt;
+   reg [15:0] inst_imm;
+   reg [31:0] inst_imm_sext, inst_imm_sext_r;
+   reg [25:0] inst_addr;
+   reg [31:0] inst_addr_sext, inst_addr_jump, inst_addr_branch;
+   always @(*) begin : dispatch_ifq_inst_split_proc
+      inst_opcode = ifq_inst[31:26];
+      inst_rstag  = ifq_inst[25:21];
+      inst_rttag  = ifq_inst[20:16];
+      inst_rdtag  = ifq_inst[15:11];
+      inst_shamt  = ifq_inst[10: 6];
+      inst_func   = ifq_inst[ 5: 0];
+      inst_imm    = ifq_inst[15: 0];
+      inst_addr   = ifq_inst[25: 0];
+
+      // Calculate branch address and jump address using the sign-extended address
+      // provided in the instruction. Embedded jump address is 26 bits, unlike
+      // embedded branch address which is only 16 bits.
+      inst_imm_sext    = { {14 {inst_imm [15]} }, inst_imm << 2};
+      inst_addr_sext   = { { 6 {inst_addr[25]} }, inst_addr};
+      inst_addr_branch = ifq_pcout_plus4 + inst_imm_sext_r;
+      inst_addr_jump   = ifq_pcout_plus4 + inst_addr_sext;
+   end
+
+   always @(posedge clk) begin : dispatch_inst_imm_setx_reg
+      inst_imm_sext_r <= (reset) ? 'h0 : inst_imm_sext;
+   end
+
+   always @(*) begin : dispatch_decode_proc
+      // Set defaults.
+      ifq_ren          = 1'b1;
+      ifq_branch_valid = 1'b0;
+      ifq_branch_addr  = inst_addr_branch;
+
+      case (inst_opcode)
+         `OPCODE_RTYPE : begin
+
+         end
+         // Halt IFQ until branch result is published by CDB.
+         `OPCODE_BTYPE : begin
+            ifq_ren          = 1'b0;
+            ifq_branch_valid = 1'b0;
+            ifq_branch_addr  = inst_addr_branch;
+         end
+         `OPCODE_JTYPE : begin
+            ifq_branch_valid = 1'b1;
+            ifq_branch_addr  = inst_addr_jump;
+         end
+         default : begin
+
+         end
+      endcase
+   end
+
    /*
    always @(*) begin : dispatch_inst_decode_proc
       ifq_inst_rs = () ? cdb_
@@ -184,10 +200,6 @@ module dispatch(
       equeue_rtvalid = ;
    end
    */
-   `undef INST_RTYPE_BIT
-   `undef INST_ITYPE_BIT
-   `undef INST_JTYPE_BIT
-   `undef INST_ERROR
 
    regfile regfile (
       .clk             (clk                     ),

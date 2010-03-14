@@ -9,9 +9,10 @@
 // Most significant opcodes
 //
 `define OPCODE_RTYPE  (6'h00)
+`define OPCODE_JTYPE  (6'h02)
 `define OPCODE_J      (6'h02)
 `define OPCODE_JAL    (6'h03)
-`define OPCODE_BTYPE  (6'b00001XX)
+`define OPCODE_BTYPE  (6'b0001XX)
 `define OPCODE_BEQ    (6'h04)
 `define OPCODE_BNE    (6'h05)
 `define OPCODE_BLEZ   (6'h06)

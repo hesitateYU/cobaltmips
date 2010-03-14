@@ -2,7 +2,7 @@
 `ifndef EQUEUEMULT_V
 `define EQUEUEMULT_V
 
-module equeuemult(
+module equeuemult (
    input             clk,
    input             reset,
 

@@ -2,7 +2,7 @@
 `ifndef IFQ_V
 `define IFQ_V
 
-module ifq(
+module ifq (
    input              clk,
    input              reset,
    // Interface with instruction cache.

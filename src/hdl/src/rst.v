@@ -1,7 +1,7 @@
 `ifndef RST_V
 `define RST_V
 
-module rst(
+module rst (
    input             clk,
    input             reset,
 

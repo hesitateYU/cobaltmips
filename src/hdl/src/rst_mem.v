@@ -2,7 +2,7 @@
 `ifndef RST_MEM_V
 `define RST_MEM_V
 
-module rst_mem(
+module rst_mem (
    input            clk,
    input            reset,
 

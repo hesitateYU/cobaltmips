@@ -5,8 +5,10 @@
 
 module tb_top();
 
-   reg clk;
-   reg reset;
+   reg  clk;
+   reg  reset;
+   wire [ 4:0] debug_regfile_addr;
+   wire [31:0] debug_regfile_data;
 
    initial begin
       reset = 1'b1; #10; reset = 1'b0;
@@ -18,8 +20,10 @@ module tb_top();
    end
 
    cpu cpu(
-      .clk   (clk  ),
-      .reset (reset)
+      .clk                (clk               ),
+      .reset              (reset             ),
+      .debug_regfile_addr (debug_regfile_addr),
+      .debug_regfile_data (debug_regfile_data)
    );
 
 endmodule

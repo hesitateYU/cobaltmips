@@ -5,9 +5,11 @@
 
 `include "globals.vh"
 
-module cpu(
-   input        clk,
-   input        reset
+module cpu (
+   input         clk,
+   input         reset,
+   input  [ 4:0] debug_regfile_addr,
+   output [31:0] debug_regfile_data
 );
 
    wire [ 31:0] ifq_icache_pcin;
@@ -84,96 +86,98 @@ module cpu(
    );
 
    dispatch dispatch (
-      .clk              (clk                      ),
-      .reset            (reset                    ),
-      .ifq_pcout_plus4  (ifq_dispatch_pcout_plus4 ),
-      .ifq_inst         (ifq_dispatch_inst        ),
-      .ifq_empty        (ifq_dispatch_empty       ),
-      .ifq_ren          (dispatch_ifq_ren         ),
-      .ifq_branch_addr  (dispatch_ifq_branch_addr ),
-      .ifq_branch_valid (dispatch_ifq_branch_valid),
-      .cdb_tag          (cdb_dispatch_tag         ),
-      .cdb_valid        (cdb_dispatch_valid       ),
-      .cdb_data         (cdb_dispatch_data        ),
-      .cdb_branch       (cdb_dispatch_branch      ),
-      .cdb_branch_taken (cdb_dispatch_taken       ),
-      .equeue_imm       (dispatch_equeue_imm      ),
-      .equeue_rdtag     (dispatch_equeue_rdtag    ),
-      .equeue_rstag     (dispatch_equeue_rstag    ),
-      .equeue_rttag     (dispatch_equeue_rttag    ),
-      .equeue_rsdata    (dispatch_equeue_rsdata   ),
-      .equeue_rtdata    (dispatch_equeue_rtdata   ),
-      .equeue_rsvalid   (dispatch_equeue_rsvalid  ),
-      .equeue_rtvalid   (dispatch_equeue_rtvalid  ),
-      .equeuels_opcode  (dispatch_equeuels_opcode ),
-      .equeuels_en      (dispatch_equeuels_en     ),
-      .equeuels_ready   (equeuels_dispatch_ready  ),
-      .equeueint_opcode (dispatch_equeueint_opcode),
-      .equeueint_en     (dispatch_equeueint_en    ),
-      .equeueint_ready  (equeueint_dispatch_ready ),
-      .equeuemult_en    (dispatch_equeuemult_en   ),
-      .equeuemult_ready (equeuemult_dispatch_ready),
-      .equeuediv_en     (dispatch_equeuediv_en    ),
-      .equeuediv_ready  (equeuediv_dispatch_ready )
+      .clk                (clk                      ),
+      .reset              (reset                    ),
+      .ifq_pcout_plus4    (ifq_dispatch_pcout_plus4 ),
+      .ifq_inst           (ifq_dispatch_inst        ),
+      .ifq_empty          (ifq_dispatch_empty       ),
+      .ifq_ren            (dispatch_ifq_ren         ),
+      .ifq_branch_addr    (dispatch_ifq_branch_addr ),
+      .ifq_branch_valid   (dispatch_ifq_branch_valid),
+      .cdb_tag            (cdb_dispatch_tag         ),
+      .cdb_valid          (cdb_dispatch_valid       ),
+      .cdb_data           (cdb_dispatch_data        ),
+      .cdb_branch         (cdb_dispatch_branch      ),
+      .cdb_branch_taken   (cdb_dispatch_taken       ),
+      .equeue_imm         (dispatch_equeue_imm      ),
+      .equeue_rdtag       (dispatch_equeue_rdtag    ),
+      .equeue_rstag       (dispatch_equeue_rstag    ),
+      .equeue_rttag       (dispatch_equeue_rttag    ),
+      .equeue_rsdata      (dispatch_equeue_rsdata   ),
+      .equeue_rtdata      (dispatch_equeue_rtdata   ),
+      .equeue_rsvalid     (dispatch_equeue_rsvalid  ),
+      .equeue_rtvalid     (dispatch_equeue_rtvalid  ),
+      .equeuels_opcode    (dispatch_equeuels_opcode ),
+      .equeuels_en        (dispatch_equeuels_en     ),
+      .equeuels_ready     (equeuels_dispatch_ready  ),
+      .equeueint_opcode   (dispatch_equeueint_opcode),
+      .equeueint_en       (dispatch_equeueint_en    ),
+      .equeueint_ready    (equeueint_dispatch_ready ),
+      .equeuemult_en      (dispatch_equeuemult_en   ),
+      .equeuemult_ready   (equeuemult_dispatch_ready),
+      .equeuediv_en       (dispatch_equeuediv_en    ),
+      .equeuediv_ready    (equeuediv_dispatch_ready ),
+      .debug_regfile_addr (debug_regfile_addr       ),
+      .debug_regfile_data (debug_regfile_data       )
    );
 
    equeueint equeueint (
-      .clk             (clk                      ),
-      .reset           (reset                    ),
-      .dispatch_opcode (dispatch_equeueint_opcode),
-      .dispatch_en     (dispatch_equeueint_en    ),
-      .dispatch_ready  (equeueint_dispatch_ready ),
-      .dispatch_rdtag  (dispatch_equeue_rdtag    ),
-      .dispatch_rstag  (dispatch_equeue_rstag    ),
-      .dispatch_rttag  (dispatch_equeue_rttag    ),
-      .dispatch_rsdata (dispatch_equeue_rsdata   ),
-      .dispatch_rtdata (dispatch_equeue_rtdata   ),
-      .dispatch_rsvalid(dispatch_equeue_rsvalid  ),
-      .dispatch_rtvalid(dispatch_equeue_rtvalid  )
+      .clk              (clk                      ),
+      .reset            (reset                    ),
+      .dispatch_opcode  (dispatch_equeueint_opcode),
+      .dispatch_en      (dispatch_equeueint_en    ),
+      .dispatch_ready   (equeueint_dispatch_ready ),
+      .dispatch_rdtag   (dispatch_equeue_rdtag    ),
+      .dispatch_rstag   (dispatch_equeue_rstag    ),
+      .dispatch_rttag   (dispatch_equeue_rttag    ),
+      .dispatch_rsdata  (dispatch_equeue_rsdata   ),
+      .dispatch_rtdata  (dispatch_equeue_rtdata   ),
+      .dispatch_rsvalid (dispatch_equeue_rsvalid  ),
+      .dispatch_rtvalid (dispatch_equeue_rtvalid  )
    );
 
    equeuels equeuels (
-      .clk             (clk                     ),
-      .reset           (reset                   ),
-      .dispatch_opcode (dispatch_equeuels_opcode),
-      .dispatch_en     (dispatch_equeuels_en    ),
-      .dispatch_ready  (equeuels_dispatch_ready ),
-      .dispatch_imm    (dispatch_equeue_imm     ),
-      .dispatch_rdtag  (dispatch_equeue_rdtag   ),
-      .dispatch_rstag  (dispatch_equeue_rstag   ),
-      .dispatch_rttag  (dispatch_equeue_rttag   ),
-      .dispatch_rsdata (dispatch_equeue_rsdata  ),
-      .dispatch_rtdata (dispatch_equeue_rtdata  ),
-      .dispatch_rsvalid(dispatch_equeue_rsvalid ),
-      .dispatch_rtvalid(dispatch_equeue_rtvalid )
+      .clk              (clk                     ),
+      .reset            (reset                   ),
+      .dispatch_opcode  (dispatch_equeuels_opcode),
+      .dispatch_en      (dispatch_equeuels_en    ),
+      .dispatch_ready   (equeuels_dispatch_ready ),
+      .dispatch_imm     (dispatch_equeue_imm     ),
+      .dispatch_rdtag   (dispatch_equeue_rdtag   ),
+      .dispatch_rstag   (dispatch_equeue_rstag   ),
+      .dispatch_rttag   (dispatch_equeue_rttag   ),
+      .dispatch_rsdata  (dispatch_equeue_rsdata  ),
+      .dispatch_rtdata  (dispatch_equeue_rtdata  ),
+      .dispatch_rsvalid (dispatch_equeue_rsvalid ),
+      .dispatch_rtvalid (dispatch_equeue_rtvalid )
    );
 
    equeuediv equeuediv (
-      .clk             (clk                     ),
-      .reset           (reset                   ),
-      .dispatch_en     (dispatch_equeuediv_en   ),
-      .dispatch_ready  (equeuediv_dispatch_ready),
-      .dispatch_rdtag  (dispatch_equeue_rdtag   ),
-      .dispatch_rstag  (dispatch_equeue_rstag   ),
-      .dispatch_rttag  (dispatch_equeue_rttag   ),
-      .dispatch_rsdata (dispatch_equeue_rsdata  ),
-      .dispatch_rtdata (dispatch_equeue_rtdata  ),
-      .dispatch_rsvalid(dispatch_equeue_rsvalid ),
-      .dispatch_rtvalid(dispatch_equeue_rtvalid )
+      .clk              (clk                     ),
+      .reset            (reset                   ),
+      .dispatch_en      (dispatch_equeuediv_en   ),
+      .dispatch_ready   (equeuediv_dispatch_ready),
+      .dispatch_rdtag   (dispatch_equeue_rdtag   ),
+      .dispatch_rstag   (dispatch_equeue_rstag   ),
+      .dispatch_rttag   (dispatch_equeue_rttag   ),
+      .dispatch_rsdata  (dispatch_equeue_rsdata  ),
+      .dispatch_rtdata  (dispatch_equeue_rtdata  ),
+      .dispatch_rsvalid (dispatch_equeue_rsvalid ),
+      .dispatch_rtvalid (dispatch_equeue_rtvalid )
    );
 
    equeuemult equeuemult (
-      .clk             (clk                      ),
-      .reset           (reset                    ),
-      .dispatch_en     (dispatch_equeuemult_en   ),
-      .dispatch_ready  (equeuemult_dispatch_ready),
-      .dispatch_rdtag  (dispatch_equeue_rdtag    ),
-      .dispatch_rstag  (dispatch_equeue_rstag    ),
-      .dispatch_rttag  (dispatch_equeue_rttag    ),
-      .dispatch_rsdata (dispatch_equeue_rsdata   ),
-      .dispatch_rtdata (dispatch_equeue_rtdata   ),
-      .dispatch_rsvalid(dispatch_equeue_rsvalid  ),
-      .dispatch_rtvalid(dispatch_equeue_rtvalid  )
+      .clk              (clk                      ),
+      .reset            (reset                    ),
+      .dispatch_en      (dispatch_equeuemult_en   ),
+      .dispatch_ready   (equeuemult_dispatch_ready),
+      .dispatch_rdtag   (dispatch_equeue_rdtag    ),
+      .dispatch_rstag   (dispatch_equeue_rstag    ),
+      .dispatch_rttag   (dispatch_equeue_rttag    ),
+      .dispatch_rsdata  (dispatch_equeue_rsdata   ),
+      .dispatch_rtdata  (dispatch_equeue_rtdata   ),
+      .dispatch_rsvalid (dispatch_equeue_rsvalid  ),
+      .dispatch_rtvalid (dispatch_equeue_rtvalid  )
    );
 
 endmodule

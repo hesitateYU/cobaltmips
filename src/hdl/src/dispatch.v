@@ -4,7 +4,7 @@
 
 `include "globals.vh"
 
-module dispatch(
+module dispatch (
    input             clk,
    input             reset,
 
@@ -43,7 +43,10 @@ module dispatch(
    input             equeuemult_ready,
 
    output reg        equeuediv_en,
-   input             equeuediv_ready
+   input             equeuediv_ready,
+
+   input      [ 4:0] debug_regfile_addr,
+   output     [31:0] debug_regfile_data
 );
 
    initial begin
@@ -62,13 +65,10 @@ module dispatch(
 
    // Signal declarations for Regfile.
    wire [31:0] cdb_regfile_wdata;
-   wire [31:0] rst_regfile_onehot;
    wire [ 4:0] dispatch_regfile_rs_addr;
    wire [31:0] regfile_dispatch_rs_data;
    wire [ 4:0] dispatch_regfile_rt_addr;
    wire [31:0] regfile_dispatch_rt_data;
-   wire [ 4:0] top_regfile_addr;
-   wire [31:0] regfile_top_data;
 
    // Signal declarations for Register Status Table.
    wire [ 5:0] dispatch_rst_tag;
@@ -202,51 +202,51 @@ module dispatch(
    */
 
    regfile regfile (
-      .clk             (clk                     ),
-      .reset           (reset                   ),
+      .clk              (clk                     ),
+      .reset            (reset                   ),
 
-      .cdb_wdata       (cdb_regfile_wdata       ),
-      .rst_wen_onehot  (rst_regfile_onehot      ),
+      .cdb_wdata        (cdb_regfile_wdata       ),
+      .rst_wen_onehot   (rst_regfile_wen_onehot  ),
 
-      .dispatch_rs_addr(dispatch_regfile_rs_addr),
-      .dispatch_rt_addr(dispatch_regfile_rt_addr),
-      .debug_addr      (top_regfile_addr        ),
-      .dispatch_rs_data(regfile_dispatch_rs_data),
-      .dispatch_rt_data(regfile_dispatch_rt_data),
-      .debug_data      (regfile_top_data        )
+      .dispatch_rs_addr (dispatch_regfile_rs_addr),
+      .dispatch_rt_addr (dispatch_regfile_rt_addr),
+      .debug_addr       (debug_regfile_addr      ),
+      .dispatch_rs_data (regfile_dispatch_rs_data),
+      .dispatch_rt_data (regfile_dispatch_rt_data),
+      .debug_data       (debug_regfile_data      )
    );
 
    rst rst(
-      .clk               (clk                   ),
-      .reset             (reset                 ),
+      .clk                (clk                   ),
+      .reset              (reset                 ),
 
-      .dispatch_tag      (dispatch_rst_tag      ),
-      .dispatch_valid    (dispatch_rst_valid    ),
-      .dispatch_addr     (dispatch_rst_addr     ),
-      .dispatch_wen      (dispatch_rst_wen      ),
+      .dispatch_tag       (dispatch_rst_tag      ),
+      .dispatch_valid     (dispatch_rst_valid    ),
+      .dispatch_addr      (dispatch_rst_addr     ),
+      .dispatch_wen       (dispatch_rst_wen      ),
 
-      .cdb_tag           (cdb_rst_tag           ),
-      .cdb_valid         (cdb_rst_valid         ),
+      .cdb_tag            (cdb_rst_tag           ),
+      .cdb_valid          (cdb_rst_valid         ),
 
-      .regfile_wen_onehot(rst_regfile_wen_onehot),
+      .regfile_wen_onehot (rst_regfile_wen_onehot),
 
-      .dispatch_rstag    (rst_dispatch_rstag    ),
-      .dispatch_rsvalid  (rst_dispatch_rsvalid  ),
-      .dispatch_rsaddr   (dispatch_rst_rsaddr   ),
-      .dispatch_rttag    (rst_dispatch_rttag    ),
-      .dispatch_rtvalid  (rst_dispatch_rtvalid  ),
-      .dispatch_rtaddr   (dispatch_rst_rtaddr   )
+      .dispatch_rstag     (rst_dispatch_rstag    ),
+      .dispatch_rsvalid   (rst_dispatch_rsvalid  ),
+      .dispatch_rsaddr    (dispatch_rst_rsaddr   ),
+      .dispatch_rttag     (rst_dispatch_rttag    ),
+      .dispatch_rtvalid   (rst_dispatch_rtvalid  ),
+      .dispatch_rtaddr    (dispatch_rst_rtaddr   )
    );
 
    tagfifo tagfifo (
-      .clk           (clk                   ),
-      .reset         (reset                 ),
-      .dispatch_tag  (tagfifo_dispatch_tag  ),
-      .dispatch_ren  (dispatch_tagfifo_ren  ),
-      .dispatch_full (tagfifo_dispatch_full ),
-      .dispatch_empty(tagfifo_dispatch_empty),
-      .cdb_tag       (cdb_tagfifo_tag       ),
-      .cdb_valid     (cdb_tagfifo_valid     )
+      .clk            (clk                   ),
+      .reset          (reset                 ),
+      .dispatch_tag   (tagfifo_dispatch_tag  ),
+      .dispatch_ren   (dispatch_tagfifo_ren  ),
+      .dispatch_full  (tagfifo_dispatch_full ),
+      .dispatch_empty (tagfifo_dispatch_empty),
+      .cdb_tag        (cdb_tagfifo_tag       ),
+      .cdb_valid      (cdb_tagfifo_valid     )
    );
 
 endmodule

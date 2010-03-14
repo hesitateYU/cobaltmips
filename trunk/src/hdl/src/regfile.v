@@ -1,30 +1,35 @@
 `ifndef REGFILE_V
 `define REGFILE_V
 
-module regfile(
-   input             clk,
-   input             rst,
+module regfile #(
+   parameter W_DATA = 32,
+   parameter W_ADDR = 5
+)(
+   input                   clk,
+   input                   reset,
 
    // Single write port, data comes from CDB and address is
    // encoded as one-hot from register status table.
-   input      [31:0] cdb_wdata,
-   input      [31:0] rst_wen_onehot,
+   input      [W_DATA-1:0] cdb_wdata,
+   input      [W_DATA-1:0] rst_wen_onehot,
 
    // 2 read ports for RS and RT registers.
-   input      [ 4:0] dispatch_rs_addr,
-   output reg [31:0] dispatch_rs_data,
-   input      [ 4:0] dispatch_rt_addr,
-   output reg [31:0] dispatch_rt_data,
-   input      [ 4:0] debug_addr,
-   output reg [31:0] debug_data
+   input      [W_ADDR-1:0] dispatch_rs_addr,
+   input      [W_ADDR-1:0] dispatch_rt_addr,
+   input      [W_ADDR-1:0] debug_addr,
+   output reg [W_DATA-1:0] dispatch_rs_data,
+   output reg [W_DATA-1:0] dispatch_rt_data,
+   output reg [W_DATA-1:0] debug_data
 );
 
-   reg  [31:0] mem   [31:0];
-   reg  [31:0] mem_r [31:0];
+   parameter N_ENTRY = 2 ** W_ADDR;
+
+   reg  [W_DATA-1:0] mem   [N_ENTRY-1:0];
+   reg  [W_DATA-1:0] mem_r [N_ENTRY-1:0];
 
    always @(*) begin: reg_file_write_proc
       integer i;
-      for (i = 0; i < 32; i = i + 1) begin
+      for (i = 0; i < N_ENTRY; i = i + 1) begin
          mem[i] = (rst_wen_onehot[i]) ? cdb_wdata : mem_r[i];
       end
    end
@@ -37,8 +42,8 @@ module regfile(
 
    always @(posedge clk) begin : reg_file_mem_assign
       integer i;
-      for (i=0; i<32; i= i+1) begin
-         mem_r[i] <= (rst) ? 'h0 : mem[i];
+      for (i = 0; i < N_ENTRY; i = i + 1) begin
+         mem_r[i] <= (reset) ? 'h0 : mem[i];
       end
    end
 

@@ -3,46 +3,46 @@
 `define ICACHE_V
 
 module icache #(
-   parameter INC_OREG = 1'b0
+   parameter W_IDATA      = 32,
+   parameter W_ODATA      = 128,
+   parameter W_ADDR       = 6,
+   parameter INCLUDE_OREG = 1'b0
 )(
-   input              clk,
-   input              rst,
-   input       [31:0] ifq_pc_in,
-   input              ifq_rd_en,
-   input              ifq_abort,
-   output reg [127:0] ifq_dout,
-   output reg         ifq_dout_valid
+   input                     clk,
+   input                     reset,
+   input       [W_IDATA-1:0] ifq_pc_in,
+   input                     ifq_rd_en,
+   input                     ifq_abort,
+   output reg [W_ODATA-1:0]  ifq_dout,
+   output reg                ifq_dout_valid
 );
+
+   parameter N_ENTRY     = 2 ** W_ADDR;
+   parameter N_BYTEALIGN = W_ODATA / W_IDATA;
 
    //
    // TODO: replace with a RAM block for FPGA implementation.
    //
    // Internal cache memory, 128x64.
-   reg [127:0] mem   [63:0];
-   reg [127:0] mem_r [63:0];
+   reg [W_ODATA-1:0] mem   [N_ENTRY-1:0];
+   reg [W_ODATA-1:0] mem_r [N_ENTRY-1:0];
 
-   reg dout_valid, dout_valid_r;
-   reg [127:0] dout, dout_r;
+   reg               dout_valid, dout_valid_r;
+   reg [W_ODATA-1:0] dout, dout_r;
 
-   reg [27:0] line_sel;
-
+   reg [W_IDATA-N_BYTEALIGN-1:0] line_sel;
    always @(*) begin
-      // Addresses are aligned to 4 bits, ignore (zeros) 4 LSB.
-      line_sel = ifq_pc_in[31:4];
+      // Addresses are aligned to N_BYTEALIGN bytes, ignore the LSB.
+      line_sel = ifq_pc_in[W_IDATA-1:N_BYTEALIGN];
 
       // Since read delay is only one cycle, we always set dout_valid to TRUE
       // unless there is an abort pending.
-      if (ifq_rd_en && !ifq_abort) begin
-         dout       = mem[line_sel];
-         dout_valid = 1'b1;
-      end else begin
-         dout       = dout_r;
-         dout_valid = 1'b0;
-      end
+      dout_valid = ifq_rd_en;// & ~ifq_abort;
+      dout       = (dout_valid) ? mem_r[line_sel] : dout_r;
    end
 
    always @(*) begin : out_reg_assignment
-      if (INC_OREG == 1'b1) begin
+      if (INCLUDE_OREG) begin
          ifq_dout       = dout_r;
          ifq_dout_valid = dout_valid_r;
       end else begin
@@ -51,22 +51,31 @@ module icache #(
       end
    end
 
-   always @(posedge clk) begin : dout_reg
-      dout_r       <= (rst) ? 128'h0 : dout;
-      dout_valid_r <= (rst) ?   1'b0 : dout_valid;
-   end
-
    always @(*) begin : mem_proc
       integer i;
-      for(i = 0; i < 64; i = i + 1) begin
+      for(i = 0; i < N_ENTRY; i = i + 1) begin
          mem[i] = mem_r[i];
       end
    end
 
+   always @(posedge clk) begin : dout_reg
+      dout_r       <= (reset) ? 'h0 : dout;
+      dout_valid_r <= (reset) ? 'h0 : dout_valid;
+   end
+
+   reg [W_ODATA-1:0] init_data, init_data_temp;
    always @(posedge clk) begin : mem_reg
-      integer i;
-      for(i = 0; i < 64; i = i + 1) begin
-         mem_r[i] <= (rst) ? {(i*4)+3, (i*4)+2, (i*4)+1, (i*4)} : mem[i];
+      integer i, j;
+      if (reset) $display("icache contents:");
+      for(i = 0; i < N_ENTRY; i = i + 1) begin
+         init_data_temp = 'h0;
+         init_data      = 'h0;
+         for (j = 0; j < N_BYTEALIGN; j = j + 1) begin
+            init_data_temp = (j + (N_BYTEALIGN * i)) << (j * W_IDATA);
+            init_data = init_data | init_data_temp;
+         end
+         mem_r[i] <= (reset) ? init_data : mem[i];
+         if (reset) $display("[%h] 0x%h", i * N_BYTEALIGN, init_data);
       end
    end
 

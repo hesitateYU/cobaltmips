@@ -6,20 +6,20 @@
 module tb_top();
 
    reg clk;
-   reg rst;
+   reg reset;
 
    initial begin
-      rst = 1; #20; rst = 0;
+      reset = 1'b1; #10; reset = 1'b0;
    end
 
    initial begin
-      clk = 0;
+      clk = 1'b0;
       forever #5 clk <= ~clk;
    end
 
    cpu cpu(
-      .clk (clk),
-      .rst (rst)
+      .clk   (clk  ),
+      .reset (reset)
    );
 
 endmodule

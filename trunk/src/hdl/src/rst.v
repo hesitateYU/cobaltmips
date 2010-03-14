@@ -1,9 +1,9 @@
 `ifndef RST_V
 `define RST_V
 
-module reg_status_table(
+module rst(
    input             clk,
-   input             rst,
+   input             reset,
 
    // Write port 0.
    input      [ 5:0] dispatch_tag,
@@ -80,9 +80,9 @@ module reg_status_table(
       end
    end
 
-   reg_status_table_mem reg_status_table_mem(
+   rst_mem rst_mem(
       .clk         (clk         ),
-      .rst         (rst         ),
+      .reset       (reset       ),
 
       // 2 read ports: RS and RT register fields.
       .rport0_addr (rport0_addr ),

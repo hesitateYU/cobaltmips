@@ -16,7 +16,7 @@ module tagfifo #(
    input            cdb_valid
 );
 
-   parameter N_ENTRY = 2 ** W_ADDR;
+   localparam N_ENTRY = 2 ** W_ADDR;
 
    // Typically, 64 tags of 6b.
    reg [W_DATA-1:0] mem   [N_ENTRY-1:0];

@@ -14,15 +14,15 @@ module regfile #(
    input      [W_DATA-1:0] rst_wen_onehot,
 
    // 2 read ports for RS and RT registers.
-   input      [W_ADDR-1:0] dispatch_rs_addr,
-   input      [W_ADDR-1:0] dispatch_rt_addr,
+   input      [W_ADDR-1:0] dispatch_rsaddr,
+   input      [W_ADDR-1:0] dispatch_rtaddr,
    input      [W_ADDR-1:0] debug_addr,
-   output reg [W_DATA-1:0] dispatch_rs_data,
-   output reg [W_DATA-1:0] dispatch_rt_data,
+   output reg [W_DATA-1:0] dispatch_rsdata,
+   output reg [W_DATA-1:0] dispatch_rtdata,
    output reg [W_DATA-1:0] debug_data
 );
 
-   parameter N_ENTRY = 2 ** W_ADDR;
+   localparam N_ENTRY = 2 ** W_ADDR;
 
    reg  [W_DATA-1:0] mem   [N_ENTRY-1:0];
    reg  [W_DATA-1:0] mem_r [N_ENTRY-1:0];
@@ -39,9 +39,9 @@ module regfile #(
    end
 
    always @(*) begin : reg_file_read_proc
-      dispatch_rs_data = mem_r[dispatch_rs_addr];
-      dispatch_rt_data = mem_r[dispatch_rt_addr];
-      debug_data       = mem_r[debug_addr];
+      dispatch_rsdata = mem_r[dispatch_rsaddr];
+      dispatch_rtdata = mem_r[dispatch_rtaddr];
+      debug_data      = mem_r[debug_addr];
    end
 
    always @(posedge clk) begin : reg_file_mem_assign

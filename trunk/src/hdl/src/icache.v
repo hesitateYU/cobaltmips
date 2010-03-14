@@ -24,8 +24,8 @@ module icache #(
    //       + N_BYTEALIGN might not work properly if set different than 4;
    //       + W_IDATA and W_ODATA must be a power of 2.
    //
-   parameter N_ENTRY     = 2 ** W_ADDR;
-   parameter N_BYTEALIGN = W_ODATA / W_IDATA;
+   localparam N_ENTRY     = 2 ** W_ADDR;
+   localparam N_BYTEALIGN = W_ODATA / W_IDATA;
 
    //
    // TODO: replace with a RAM block for FPGA implementation.

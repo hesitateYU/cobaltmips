@@ -10,8 +10,8 @@ module icache #(
 )(
    input                    clk,
    input                    reset,
-   input      [W_IDATA-1:0] ifq_pc_in,
-   input                    ifq_rd_en,
+   input      [W_IDATA-1:0] ifq_pcin,
+   input                    ifq_ren,
    input                    ifq_abort,
    output reg [W_ODATA-1:0] ifq_dout,
    output reg               ifq_dout_valid
@@ -38,7 +38,7 @@ module icache #(
    reg [W_IDATA-N_BYTEALIGN-1:0] line_sel;
    always @(*) begin
       // Addresses are aligned to N_BYTEALIGN bytes, ignore the LSB.
-      line_sel = ifq_pc_in[W_IDATA-1:N_BYTEALIGN];
+      line_sel = ifq_pcin[W_IDATA-1:N_BYTEALIGN];
 
       // Since read delay is only one cycle, we always set dout_valid to TRUE
       // unless there is an abort pending.
@@ -48,7 +48,7 @@ module icache #(
       //       cycles. INCLUDE_OREG works properly, adding a 1 tick delay in every
       //       read.
       //
-      dout_valid = ifq_rd_en & ~ifq_abort;
+      dout_valid = ifq_ren & ~ifq_abort;
       dout       = (dout_valid) ? mem_r[line_sel] : dout_r;
    end
 

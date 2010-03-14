@@ -6,16 +6,16 @@ module ifq(
    input              clk,
    input              reset,
    // Interface with instruction cache.
-   output reg  [31:0] icache_pc_in,
-   output reg         icache_rd_en,
+   output reg  [31:0] icache_pcin,
+   output reg         icache_ren,
    output reg         icache_abort,
    input      [127:0] icache_dout,
    input              icache_dout_valid,
    // Interface with dispatch unit.
-   output reg  [31:0] dispatch_pc_out,
+   output reg  [31:0] dispatch_pcout_plus4,
    output reg  [31:0] dispatch_inst,
    output reg         dispatch_empty,
-   input              dispatch_rd_en,
+   input              dispatch_ren,
    input       [31:0] dispatch_branch_addr,
    input              dispatch_branch_valid
 );
@@ -31,8 +31,8 @@ module ifq(
    reg  [  4:0] wptr, wptr_r;
    reg  [  4:0] rptr, rptr_r;
 
-   reg  [ 31:0] pc_in,  pc_in_r;
-   reg  [ 31:0] pc_out, pc_out_r;
+   reg  [ 31:0] pcin,  pcin_r;
+   reg  [ 31:0] pcout, pcout_r;
 
    reg is_full, is_empty;
    reg is_valid_read,  do_inc_rptr;
@@ -43,7 +43,7 @@ module ifq(
       is_full  = (wptr_r[4] != rptr_r[4]) && (wptr_r[3:2] == rptr_r[3:2]);
 
       bypass_mux_sel = dispatch_branch_valid | is_empty;
-      is_valid_read  = dispatch_rd_en    & ~is_empty;
+      is_valid_read  = dispatch_ren      & ~is_empty;
       is_valid_write = icache_dout_valid & ~is_full;
       do_inc_rptr    = is_valid_read | bypass_mux_sel;
       do_inc_wptr    = is_valid_write;
@@ -57,8 +57,8 @@ module ifq(
 
       // 4 byte alignment for PC.
       // When no branch/jump, read 1 cache line (4 instructions at a time) from icache.
-      pc_out = dispatch_branch_valid ? dispatch_branch_addr +  4 : do_inc_rptr ? pc_out_r + 4 : pc_out_r;
-      pc_in  = dispatch_branch_valid ? dispatch_branch_addr + 16 : do_inc_wptr ? pc_in_r + 16 : pc_in_r;
+      pcout = dispatch_branch_valid ? dispatch_branch_addr +  4 : do_inc_rptr ? pcout_r + 4 : pcout_r;
+      pcin  = dispatch_branch_valid ? dispatch_branch_addr + 16 : do_inc_wptr ? pcin_r + 16 : pcin_r;
    end
 
    // Internal mux signals, one coming form memory and the other coming
@@ -93,17 +93,17 @@ module ifq(
       // TODO: when should abort the reading from icache? If readings take much
       //       more than 1 cycle then it makes sense, but how to detect when we
       //       are still waiting for the instruction to arrive? We need to set
-      //       a register indicating that icache_rd_en has been issued but
+      //       a register indicating that icache_ren has been issued but
       //       icache_dout_valid hasn't arrived yet.
       //       Fow now, we never set icache_abort.
       //
       icache_abort = 1'b0;
-      icache_pc_in = dispatch_branch_valid ? dispatch_branch_addr : pc_in_r;
-      icache_rd_en = ~(dispatch_branch_valid | is_full);
+      icache_pcin = dispatch_branch_valid ? dispatch_branch_addr : pcin_r;
+      icache_ren   = ~(dispatch_branch_valid | is_full);
 
-      dispatch_pc_out = dispatch_branch_valid ? pc_out : pc_out_r;
-      dispatch_inst   = bypass_mux_out;
-      dispatch_empty  = is_empty;
+      dispatch_pcout_plus4 = dispatch_branch_valid ? pcout : pcout_r;
+      dispatch_inst        = bypass_mux_out;
+      dispatch_empty       = is_empty;
    end
 
    always @(*) begin : ifq_mem_proc
@@ -119,8 +119,8 @@ module ifq(
    end
 
    always @(posedge clk) begin : ifq_pc_reg
-      pc_in_r  <= (reset) ? 32'b0 : pc_in;
-      pc_out_r <= (reset) ? 32'b0 : pc_out;
+      pcin_r  <= (reset) ? 32'b0 : pcin;
+      pcout_r <= (reset) ? 32'b0 : pcout;
    end
 
    always @(posedge clk) begin : ifq_mem_reg

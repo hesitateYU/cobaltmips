@@ -2,11 +2,13 @@
 `ifndef ICACHE_V
 `define ICACHE_V
 
+`include "globals.vh"
+
 module icache #(
-   parameter W_IDATA      = 32,
-   parameter W_ODATA      = 128,
-   parameter W_ADDR       = 6,
-   parameter INCLUDE_OREG = 1'b0
+   parameter integer W_IDATA      = 32,
+   parameter integer W_ODATA      = 128,
+   parameter integer W_ADDR       = 6,
+   parameter integer INCLUDE_OREG = 1'b0
 )(
    input                    clk,
    input                    reset,
@@ -29,14 +31,15 @@ module icache #(
    // TODO: replace with a RAM block for FPGA implementation.
    //
    // Internal cache memory, 128x64.
-   reg [W_ODATA-1:0] mem   [N_ENTRY-1:0];
-   reg [W_ODATA-1:0] mem_r [N_ENTRY-1:0];
+   reg [W_ODATA-1:0] mem_init [N_ENTRY-1:0];
+   reg [W_ODATA-1:0] mem      [N_ENTRY-1:0];
+   reg [W_ODATA-1:0] mem_r    [N_ENTRY-1:0];
 
    reg               dout_valid, dout_valid_r;
    reg [W_ODATA-1:0] dout, dout_r;
 
    reg [W_IDATA-N_BYTEALIGN-1:0] line_sel;
-   always @(*) begin
+   always @(*) begin : icache_read_proc
       // Addresses are aligned to N_BYTEALIGN bytes, ignore the LSB.
       line_sel = ifq_pcin[W_IDATA-1:N_BYTEALIGN];
 
@@ -52,7 +55,7 @@ module icache #(
       dout       = (dout_valid) ? mem_r[line_sel] : dout_r;
    end
 
-   always @(*) begin : out_reg_assignment
+   always @(*) begin : icache_oreg_assign
       if (INCLUDE_OREG) begin
          ifq_dout       = dout_r;
          ifq_dout_valid = dout_valid_r;
@@ -62,7 +65,7 @@ module icache #(
       end
    end
 
-   always @(*) begin : mem_proc
+   always @(*) begin : ichache_write_proc
       integer i;
       for(i = 0; i < N_ENTRY; i = i + 1) begin
          mem[i] = mem_r[i];
@@ -74,20 +77,23 @@ module icache #(
       dout_valid_r <= (reset) ? 'h0 : dout_valid;
    end
 
-   reg [W_ODATA-1:0] init_data, init_data_temp;
    always @(posedge clk) begin : mem_reg
-      integer i, j;
-      if (reset) $display("icache contents:");
-      for(i = 0; i < N_ENTRY; i = i + 1) begin
-         init_data_temp = 'h0;
-         init_data      = 'h0;
-         for (j = 0; j < N_BYTEALIGN; j = j + 1) begin
-            init_data_temp = (j + (N_BYTEALIGN * i)) << (j * W_IDATA);
-            init_data = init_data | init_data_temp;
-         end
-         mem_r[i] <= (reset) ? init_data : mem[i];
-         if (reset) $display("[%h] 0x%h", i * (2**N_BYTEALIGN), init_data);
-      end
+      integer i;
+      for (i = 0; i < N_ENTRY; i = i + 1) mem_r[i] <= (reset) ? mem_init[i] : mem[i];
+   end
+
+   initial begin : ichace_mem_init_proc
+      integer i;
+      for (i = 0; i < N_ENTRY; i = i + 1) mem_init[i] = 'h0;
+
+      // Load program in verilog format.
+      //`include "programs/rtype.vh"
+      `include "programs/rtype_simple.vh"
+
+      // Load program in hex format.
+      //$readmemh("programs/incremental.txt", mem_init);
+
+      for (i = 0; i < N_ENTRY; i = i + 1) $display("[%h] %h", i * (2**N_BYTEALIGN), mem_init[i]);
    end
 
 endmodule

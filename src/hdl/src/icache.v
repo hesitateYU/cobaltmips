@@ -8,15 +8,20 @@ module icache #(
    parameter W_ADDR       = 6,
    parameter INCLUDE_OREG = 1'b0
 )(
-   input                     clk,
-   input                     reset,
-   input       [W_IDATA-1:0] ifq_pc_in,
-   input                     ifq_rd_en,
-   input                     ifq_abort,
-   output reg [W_ODATA-1:0]  ifq_dout,
-   output reg                ifq_dout_valid
+   input                    clk,
+   input                    reset,
+   input      [W_IDATA-1:0] ifq_pc_in,
+   input                    ifq_rd_en,
+   input                    ifq_abort,
+   output reg [W_ODATA-1:0] ifq_dout,
+   output reg               ifq_dout_valid
 );
 
+   //
+   // NOTE: the module is not entirely parametric:
+   //       + N_BYTEALIGN might not work properly if set different than 4;
+   //       + W_IDATA and W_ODATA must be a power of 2.
+   //
    parameter N_ENTRY     = 2 ** W_ADDR;
    parameter N_BYTEALIGN = W_ODATA / W_IDATA;
 
@@ -37,7 +42,13 @@ module icache #(
 
       // Since read delay is only one cycle, we always set dout_valid to TRUE
       // unless there is an abort pending.
-      dout_valid = ifq_rd_en;// & ~ifq_abort;
+      //
+      // TODO: what is the expected behavior when ifq_abort is set??
+      // TODO: validate the case when reading values takes more than one effective
+      //       cycles. INCLUDE_OREG works properly, adding a 1 tick delay in every
+      //       read.
+      //
+      dout_valid = ifq_rd_en & ~ifq_abort;
       dout       = (dout_valid) ? mem_r[line_sel] : dout_r;
    end
 
@@ -75,7 +86,7 @@ module icache #(
             init_data = init_data | init_data_temp;
          end
          mem_r[i] <= (reset) ? init_data : mem[i];
-         if (reset) $display("[%h] 0x%h", i * N_BYTEALIGN, init_data);
+         if (reset) $display("[%h] 0x%h", i * (2**N_BYTEALIGN), init_data);
       end
    end
 

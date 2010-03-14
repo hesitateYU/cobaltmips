@@ -75,10 +75,6 @@ module dispatch(
    end
 
    initial begin
-
-   end
-
-   initial begin
       #5;
       #110; ifq_branch_valid = 1'b1; ifq_branch_addr = 32'h5;
       #10  ifq_branch_valid = 1'b0;

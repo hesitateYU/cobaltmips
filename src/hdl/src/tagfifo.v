@@ -2,57 +2,63 @@
 `ifndef TAGFIFO_V
 `define TAGFIFO_V
 
-module tagfifo (
+module tagfifo #(
+   parameter W_DATA = 6,
+   parameter W_ADDR = 6
+)(
    input            clk,
-   input            rst,
-   output reg [5:0] dispatch_tag,
+   input            reset,
    input            dispatch_ren,
    output reg       dispatch_full,
+   output reg [5:0] dispatch_tag,
    output reg       dispatch_empty,
    input      [5:0] cdb_tag,
    input            cdb_valid
 );
 
-   reg [5:0] tag_fifo   [63:0];
-   reg [5:0] tag_fifo_r [63:0];
+   parameter N_ENTRY = 2 ** W_ADDR;
 
-   reg [6:0] wrptr, rdptr;
-   reg [6:0] wrptr_r, rdptr_r;
+   reg [W_DATA-1:0] mem   [N_ENTRY-1:0];
+   reg [W_DATA-1:0] mem_r [N_ENTRY-1:0];
 
-   always @(posedge clk) begin : tag_fifo_reg
-     integer i;
-     for (i = 0; i < 64; i = i + 1) begin
-         tag_fifo_r[i]  <= (rst) ? 'h0 : tag_fifo[i];
-     end
+   reg [W_ADDR:0] wptr, wptr_r;
+   reg [W_ADDR:0] rptr, rptr_r;
+
+   // + Pops always come from Dispatch Unit when requesting
+   //   a new tag for the RD register.
+   // + Pushes always come from CDB when it publishes a TAG.
+   reg can_pop, can_push;
+   always @(*) begin  : tag_fifo_ptr_proc
+      can_pop  = ~dispatch_empty & dispatch_ren;
+      can_push = ~dispatch_full  & cdb_valid;
+      rptr = (can_pop)  ? rptr_r + 1 : rptr_r;
+      wptr = (can_push) ? wptr_r + 1 : wptr_r;
    end
-   always @(posedge clk) begin : tag_fifo_ptr
-      wrptr_r <= (rst) ? 7'b1000000 : wrptr;
-      rdptr_r <= (rst) ? 7'b0000000 : rdptr;
-   end
 
-   always @(*) begin  : tag_fifo_proc
+   always @(*) begin  : tag_fifo_assign_proc
+      // Set default values for memory.
       integer i;
-      if (rst) begin
-         for (i = 0; i < 64; i = i + 1) begin
-             tag_fifo[i] <= i; //initialize tags 0-63
-         end
-      end
-      else begin
-           if (dispatch_ren && (wrptr_r != rdptr_r)) begin
-               dispatch_tag = tag_fifo_r[rdptr];
-               rdptr        = rdptr_r + 1;  //increase read pointer to get next tag
-            end
-            else if(cdb_valid && (wrptr_r != rdptr_r)) begin
-               tag_fifo[wrptr_r] = cdb_tag;
-               wrptr           = wrptr_r + 1;
-            end
-      end
+      for (i = 0; i < N_ENTRY; i = i + 1) mem[i] = mem_r[i];
+
+      mem[wptr_r] = (can_push) ? cdb_tag : mem_r[wptr_r];
+      // Always dispatch the tag pointed by rptr.
+      dispatch_tag = mem_r[rptr_r];
    end
 
-   always @(*) begin : tag_fifo_full_empty
-         dispatch_full  = (rdptr_r == wrptr_r);
-         dispatch_empty = ((rdptr_r[5:0] == wrptr_r[5:0]) && (rdptr_r[6] != wrptr_r[6]));
-   end 
+   always @(*) begin : tag_fifo_oreg_proc
+      dispatch_empty = wptr_r[W_ADDR] == rptr_r[W_ADDR] & wptr_r[W_ADDR-1:0] == rptr_r[W_ADDR-1:0];
+      dispatch_full  = wptr_r[W_ADDR] != rptr_r[W_ADDR] & wptr_r[W_ADDR-1:0] == rptr_r[W_ADDR-1:0];
+   end
+
+   always @(posedge clk) begin : tag_fifo_mem_reg
+      integer i;
+      for (i = 0; i < N_ENTRY; i = i + 1) mem_r[i] <= (reset) ? i : mem[i];
+   end
+
+   always @(posedge clk) begin : tag_fifo_ptr_reg
+      wptr_r <= (reset) ? 2**W_ADDR : wptr;
+      rptr_r <= (reset) ? 'h0       : rptr;
+   end
 
 endmodule
 

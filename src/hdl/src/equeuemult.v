@@ -3,20 +3,18 @@
 `define EQUEUEMULT_V
 
 module equeuemult(
-   input clk,
-   input rst,
+   input             clk,
+   input             reset,
 
-   input      [31:0] dispatch_inst,
+   input      [ 5:0] dispatch_rdtag,
+   input      [ 5:0] dispatch_rstag,
+   input      [ 5:0] dispatch_rttag,
+   input      [31:0] dispatch_rsdata,
+   input      [31:0] dispatch_rtdata,
    input             dispatch_rsvalid,
    input             dispatch_rtvalid,
    input             dispatch_en,
-   output reg        dispatch_ready,
-
-   output reg [31:0] cdb_data,
-   output reg [ 5:0] cdb_tag,
-   output reg        cdb_valid,
-   output reg        cdb_branch,
-   output reg        cdb_branch_taken
+   output reg        dispatch_ready
 );
 
    always @(*) begin : equeuemult_oreg_assign

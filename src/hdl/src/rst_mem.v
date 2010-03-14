@@ -1,10 +1,10 @@
 
-`ifndef REG_STATUS_TABLE_MEM_V
-`define REG_STATUS_TABLE_MEM_V
+`ifndef RST_MEM_V
+`define RST_MEM_V
 
-module reg_status_table_mem(
+module rst_mem(
    input            clk,
-   input            rst,
+   input            reset,
 
    input      [4:0] rport0_addr,
    output reg [6:0] rport0_data,
@@ -61,7 +61,7 @@ module reg_status_table_mem(
    always @(posedge clk) begin : reg_status_table_mem_assign
       integer i;
       for (i=0; i<32; i= i+1) begin
-         mem_r[i] <= (rst) ? 'h0 : mem[i];
+         mem_r[i] <= (reset) ? 'h0 : mem[i];
       end
    end
 

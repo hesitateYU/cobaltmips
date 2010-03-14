@@ -49,7 +49,13 @@ module dispatch (
    output     [31:0] debug_regfile_data
 );
 
+   localparam S_DISPATCH    = 1'b0;
+   localparam S_BRANCHSTALL = 1'b1;
+
    initial begin
+      ifq_ren          = 1'b1;
+      ifq_branch_valid = 1'b0;
+      ifq_branch_addr  = 31'h0;
       #5;
       #110; ifq_branch_valid = 1'b1; ifq_branch_addr = 32'h5;
       #10   ifq_branch_valid = 1'b0;
@@ -57,41 +63,30 @@ module dispatch (
       #40   ifq_ren = 1'b1;
    end
 
-   always @(*) begin : ifq_oreg_proc
-      ifq_ren          = (reset) ? 'h0 : 1'b1;//~ifq_empty;
-      ifq_branch_addr  = (reset) ? 'h0 : 32'h0;
-      ifq_branch_valid = (reset) ? 'h0 : 1'b0;
-   end
-
    // Signal declarations for Regfile.
-   wire [31:0] cdb_regfile_wdata;
-   wire [ 4:0] dispatch_regfile_rs_addr;
-   wire [31:0] regfile_dispatch_rs_data;
-   wire [ 4:0] dispatch_regfile_rt_addr;
-   wire [31:0] regfile_dispatch_rt_data;
+   reg  [ 4:0] dispatch_regfile_rsaddr;
+   reg  [ 4:0] dispatch_regfile_rtaddr;
+   wire [31:0] regfile_dispatch_rsdata;
+   wire [31:0] regfile_dispatch_rtdata;
 
    // Signal declarations for Register Status Table.
-   wire [ 5:0] dispatch_rst_tag;
-   wire        dispatch_rst_valid;
-   wire [ 4:0] dispatch_rst_addr;
-   wire        dispatch_rst_wen;
-   wire [ 5:0] cdb_rst_tag;
-   wire        cdb_rst_valid;
+   reg  [ 5:0] dispatch_rst_tag;
+   reg         dispatch_rst_valid;
+   reg  [ 4:0] dispatch_rst_addr;
+   reg         dispatch_rst_wen;
    wire [31:0] rst_regfile_wen_onehot;
    wire [ 5:0] rst_dispatch_rstag;
-   wire        rst_dispatch_rsvalid;
-   wire [ 4:0] dispatch_rst_rsaddr;
    wire [ 5:0] rst_dispatch_rttag;
+   wire        rst_dispatch_rsvalid;
    wire        rst_dispatch_rtvalid;
-   wire [ 4:0] dispatch_rst_rtaddr;
+   reg  [ 4:0] dispatch_rst_rtaddr;
+   reg  [ 4:0] dispatch_rst_rsaddr;
 
    // Signal declarations for Tag FIFO.
    wire [ 5:0] tagfifo_dispatch_tag;
-   wire        dispatch_tagfifo_ren;
+   reg         dispatch_tagfifo_ren;
    wire        tagfifo_dispatch_full;
    wire        tagfifo_dispatch_empty;
-   wire [ 5:0] cdb_tagfifo_tag;
-   wire        cdb_tagfifo_valid;
 
    // Internal registers used to flop decoded instruction to execution queues
    // but they are not ready to receive.
@@ -125,16 +120,16 @@ module dispatch (
    //       Jump |Opcode|                Address (26)  |
    //            +------+-----+-----+------------------+
    reg [ 5:0] inst_opcode, inst_func;
-   reg [ 4:0] inst_rdtag, inst_rstag, inst_rttag, inst_shamt;
+   reg [ 4:0] inst_rdaddr, inst_rsaddr, inst_rtaddr, inst_shamt;
    reg [15:0] inst_imm;
    reg [31:0] inst_imm_sext, inst_imm_sext_r;
    reg [25:0] inst_addr;
    reg [31:0] inst_addr_sext, inst_addr_jump, inst_addr_branch;
    always @(*) begin : dispatch_ifq_inst_split_proc
       inst_opcode = ifq_inst[31:26];
-      inst_rstag  = ifq_inst[25:21];
-      inst_rttag  = ifq_inst[20:16];
-      inst_rdtag  = ifq_inst[15:11];
+      inst_rsaddr = ifq_inst[25:21];
+      inst_rtaddr = ifq_inst[20:16];
+      inst_rdaddr = ifq_inst[15:11];
       inst_shamt  = ifq_inst[10: 6];
       inst_func   = ifq_inst[ 5: 0];
       inst_imm    = ifq_inst[15: 0];
@@ -152,68 +147,96 @@ module dispatch (
    always @(posedge clk) begin : dispatch_inst_imm_setx_reg
       inst_imm_sext_r <= (reset) ? 'h0 : inst_imm_sext;
    end
-/*
-   always @(*) begin : dispatch_decode_proc
+
+   always @(*) begin : dispatch_equeue_oreg_proc
+      dispatch_regfile_rsaddr = inst_rsaddr;
+      dispatch_regfile_rtaddr = inst_rtaddr;
+      dispatch_rst_rsaddr     = inst_rsaddr;
+      dispatch_rst_rtaddr     = inst_rtaddr;
+
+      equeue_imm     = inst_imm;
+      equeue_rdtag   = tagfifo_dispatch_tag;
+      equeue_rstag   = rst_dispatch_rstag;
+      equeue_rttag   = rst_dispatch_rttag;
+      equeue_rsvalid = rst_dispatch_rsvalid;
+      equeue_rtvalid = rst_dispatch_rtvalid;
+      equeue_rsdata  = (cdb_valid & cdb_tag == rst_dispatch_rstag) ? cdb_data : regfile_dispatch_rsdata;
+      equeue_rtdata  = (cdb_valid & cdb_tag == rst_dispatch_rttag) ? cdb_data : regfile_dispatch_rtdata;
+   end
+
+   reg state_r, next_state;
+   always @(*) begin : dispatch_branch_fsm_next_state
+      reg curr_equeue_ready, curr_equeue_en;
+
       // Set defaults.
-      ifq_ren          = 1'b1;
+      ifq_ren          = 1'b0;
       ifq_branch_valid = 1'b0;
       ifq_branch_addr  = inst_addr_branch;
 
-      case (inst_opcode)
-         `OPCODE_RTYPE : begin
+      equeueint_opcode = 3'h0;
+      equeuels_opcode  = 1'b0;
+      equeueint_en  = 3'h0;
+      equeuels_en   = 1'b0;
+      equeuemult_en = 1'b0;
+      equeuediv_en  = 1'b0;
 
-         end
-         // Halt IFQ until branch result is published by CDB.
-         `OPCODE_BTYPE : begin
-            ifq_ren          = 1'b0;
-            ifq_branch_valid = 1'b0;
-            ifq_branch_addr  = inst_addr_branch;
-         end
-         `OPCODE_JTYPE : begin
-            ifq_branch_valid = 1'b1;
-            ifq_branch_addr  = inst_addr_jump;
-         end
-         default : begin
+      case (state_r)
+         S_DISPATCH : begin
+            next_state = S_DISPATCH;
+            case (inst_opcode)
+               `OPCODE_RTYPE : begin
+                  curr_equeue_ready = equeueint_ready;
+                  curr_equeue_en    = equeueint_en;
+                  curr_equeue_en    = 1'b1;
+               end
+               // Halt IFQ until branch result is published by CDB.
+               `OPCODE_BTYPE : begin
+                  curr_equeue_ready = equeueint_ready;
+                  curr_equeue_en    = equeueint_en;
+                  ifq_branch_addr   = inst_addr_branch;
 
+                  // Stall when branches are decoded and integer queue can't process them.
+                  next_state  = (equeueint_ready) ? S_BRANCHSTALL : S_DISPATCH;
+               end
+               `OPCODE_JTYPE : begin
+                  curr_equeue_ready = equeueint_ready;
+                  curr_equeue_en    = equeueint_en;
+                  ifq_branch_valid  = 1'b1;
+                  ifq_branch_addr   = inst_addr_jump;
+               end
+               default : begin
+
+               end
+            endcase
+            curr_equeue_en = ~ifq_empty & ~tagfifo_dispatch_empty & curr_equeue_ready;
+            ifq_ren        = curr_equeue_ready;
+         end
+         S_BRANCHSTALL : begin
+            curr_equeue_en = cdb_branch & cdb_branch_taken;
+            ifq_ren        = 1'b0;
+            // Assume all branches are taken
+            next_state = (cdb_branch) ? S_DISPATCH : S_BRANCHSTALL;
          end
       endcase
    end
-*/
-   /*
-   always @(*) begin : dispatch_inst_decode_proc
-      ifq_inst_rs = () ? cdb_
-      ifq_inst_rt = () ?
 
-      ifq_inst_rtype = {ifq_inst_opcode, ifq_inst_rs, ifq_inst_rt, ifq_inst_rd, ifq_inst_shamt, ifq_inst_funct};
-      ifq_inst_itype = {ifq_inst_opcode, ifq_inst_rs, ifq_inst_rt, ifq_inst_imm};
-      ifq_inst_jtype = {ifq_inst_opcode, ifq_inst_addr};
-      case (1'b1)
-         ifq_inst_type[`INST_RTYPE_BIT]: equeue_inst = ifq_inst_rtype;
-         ifq_inst_type[`INST_ITYPE_BIT]: equeue_inst = ifq_inst_itype;
-         ifq_inst_type[`INST_JTYPE_BIT]: equeue_inst = ifq_inst_jtype;
-         default                          : ifq_inst = `INST_ERROR;
-      endcase
-      assert (ifq_inst_type != `INST_ERROR) else
-         $fatal($sformatf("Instruction type not valid %b.", ifq_inst_type));
-
-      equeue_rsvalid = ;
-      equeue_rtvalid = ;
+   always @(posedge clk) begin : dispatch_branch_fsm_reg
+      state_r <= (reset) ? S_DISPATCH : next_state;
    end
-   */
 
    regfile regfile (
-      .clk              (clk                     ),
-      .reset            (reset                   ),
+      .clk             (clk                     ),
+      .reset           (reset                   ),
 
-      .cdb_wdata        (cdb_regfile_wdata       ),
-      .rst_wen_onehot   (rst_regfile_wen_onehot  ),
+      .cdb_wdata       (cdb_data                ),
+      .rst_wen_onehot  (rst_regfile_wen_onehot  ),
 
-      .dispatch_rs_addr (dispatch_regfile_rs_addr),
-      .dispatch_rt_addr (dispatch_regfile_rt_addr),
-      .debug_addr       (debug_regfile_addr      ),
-      .dispatch_rs_data (regfile_dispatch_rs_data),
-      .dispatch_rt_data (regfile_dispatch_rt_data),
-      .debug_data       (debug_regfile_data      )
+      .dispatch_rsaddr (dispatch_regfile_rsaddr),
+      .dispatch_rtaddr (dispatch_regfile_rtaddr),
+      .debug_addr      (debug_regfile_addr      ),
+      .dispatch_rsdata (regfile_dispatch_rsdata),
+      .dispatch_rtdata (regfile_dispatch_rtdata),
+      .debug_data      (debug_regfile_data      )
    );
 
    rst rst(
@@ -225,16 +248,16 @@ module dispatch (
       .dispatch_addr      (dispatch_rst_addr     ),
       .dispatch_wen       (dispatch_rst_wen      ),
 
-      .cdb_tag            (cdb_rst_tag           ),
-      .cdb_valid          (cdb_rst_valid         ),
+      .cdb_tag            (cdb_tag               ),
+      .cdb_valid          (cdb_valid             ),
 
       .regfile_wen_onehot (rst_regfile_wen_onehot),
 
       .dispatch_rstag     (rst_dispatch_rstag    ),
-      .dispatch_rsvalid   (rst_dispatch_rsvalid  ),
-      .dispatch_rsaddr    (dispatch_rst_rsaddr   ),
       .dispatch_rttag     (rst_dispatch_rttag    ),
       .dispatch_rtvalid   (rst_dispatch_rtvalid  ),
+      .dispatch_rsvalid   (rst_dispatch_rsvalid  ),
+      .dispatch_rsaddr    (dispatch_rst_rsaddr   ),
       .dispatch_rtaddr    (dispatch_rst_rtaddr   )
    );
 
@@ -245,8 +268,8 @@ module dispatch (
       .dispatch_ren   (dispatch_tagfifo_ren  ),
       .dispatch_full  (tagfifo_dispatch_full ),
       .dispatch_empty (tagfifo_dispatch_empty),
-      .cdb_tag        (cdb_tagfifo_tag       ),
-      .cdb_valid      (cdb_tagfifo_valid     )
+      .cdb_tag        (cdb_tag               ),
+      .cdb_valid      (cdb_valid             )
    );
 
 endmodule

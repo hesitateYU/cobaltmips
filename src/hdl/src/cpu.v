@@ -25,11 +25,11 @@ module cpu (
    wire [ 31:0] dispatch_ifq_branch_addr;
    wire         dispatch_ifq_branch_valid;
 
-   wire [ 31:0] cdb_dispatch_data;
-   wire [  5:0] cdb_dispatch_tag;
-   wire         cdb_dispatch_valid;
-   wire         cdb_dispatch_branch;
-   wire         cdb_dispatch_taken;
+   reg  [ 31:0] cdb_dispatch_data;
+   reg  [  5:0] cdb_dispatch_tag;
+   reg          cdb_dispatch_valid;
+   reg          cdb_dispatch_branch;
+   reg          cdb_dispatch_taken;
 
    wire [ 15:0] dispatch_equeue_imm;
    wire [  5:0] dispatch_equeue_rdtag;
@@ -53,6 +53,18 @@ module cpu (
 
    wire         dispatch_equeuediv_en;
    wire         equeuediv_dispatch_ready;
+
+
+   initial begin
+      //
+      // DEBUG: setting the CDB signals to zero.
+      //
+      cdb_dispatch_data   = 32'h0;
+      cdb_dispatch_tag    =  6'h0;
+      cdb_dispatch_valid  =  1'b0;
+      cdb_dispatch_branch =  1'b0;
+      cdb_dispatch_taken  =  1'b0;
+   end
 
    icache #(
       .W_IDATA        (32                   ),

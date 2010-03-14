@@ -89,12 +89,18 @@ module ifq(
    end
 
    always @(*) begin : ifq_oreg_proc
-      // Interface with icache.
-      icache_abort = dispatch_branch_valid;
+      //
+      // TODO: when should abort the reading from icache? If readings take much
+      //       more than 1 cycle then it makes sense, but how to detect when we
+      //       are still waiting for the instruction to arrive? We need to set
+      //       a register indicating that icache_rd_en has been issued but
+      //       icache_dout_valid hasn't arrived yet.
+      //       Fow now, we never set icache_abort.
+      //
+      icache_abort = 1'b0;
       icache_pc_in = dispatch_branch_valid ? dispatch_branch_addr : pc_in_r;
       icache_rd_en = ~(dispatch_branch_valid | is_full);
 
-      // Interface with dispatch unit.
       dispatch_pc_out = dispatch_branch_valid ? pc_out : pc_out_r;
       dispatch_inst   = bypass_mux_out;
       dispatch_empty  = is_empty;

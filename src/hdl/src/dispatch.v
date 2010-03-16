@@ -185,9 +185,15 @@ module dispatch (
             next_state = S_DISPATCH;
             case (inst_opcode)
                `OPCODE_RTYPE : begin
-                  curr_equeue_ready = equeueint_ready;
-                  curr_equeue_en    = equeueint_en;
-                  curr_equeue_en    = 1'b1;
+                  curr_equeue_ready    = equeueint_ready;
+                  curr_equeue_en       = equeueint_en;
+                  curr_equeue_en       = 1'b1;
+                  //for every instruction with rd we assign a TAG
+                  dispatch_rst_wen     = (inst_rdaddr);
+                  //dispatch unit does not read a TAG if instruction doesn't have destination register
+                  //or it can't be dispatched;
+                  dispatch_tagfifo_ren = (inst_rdaddr);
+
                end
                // Halt IFQ until branch result is published by CDB.
                `OPCODE_BTYPE : begin

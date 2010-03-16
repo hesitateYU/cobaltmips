@@ -35,7 +35,7 @@ module regfile #(
 
       // Make sure one-hot vector has one (or zero) active bits.
       for (i = 0; i < N_ENTRY; i = i + 1) if (rst_wen_onehot[i]) count = count + 1;
-      if (count != 0 && count != 1) $fatal("More than one write in one-hot vector");
+//      if (count != 0 && count != 1) $fatal("More than one write in one-hot vector");
    end
 
    always @(*) begin : reg_file_read_proc

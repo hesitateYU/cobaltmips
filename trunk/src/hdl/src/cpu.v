@@ -30,6 +30,12 @@ module cpu (
    reg          cdb_dispatch_valid;
    reg          cdb_dispatch_branch;
    reg          cdb_dispatch_taken;
+   reg  [ 31:0] cdb_equeueint_data;
+   reg  [  5:0] cdb_equeueint_tag;
+   reg          cdb_equeueint_valid;
+   reg  [ 31:0] cdb_equeuels_data;
+   reg  [  5:0] cdb_equeuels_tag;
+   reg          cdb_equeuels_valid;
 
    wire [ 15:0] dispatch_equeue_imm;
    wire [  5:0] dispatch_equeue_rdtag;
@@ -43,10 +49,22 @@ module cpu (
    wire         dispatch_equeuels_opcode;
    wire         dispatch_equeuels_en;
    wire         equeuels_dispatch_ready;
+   wire         equeuels_issuels_opcode;
+   wire [  5:0] equeuels_issuels_rdtag;
+   wire [ 31:0] equeuels_issuels_addr;
+   wire [ 31:0] equeuels_issuels_data;
+   wire         equeuels_issuels_ready;
+   wire         issuels_equeuels_done;
 
    wire [  2:0] dispatch_equeueint_opcode;
    wire         dispatch_equeueint_en;
    wire         equeueint_dispatch_ready;
+   wire [  2:0] equeueint_issueint_opcode;
+   wire [  5:0] equeueint_issueint_rdtag;
+   wire [ 31:0] equeueint_issueint_rsdata;
+   wire [ 31:0] equeueint_issueint_rtdata;
+   wire         equeueint_issueint_ready;
+   wire         issueint_equeueint_done;
 
    wire         dispatch_equeuemult_en;
    wire         equeuemult_dispatch_ready;
@@ -145,7 +163,16 @@ module cpu (
       .dispatch_rsdata  (dispatch_equeue_rsdata   ),
       .dispatch_rtdata  (dispatch_equeue_rtdata   ),
       .dispatch_rsvalid (dispatch_equeue_rsvalid  ),
-      .dispatch_rtvalid (dispatch_equeue_rtvalid  )
+      .dispatch_rtvalid (dispatch_equeue_rtvalid  ),
+      .cdb_tag          (cdb_equeueint_tag        ),
+      .cdb_valid        (cdb_equeueint_valid      ),
+      .cdb_data         (cdb_equeueint_data       ),
+      .issueint_opcode  (equeueint_issueint_opcode),
+      .issueint_rdtag   (equeueint_issueint_rdtag ),
+      .issueint_rsdata  (equeueint_issueint_rsdata),
+      .issueint_rtdata  (equeueint_issueint_rtdata),
+      .issueint_ready   (equeueint_issueint_ready ),
+      .issueint_done    (issueint_equeueint_done  )
    );
 
    equeuels equeuels (
@@ -154,14 +181,23 @@ module cpu (
       .dispatch_opcode  (dispatch_equeuels_opcode),
       .dispatch_en      (dispatch_equeuels_en    ),
       .dispatch_ready   (equeuels_dispatch_ready ),
-      .dispatch_imm     (dispatch_equeue_imm     ),
+      .dispatch_offset  (dispatch_equeue_imm     ),
       .dispatch_rdtag   (dispatch_equeue_rdtag   ),
       .dispatch_rstag   (dispatch_equeue_rstag   ),
       .dispatch_rttag   (dispatch_equeue_rttag   ),
       .dispatch_rsdata  (dispatch_equeue_rsdata  ),
       .dispatch_rtdata  (dispatch_equeue_rtdata  ),
       .dispatch_rsvalid (dispatch_equeue_rsvalid ),
-      .dispatch_rtvalid (dispatch_equeue_rtvalid )
+      .dispatch_rtvalid (dispatch_equeue_rtvalid ),
+      .cdb_tag          (cdb_equeuels_tag        ),
+      .cdb_valid        (cdb_equeuels_valid      ),
+      .cdb_data         (cdb_equeuels_data       ),
+      .issuels_opcode   (equeuels_issuels_opcode ),
+      .issuels_rdtag    (equeuels_issuels_rdtag  ),
+      .issuels_addr     (equeuels_issuels_addr   ),
+      .issuels_data     (equeuels_issuels_data   ),
+      .issuels_ready    (equeuels_issuels_ready  ),
+      .issuels_done     (issuels_equeuels_done   )
    );
 
    equeuediv equeuediv (

@@ -61,13 +61,15 @@ module equeueint (
 
    always @(*) begin : equeueint_shift_proc
       integer i;
-      for (i = 0; i < N_SREG ; i = i + 1) begin
+      for (i = 0; i < N_SREG; i = i + 1) begin
          // Shift current register only when next register is not occupied.
-         do_shift[i] = ~inst_valid_r[i];
+         do_shift[i] = ~inst_valid_r[i] & inst_valid_r[i+1];
       end
+      // Allow to register 'fake' register.
+      do_shift[N_SREG-1] = ~inst_valid_r[N_SREG-1] & dispatch_en;
       // Don't shift last register until operation is ready and issue unit has
       // finished processing previous instruction.
-      do_shift[0] = inst_ready[0] & issueint_done;
+      do_shift[0] = ~inst_valid_r[0] & issueint_done;
 
       // The top register is fake, it just stores (no flops) the input from
       // dispatch unit. Used to simplify register shifting and updating.
@@ -82,11 +84,11 @@ module equeueint (
       inst_valid_r  [N_SREG] = dispatch_en;
 
       for (i = 0; i < N_SREG; i = i + 1) begin
-         inst_opcode [i] = (do_shift[i]) ? inst_opcode_r[i + 1] : inst_opcode_r[i];
-         inst_rdtag  [i] = (do_shift[i]) ? inst_rdtag_r [i + 1] : inst_rdtag_r [i];
-         inst_rstag  [i] = (do_shift[i]) ? inst_rstag_r [i + 1] : inst_rstag_r [i];
-         inst_rttag  [i] = (do_shift[i]) ? inst_rttag_r [i + 1] : inst_rttag_r [i];
-         inst_valid  [i] = (do_shift[i]) ? inst_valid_r [i + 1] : inst_valid_r [i];
+         inst_opcode[i] = (do_shift[i]) ? inst_opcode_r[i + 1] : inst_opcode_r[i];
+         inst_rdtag [i] = (do_shift[i]) ? inst_rdtag_r [i + 1] : inst_rdtag_r [i];
+         inst_rstag [i] = (do_shift[i]) ? inst_rstag_r [i + 1] : inst_rstag_r [i];
+         inst_rttag [i] = (do_shift[i]) ? inst_rttag_r [i + 1] : inst_rttag_r [i];
+         inst_valid [i] = (do_shift[i]) ? inst_valid_r [i + 1] : inst_valid_r [i];
 
          // Select if data is taken from CDB (update) or the previous register (shift).
          case ({do_shift[i], do_rs_update[i]})

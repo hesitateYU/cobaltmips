@@ -12,4 +12,4 @@ src/equeuemult.v
 src/equeuediv.v
 src/equeuels.v
 src/cpu.v
-tb/tb_top.v
+tb/tb_equeueint.v

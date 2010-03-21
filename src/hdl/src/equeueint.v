@@ -61,15 +61,15 @@ module equeueint (
 
    always @(*) begin : equeueint_shift_proc
       integer i;
-      for (i = 0; i < N_SREG; i = i + 1) begin
-         // Shift current register only when next register is not occupied.
-         do_shift[i] = ~inst_valid_r[i] & inst_valid_r[i+1];
-      end
-      // Allow to register 'fake' register.
-      do_shift[N_SREG-1] = ~inst_valid_r[N_SREG-1] & dispatch_en;
       // Don't shift last register until operation is ready and issue unit has
       // finished processing previous instruction.
-      do_shift[0] = ~inst_valid_r[0] & issueint_done;
+      do_shift[0] = issueint_done | (~inst_valid_r[0] & inst_valid_r[1]);
+      for (i = 1; i < N_SREG; i = i + 1) begin
+         // Shift current register only when next register is not occupied.
+         do_shift[i] = do_shift[i - 1] | (~inst_valid_r[i] & inst_valid_r[i + 1]);
+      end
+      // Allow to register 'fake' register.
+      do_shift[N_SREG-1] = dispatch_en & (~inst_valid_r[N_SREG-1] | do_shift[N_SREG-2]);
 
       // The top register is fake, it just stores (no flops) the input from
       // dispatch unit. Used to simplify register shifting and updating.
@@ -92,14 +92,14 @@ module equeueint (
 
          // Select if data is taken from CDB (update) or the previous register (shift).
          case ({do_shift[i], do_rs_update[i]})
-            2'b00:        begin inst_rsdata[i] = inst_rsdata_r[i];   inst_rsvalid[i] = inst_rsvalid_r[i];   end
-            2'b01, 2'b11: begin inst_rsdata[i] = cdb_data;           inst_rsvalid[i] = 1'b1;                end
-            2'b10:        begin inst_rsdata[i] = inst_rsdata_r[i+1]; inst_rsvalid[i] = inst_rsvalid_r[i+1]; end
+            2'b00:        begin inst_rsdata[i] = inst_rsdata_r[i];     inst_rsvalid[i] = inst_rsvalid_r[i];     end
+            2'b01, 2'b11: begin inst_rsdata[i] = cdb_data;             inst_rsvalid[i] = 1'b1;                  end
+            2'b10:        begin inst_rsdata[i] = inst_rsdata_r[i + 1]; inst_rsvalid[i] = inst_rsvalid_r[i + 1]; end
          endcase
          case ({do_shift[i], do_rt_update[i]})
-            2'b00:        begin inst_rtdata[i] = inst_rtdata_r[i];   inst_rtvalid[i] = inst_rtvalid_r[i];   end
-            2'b01, 2'b11: begin inst_rtdata[i] = cdb_data;           inst_rtvalid[i] = 1'b1;                end
-            2'b10:        begin inst_rtdata[i] = inst_rtdata_r[i+1]; inst_rtvalid[i] = inst_rtvalid_r[i+1]; end
+            2'b00:        begin inst_rtdata[i] = inst_rtdata_r[i];     inst_rtvalid[i] = inst_rtvalid_r[i];     end
+            2'b01, 2'b11: begin inst_rtdata[i] = cdb_data;             inst_rtvalid[i] = 1'b1;                  end
+            2'b10:        begin inst_rtdata[i] = inst_rtdata_r[i + 1]; inst_rtvalid[i] = inst_rtvalid_r[i + 1]; end
          endcase
       end
    end

@@ -34,26 +34,25 @@ module tb_equeueint();
    initial begin : main_proc
       integer i;
 
-      dispatch_equeueint_opcode = 3'h0;
       dispatch_equeueint_en     = 1'b0;
+      issueint_equeueint_done   = 1'b0;
+      dispatch_equeueint_opcode =  3'h0;
+      dispatch_equeue_rdtag     =  6'h0;
+      dispatch_equeue_rstag     =  6'h0;
+      dispatch_equeue_rttag     =  6'h0;
+      dispatch_equeue_rsdata    = 32'h0;
+      dispatch_equeue_rtdata    = 32'h0;
+      dispatch_equeue_rsvalid   =  1'b0;
+      dispatch_equeue_rtvalid   =  1'b0;
+      cdb_equeueint_data        = 32'h0;
+      cdb_equeueint_tag         =  6'h0;
+      cdb_equeueint_valid       =  1'b0;
 
-      dispatch_equeue_rdtag   = 6'h0;
-      dispatch_equeue_rstag   = 6'h0;
-      dispatch_equeue_rttag   = 6'h0;
-      dispatch_equeue_rsdata  = 32'h0;
-      dispatch_equeue_rtdata  = 32'h0;
-      dispatch_equeue_rsvalid = 1'b0;
-      dispatch_equeue_rtvalid = 1'b0;
-
-      cdb_equeueint_data  = 32'h0;
-      cdb_equeueint_tag   = 6'h0;
-      cdb_equeueint_valid = 1'b0;
-
-      issueint_equeueint_done = 1'b1;
-
-      #21;
-      for (i = 5; i < 11; i = i + 1) begin
-         dispatch_equeueint_en     = 1'b1;
+      // Case 0: don't take anything.
+      #50;
+      dispatch_equeueint_en   = 1'b0;
+      issueint_equeueint_done = 1'b0;
+      for (i = 5; i < 15; i = i + 1) begin
          dispatch_equeueint_opcode = i;
          dispatch_equeue_rdtag     = i;
          dispatch_equeue_rstag     = i;
@@ -64,7 +63,47 @@ module tb_equeueint();
          dispatch_equeue_rtvalid   = 1'b1;
          #10;
       end
-      dispatch_equeueint_en = 1'b0;
+
+      // Case 1: fill queue beyond capacity.
+      #50;
+      dispatch_equeueint_en   = 1'b1;
+      issueint_equeueint_done = 1'b0;
+      for (i = 5; i < 15; i = i + 1) begin
+         dispatch_equeueint_opcode = i;
+         dispatch_equeue_rdtag     = i;
+         dispatch_equeue_rstag     = i;
+         dispatch_equeue_rttag     = i;
+         dispatch_equeue_rsdata    = i;
+         dispatch_equeue_rtdata    = i;
+         dispatch_equeue_rsvalid   = 1'b1;
+         dispatch_equeue_rtvalid   = 1'b1;
+         #10;
+      end
+
+      // Case 2: consume queue.
+      #50;
+      dispatch_equeueint_en   = 1'b0;
+      issueint_equeueint_done = 1'b1;
+      #50;
+
+      // Case 3: fill and consume at the same time.
+      #50;
+      dispatch_equeueint_en   = 1'b1;
+      issueint_equeueint_done = 1'b1;
+      for (i = 5; i < 15; i = i + 1) begin
+         dispatch_equeueint_opcode = i;
+         dispatch_equeue_rdtag     = i;
+         dispatch_equeue_rstag     = i;
+         dispatch_equeue_rttag     = i;
+         dispatch_equeue_rsdata    = i;
+         dispatch_equeue_rtdata    = i;
+         dispatch_equeue_rsvalid   = 1'b1;
+         dispatch_equeue_rtvalid   = 1'b1;
+         #10;
+      end
+
+      #50;
+
    end
 
    initial begin

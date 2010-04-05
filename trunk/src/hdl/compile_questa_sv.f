@@ -1,4 +1,6 @@
 +incdir+src
++incdir+src+divider
++incdir+src+mult
 +incdir+tb
 src/ifq.v
 src/icache.v
@@ -12,4 +14,9 @@ src/equeuemult.v
 src/equeuediv.v
 src/equeuels.v
 src/cpu.v
+src/issuemult.v
+src/issuediv.v
+src/divider/divider.v
+src/mult/multiplier.v
 tb/tb_equeueint.v
+

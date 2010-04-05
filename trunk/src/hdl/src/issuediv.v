@@ -29,7 +29,7 @@ always @(posedge clk) begin: div_secnd_flopdelay
    out_r <= (reset) ? 32'h0: out;
 end
 
-always @(*) begin : busy
+always @(*) begin : busy_proc
    issuediv_rdtag_out <= (busy) ? 6'h0: issuediv_rdtag;
 end
 

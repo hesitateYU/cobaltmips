@@ -1,0 +1,7 @@
+# Output products list for <multiplier>
+multiplier.ngc
+multiplier.v
+multiplier.veo
+multiplier.xco
+multiplier_flist.txt
+multiplier_xmdf.tcl

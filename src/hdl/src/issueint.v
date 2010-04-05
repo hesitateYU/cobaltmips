@@ -3,7 +3,7 @@
 
 module issueint (
          input             clk,
-         input             rst,
+         input             reset,
          input      [ 3:0] issueint_opcode,
          input      [31:0] issueint_rsdata,
          input      [31:0] issueint_rtdata,
@@ -30,7 +30,7 @@ parameter [3:0] ADD  = 4'b0000,
    wire [31:0] sum_out;
 
    always @(posedge clk) begin : reg_data
-      if (rst) begin
+      if (reset) begin
          rsdata_r <= 32'h0; 
          rtdata_r <= 32'h0; 
       end

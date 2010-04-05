@@ -6,7 +6,7 @@ module issue_unit (
       input          clk,
       input          reset,
       
-      input [3:0]    opcode.
+      input [3:0]    opcode,
       input [31:0]   rsdata,
       input [31:0]   rtdata,
       input [ 5:0]   rdtag,
@@ -25,8 +25,8 @@ module issue_unit (
       output         issue_carryout,
       output         issue_overflow,
 
-      output [31:0]  cdb_out,
-      output [ 5:0]  cdb_tagout
+      output reg [31:0]  cdb_out,
+      output reg [ 5:0]  cdb_tagout
 
 
 );

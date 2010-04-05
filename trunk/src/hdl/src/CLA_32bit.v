@@ -4,12 +4,15 @@
 module CLA_32bit (
       output wire [31:0] sum, 
       output wire carryout,
+      output wire overflow,
       input wire [31:0] A_in, 
       input wire [31:0] B_in, 
       input wire carryin
 );
 
    wire [6:0] carry;
+
+   assign overflow = carryout ^ carry[6];
 
    CLA_4bit  c1 (
          .s(sum[3:0]), 

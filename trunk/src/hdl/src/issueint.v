@@ -4,7 +4,7 @@
 module issueint (
          input             clk,
          input             rst,
-         input      [ 2:0] issueint_opcode,
+         input      [ 3:0] issueint_opcode,
          input      [31:0] issueint_rsdata,
          input      [31:0] issueint_rtdata,
          input      [ 5:0] issueint_rdtag,
@@ -16,46 +16,48 @@ module issueint (
          output            issueint_overflow
 );
 
-   reg [31:0] rsdata_r, rtdata_r;
+parameter [3:0] ADD  = 4'b0000,
+                ADDU = 4'b0001,
+                SUB  = 4'b0010,
+                SUBU = 4'b0011,
+                AND  = 4'b0100,
+                OR   = 4'b0101,
+                NOR  = 4'b0111,
+                STL  = 4'b1010,
+                STLU = 4'b1011;
+
+   reg  [31:0] rsdata_r, rtdata_r;
    wire [31:0] sum_out;
 
    always @(posedge clk) begin : reg_data
-      rsdata_r <= (rst) ? 32'h0 : issueint_rsdata; 
-      rtdata_r <= (rst) ? 32'h0 : issueint_rtdata; 
+      if (rst) begin
+         rsdata_r <= 32'h0; 
+         rtdata_r <= 32'h0; 
+      end
    end
 
 
    always @(*) begin : alu_opcode
       case (alu_opcode)
-         3'b000: begin
-
+         ADD, ADDU: begin
+            rsdata_r = issueint_rsdata;
+            rtdata_r = issueint_rtdata;
+            issueint_out = sum_out;
          end
-         3'b001: begin
-
+         SUB, SUBU: begin
+            issueint_out = issueint_rsdata - issueint_rtdata;
          end
-         3'b010: begin
-
+         AND: begin
+            issueint_out = issueint_rsdata | issueint_rtdata;
          end
-         3'b011: begin
-
+         NOR: begin
+            issueint_out = issueint_rsdata  ~| issueint_rtdata;
          end
-
-         3'b100: begin
-
-         end
-         3'b101: begin
-
-         end
-
-         3'b110: begin
-
-         end
-
-         3'b111: begin
-
+         STL, STLU: begin
+            issueint_out = (issueint_rsdata  - issueint_rtdata);
          end
          default: begin
-
+            issueint_out = issueint_out;
          end
       endcase
    end

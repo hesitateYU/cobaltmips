@@ -16,6 +16,7 @@ src/equeuels.v
 src/cpu.v
 src/issuemult.v
 src/issuediv.v
+src/issue_unit.v
 src/divider/divider.v
 src/mult/multiplier.v
 tb/tb_equeueint.v

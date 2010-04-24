@@ -161,17 +161,17 @@ module issue (
    );
    //load/store exec unit
    issuels issuels(
-      .clk              (clk),
-      .reset            (reset),
-      .ls_ready_in      (ready_ld_buf),
-      .ls_data          (rsdata),
-      .ls_address       (rtdata),
-      .ls_tag           (rdtag),
-      .opcode           (opcode),
+      .clk              (clk           ),
+      .reset            (reset         ),
+      .ls_ready_in      (ready_ld_buf  ),
+      .ls_data          (rsdata        ),
+      .ls_address       (rtdata        ),
+      .ls_tag           (rdtag         ),
+      .opcode           (opcode        ),
 
       .ls_done_out      (),
-      .ls_data_out      (ld_buf_out),
-      .ls_tag_out       (cdb_tagout),
+      .ls_data_out      (ld_buf_out    ),
+      .ls_tag_out       (cdb_tagout    ),
       .ls_done          (),
       .ls_ready_out     ()
    );

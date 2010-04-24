@@ -35,7 +35,7 @@ module dispatch (
    output reg        equeuels_en,
    input             equeuels_ready,
 
-   output reg [ 2:0] equeueint_opcode,
+   output reg [ 3:0] equeueint_opcode,
    output reg        equeueint_en,
    input             equeueint_ready,
 
@@ -95,7 +95,7 @@ module dispatch (
    reg  [31:0] equeue_rsdata_r, equeue_rtdata_r;
    reg         equeue_rsvalid_r, equeue_rtvalid_r;
    reg         equeuels_opcode_r;
-   reg  [ 2:0] equeueint_opcode_r;
+   reg  [ 3:0] equeueint_opcode_r;
    always @(posedge clk) begin : dispatch_equeue_reg
       equeue_imm_r       <= (reset) ? 'h0 : equeue_imm;
       equeue_rdtag_r     <= (reset) ? 'h0 : equeue_rdtag;
@@ -173,7 +173,7 @@ module dispatch (
       ifq_branch_valid = 1'b0;
       ifq_branch_addr  = inst_addr_branch;
 
-      equeueint_opcode = 3'h0;
+      equeueint_opcode = 4'h0;
       equeuels_opcode  = 1'b0;
       equeueint_en  = 3'h0;
       equeuels_en   = 1'b0;

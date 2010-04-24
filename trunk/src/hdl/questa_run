@@ -1,2 +1,2 @@
-vsim -novopt -do vsim.do -c tb_top
+vsim -novopt -do vsim.do -c $1
 

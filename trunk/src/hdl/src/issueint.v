@@ -1,3 +1,4 @@
+
 `ifndef ISSUEINT_V
 `define ISSUEINT_V
 
@@ -38,7 +39,7 @@ parameter [3:0] ADD  = 4'b0000,
 
 
    always @(*) begin : alu_opcode
-      case (alu_opcode)
+      case (issueint_opcode)
          ADD, ADDU: begin
             rsdata_r = issueint_rsdata;
             rtdata_r = issueint_rtdata;
@@ -51,25 +52,23 @@ parameter [3:0] ADD  = 4'b0000,
             issueint_out = issueint_rsdata | issueint_rtdata;
          end
          NOR: begin
-            issueint_out = issueint_rsdata  ~| issueint_rtdata;
+            issueint_out = ~(issueint_rsdata | issueint_rtdata);
          end
          STL, STLU: begin
-            issueint_out = (issueint_rsdata  - issueint_rtdata);
+            issueint_out = (issueint_rsdata - issueint_rtdata);
          end
          default: begin
-            issueint_out = issueint_out;
+            issueint_out = issueint_rsdata;
          end
       endcase
    end
 
-   
-
-  CLA_32bit CLA32(
-      .sum      (sum_out), 
+   CLA_32bit CLA32(
+      .sum      (sum_out),
       .carryout (issueint_carryout),
       .overflow (issueint_overflow),
-      .A_in     (rsdata_r), 
-      .B_in     (rtdata_r), 
+      .A_in     (rsdata_r),
+      .B_in     (rtdata_r),
       .carryin  (1'b0)
 );
 

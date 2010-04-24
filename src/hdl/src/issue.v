@@ -161,8 +161,19 @@ module issue (
    );
    //load/store exec unit
    issuels issuels(
-      .clk                 (clk),
-      .reset               (reset)
+      .clk              (clk),
+      .reset            (reset),
+      .ls_ready_in      (     ),
+      .ls_data          (),
+      .ls_address       (),
+      .ls_tag           (),
+      .opcode           (),
+
+      .ls_done_out      (),
+      .ls_data_out      (),
+      .ls_tag_out       (),
+      .ls_done          (),
+      .ls_ready_out     ()
    );
 
 endmodule

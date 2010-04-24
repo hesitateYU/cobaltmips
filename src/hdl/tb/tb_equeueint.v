@@ -34,8 +34,8 @@ module tb_equeueint();
    initial begin : main_proc
       integer i;
 
-      dispatch_equeueint_en     = 1'b0;
-      issueint_equeueint_done   = 1'b0;
+      dispatch_equeueint_en     =  1'b0;
+      issueint_equeueint_done   =  1'b0;
       dispatch_equeueint_opcode =  3'h0;
       dispatch_equeue_rdtag     =  6'h0;
       dispatch_equeue_rstag     =  6'h0;

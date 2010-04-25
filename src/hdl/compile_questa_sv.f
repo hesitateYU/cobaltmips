@@ -34,5 +34,5 @@ src/execunits/ld_st/data_cache.v
 src/execunits/add/CLA_4bit.v
 src/execunits/add/CLA_32bit.v
 
-tb/tb_equeueint.v
+tb/tb_issue.v
 

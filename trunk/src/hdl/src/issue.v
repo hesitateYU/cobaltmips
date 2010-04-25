@@ -19,17 +19,17 @@ module issue (
    output reg         issue_mult,
    output reg         issue_div,
    output reg         issue_ld_buf,
-   output reg         issue_carryout,
-   output reg         issue_overflow,
+   output             issue_carryout,
+   output             issue_overflow,
    output reg         issue_div_done,
 
    output reg [31:0]  cdb_out,
-   output reg [ 5:0]  cdb_tagout,
-   output reg         cdb_valid,
-   output reg         cdb_branch,
-   output reg         cdb_branch_taken
+   output     [ 5:0]  cdb_tagout,
+   output             cdb_valid,
+   output             cdb_branch,
+   output             cdb_branch_taken
 );
-   reg  [6:0] cdb_slot;
+   reg  [7:0] cdb_slot;
    wire [3:0] selector;
    reg        LRU;
 
@@ -39,25 +39,22 @@ module issue (
    wire [31:0]   ld_buf_out;
 
    wire div_exec_ready;
-   
-   reg issue_div_temp, issue_mult_temp, issue_int_temp, issue_ld_buf_temp;
-   always @(*) begin: issue_temps
-      issue_div_temp    <= issue_div;
-      issue_mult_temp   <= issue_mult; 
-      issue_int_temp    <= issue_int;
-      issue_ld_buf_temp <= issue_ld_buf; 
-      issue_div_done    <= issue_div;
-   end
 
    //CDB reservation registers
    always @(posedge clk) begin : cdb_slots
-      cdb_slot [6] <= issue_div_temp;
-      cdb_slot [5] <= cdb_slot[6];
-      cdb_slot [4] <= cdb_slot[5];
-      cdb_slot [3] <= cdb_slot[4] | issue_mult_temp;
-      cdb_slot [2] <= cdb_slot[3];
-      cdb_slot [1] <= cdb_slot[2];
-      cdb_slot [0] <= cdb_slot[1] | (issue_int_temp | issue_ld_buf_temp);
+      if (reset) begin
+         cdb_slot <= 7'h0;
+      end
+      else begin
+         cdb_slot [7] <= ready_div;
+         cdb_slot [6] <= cdb_slot[7];
+         cdb_slot [5] <= cdb_slot[6];
+         cdb_slot [4] <= cdb_slot[5] | ready_mult;
+         cdb_slot [3] <= cdb_slot[4];
+         cdb_slot [2] <= cdb_slot[3];
+         cdb_slot [1] <= cdb_slot[2] | (ready_int | ready_ld_buf);
+         cdb_slot [0] <= cdb_slot[1];
+      end
    end
 
    // ISSUE UNIT LOGIC
@@ -70,31 +67,35 @@ module issue (
    //3. If the ready signals are present, the integer exec queue and
    //   memory access, we need to arbitrate using a bit of LRU
    always @(*) begin: issue_unit_logic
-      if (ready_int && cdb_slot[1] != 1'b0 && !ready_ld_buf ) begin
-         issue_int = 1'b1;
-      end
-      else if (ready_mult && cdb_slot[4] != 1'b1) begin
-         issue_mult = 1'b1;
-      end
-      else if (ready_div && div_exec_ready != 1'b1) begin
-         issue_div = 1'b1;
-      end
-      else if (ready_ld_buf && cdb_slot[1] != 1'b0 && !ready_int) begin
-         issue_ld_buf = 1'b1;
+      if (reset) begin
+         issue_int    = 1'b0;
+         issue_mult   = 1'b0;
+         issue_div    = 1'b0;
+         issue_ld_buf = 1'b0;
       end
       else begin
-         if (ready_int && ready_ld_buf) begin
-             LRU = 1'b1;
+         if (ready_int && cdb_slot[2] != 1'b1 ) begin
+            issue_int = 1'b1;
+         end
+         else if (ready_mult && cdb_slot[5] != 1'b1) begin
+            issue_mult = 1'b1;
+         end
+         else if (ready_div && div_exec_ready != 1'b1) begin
+            issue_div = 1'b1;
+         end
+         else if (ready_ld_buf && cdb_slot[2] != 1'b1) begin
+            issue_ld_buf = 1'b1;
          end
          else begin
-            LRU = 1'b0;
+            if (ready_int && ready_ld_buf) begin
+                //LRU = 1'b0;
+            end
+            else begin
+               //LRU = 1'b1;
+            end
          end
-      end
 
-      if (LRU)
-         issue_int = 1'b1;
-      else
-         issue_ld_buf = 1'b1;
+      end
    end
 
    assign selector = {ready_int, ready_mult, ready_div, ready_ld_buf};
@@ -122,21 +123,24 @@ module issue (
    // Module instantiations
    // integer exec unit
    issueint issueint (
-      .clk                 (clk           ),
-      .reset               (reset         ),
-      .issueint_opcode     (opcode        ),
-      .issueint_rsdata     (rsdata        ),
-      .issueint_rtdata     (rtdata        ),
-      .issueint_rdtag      (rdtag         ),
+      .clk                       (clk           ),
+      .reset                     (reset         ),
+      .issueint_ready            (ready_int     ),
+      .issueint_opcode           (opcode        ),
+      .issueint_rsdata           (rsdata        ),
+      .issueint_rtdata           (rtdata        ),
+      .issueint_rdtag            (rdtag         ),
 
-      .issueint_out        (int_out       ),
-      .issueint_rdtag_out  (cdb_tagout    ),
+      .issueint_out              (int_out       ),
+      .issueint_rdtag_out        (cdb_tagout    ),
 
-      .issueint_carryout   (issue_carryout),
-      .issueint_overflow   (issue_overflow)
+      .issueint_carryout         (issue_carryout),
+      .issueint_overflow         (issue_overflow),
+      .issueint_alubranch        (cdb_branch),
+      .issueint_alubranch_taken  (cdb_branch_taken)
    );
    // divider exec unitt
-   divider_wrapper divider_wrapper(
+  /* divider_wrapper divider_wrapper(
          .clk                 (clk       ),
          .reset               (reset     ),
          .issuediv_enable     (issue_div ),
@@ -147,9 +151,9 @@ module issue (
          .issuediv_busy       (div_exec_ready),
          .issuediv_out        (div_out   ),
          .issuediv_rdtag_out  (cdb_tagout)
-   );
+   ); */
    //multiplier exec unit
-   multiplier_wrapper multiplier_wrapper(
+  /* multiplier_wrapper multiplier_wrapper(
       .clk                 (clk        ),
       .reset               (reset      ),
       .issuemult_rsdata    (rsdata     ),
@@ -158,7 +162,7 @@ module issue (
 
       .issuemult_out       (mult_out   ),
       .issuemult_rdtag_out (cdb_tagout )
-   );
+   ); /*
    //load/store exec unit
    issuels issuels(
       .clk              (clk           ),
@@ -174,7 +178,7 @@ module issue (
       .ls_tag_out       (cdb_tagout    ),
       .ls_done          (),
       .ls_ready_out     ()
-   );
+   ); */
 
 endmodule
 

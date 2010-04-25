@@ -89,22 +89,37 @@ module equeueint (
 
    always @(*) begin : equeueint_do_shift_calc_proc
       integer i;
+      reg [N_SREG  :0] valid_r;
+      reg [N_SREG-1:0] selected;
 
-      // Don't shift last register until operation is ready and issue unit has
-      // finished processing previous instruction.
-      i = 0;
-      do_shift[i] = (inst_valid_r[i+1] & ~inst_valid_r[i])
-                  | (inst_valid_r[i+1] & inst_selected[i] & issueint_done);
-      for (i = 1; i < N_SREG-1; i = i + 1) begin
-         // Shift current register only when next register is not occupied.
-         do_shift[i] = (inst_valid_r[i+1] & ~inst_valid_r[i])
-                     | (inst_valid_r[i+1] & do_shift[i-1])
-                     | (inst_valid_r[i+1] & inst_selected[i] & issueint_done);
-      end
-      // Allow to shift the 'fake' register.
-      i = N_SREG-1;
-      do_shift[i] = (inst_valid_r[i+1] & ~inst_valid_r[i])
-                  | (inst_valid_r[i+1] & do_shift[i-1]);
+      for (i = 0; i < N_SREG + 1; i = i + 1) valid_r[i]  = inst_valid_r[i];
+      for (i = 0; i < N_SREG;     i = i + 1) selected[i] = inst_selected[i];
+
+      //
+      // TODO: replace with a for loop. Can't do reduction & or | unless array boundary is
+      //       specified as a constant (not as "selected[i:0]").
+      //
+      // Shift registers when:
+      //          +------------+-----------------------------------------------------------+--------------------------------
+      //          | Upper reg  |  There is some space available. Some registers are either | Upper register is not
+      //          | is valid.  |  disabled or are already being dispatched.                | being dispatched.
+      //          +------------+-----------------------------------------------------------+--------------------------------
+      do_shift[3] = valid_r[4] & ( (issueint_done & (|selected[3:0])) | ~(&valid_r[3:0]) );
+      do_shift[2] = valid_r[3] & ( (issueint_done & (|selected[2:0])) | ~(&valid_r[2:0]) ) & ~(issueint_done & selected[3]);
+      do_shift[1] = valid_r[2] & ( (issueint_done & (|selected[1:0])) | ~(&valid_r[1:0]) ) & ~(issueint_done & selected[2]);
+      do_shift[0] = valid_r[1] & ( (issueint_done & (|selected[0:0])) | ~(&valid_r[0:0]) ) & ~(issueint_done & selected[1]);
+      // Registers are valid when:
+      //            +-------------+----------------------------------------------+---------------
+      //            | If we shift | Register is not currently being dispatched.  | Lower reg
+      //            | current reg |                                              | is stalled.
+      //            | then upper  |                                              |
+      //            | must be     |                                              |
+      //            | valid       |                                              |
+      //            +-------------+----------------------------------------------+---------------
+      inst_valid[3] = do_shift[3] | (valid_r[3] & ~(issueint_done & selected[3]) & ~do_shift[2]);
+      inst_valid[2] = do_shift[2] | (valid_r[2] & ~(issueint_done & selected[2]) & ~do_shift[1]);
+      inst_valid[1] = do_shift[1] | (valid_r[1] & ~(issueint_done & selected[1]) & ~do_shift[0]);
+      inst_valid[0] = do_shift[0] | (valid_r[0] & ~(issueint_done & selected[0]));
    end
 
    always @(*) begin : equeueint_oreg_assign
@@ -160,12 +175,6 @@ module equeueint (
             2'b01, 2'b11: begin inst_rtdata[i] = cdb_data;           inst_rtvalid[i] = 1'b1;                end
             2'b10:        begin inst_rtdata[i] = inst_rtdata_r[i+1]; inst_rtvalid[i] = inst_rtvalid_r[i+1]; end
          endcase
-
-         inst_valid[i] = (do_shift[i]) ? inst_valid_r[i+1] : inst_valid_r[i];
-//         inst_valid[i] = (do_shift[i]) ? inst_valid_r[i+1] : ~(inst_selected[i] & issueint_done);
-//         inst_valid[i] = (do_shift[i]) | ~(inst_selected[i] & issueint_done);
-         //inst_valid[i] = (do_shift[i] & inst_valid_r[i+1])
-         //              | (~do_shift[i] & inst_valid_r[i] & inst_ready[i] & inst_selected[i] & ~issueint_done);
       end
    end
 

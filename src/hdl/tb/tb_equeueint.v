@@ -34,35 +34,15 @@ module tb_equeueint();
    initial begin : main_proc
       integer i;
 
-      //-----------------------------------------------------------------------
-      // Initial setup.
-      //-----------------------------------------------------------------------
-      dispatch_equeueint_en     =  1'b0;
-      issueint_equeueint_done   =  1'b0;
-      dispatch_equeueint_opcode =  3'h0;
-      dispatch_equeue_rdtag     =  6'h0;
-      dispatch_equeue_rstag     =  6'h0;
-      dispatch_equeue_rttag     =  6'h0;
-      dispatch_equeue_rsdata    = 32'h0;
-      dispatch_equeue_rtdata    = 32'h0;
-      dispatch_equeue_rsvalid   =  1'b0;
-      dispatch_equeue_rtvalid   =  1'b0;
-      cdb_equeueint_data        = 32'h0;
-      cdb_equeueint_tag         =  6'h0;
-      cdb_equeueint_valid       =  1'b0;
-      repeat (10) @(posedge clk);
-      reset = 1'b1;
-      @(posedge clk);
-      reset = 1'b0;
-      @(posedge clk);
+      reset_testbench();
 
       //-----------------------------------------------------------------------
       // Case 0: don't take anything.
       //-----------------------------------------------------------------------
       @(posedge clk);
-      dispatch_equeueint_en   = 1'b0;
-      issueint_equeueint_done = 1'b0;
       for (i = 5; i < 15; i = i + 1) begin
+         dispatch_equeueint_en     = 1'b0;
+         issueint_equeueint_done   = 1'b0;
          dispatch_equeueint_opcode = i;
          dispatch_equeue_rdtag     = i;
          dispatch_equeue_rstag     = i;
@@ -73,22 +53,16 @@ module tb_equeueint();
          dispatch_equeue_rtvalid   = 1'b1;
          @(posedge clk);
       end
-      @(posedge clk);
-      dispatch_equeueint_en   = 1'b0;
-      issueint_equeueint_done = 1'b0;
-      repeat (10) @(posedge clk);
-      reset = 1'b1;
-      @(posedge clk);
-      reset = 1'b0;
-      @(posedge clk);
+
+      reset_testbench();
 
       //-----------------------------------------------------------------------
       // Case 1: fill queue beyond capacity, then consume everything.
       //-----------------------------------------------------------------------
       @(posedge clk);
-      dispatch_equeueint_en   = 1'b1;
-      issueint_equeueint_done = 1'b0;
       for (i = 5; i < 15; i = i + 1) begin
+         dispatch_equeueint_en     = 1'b1;
+         issueint_equeueint_done   = 1'b0;
          dispatch_equeueint_opcode = i;
          dispatch_equeue_rdtag     = i;
          dispatch_equeue_rstag     = i;
@@ -104,21 +78,16 @@ module tb_equeueint();
       dispatch_equeueint_en   = 1'b0;
       issueint_equeueint_done = 1'b1;
       repeat (10) @(posedge clk);
-      dispatch_equeueint_en   = 1'b0;
-      issueint_equeueint_done = 1'b0;
-      repeat (10) @(posedge clk);
-      reset = 1'b1;
-      @(posedge clk);
-      reset = 1'b0;
-      @(posedge clk);
+
+      reset_testbench();
 
       //-----------------------------------------------------------------------
       // Case 3: fill and consume at the same time.
       //-----------------------------------------------------------------------
       @(posedge clk);
-      dispatch_equeueint_en   = 1'b1;
-      issueint_equeueint_done = 1'b1;
       for (i = 5; i < 15; i = i + 1) begin
+         dispatch_equeueint_en     = 1'b1;
+         issueint_equeueint_done   = 1'b1;
          dispatch_equeueint_opcode = i;
          dispatch_equeue_rdtag     = i;
          dispatch_equeue_rstag     = i;
@@ -133,21 +102,16 @@ module tb_equeueint();
       dispatch_equeueint_en   = 1'b0;
       issueint_equeueint_done = 1'b1;
       repeat (10) @(posedge clk);
-      dispatch_equeueint_en   = 1'b0;
-      issueint_equeueint_done = 1'b0;
-      repeat (10) @(posedge clk);
-      reset = 1'b1;
-      @(posedge clk);
-      reset = 1'b0;
-      @(posedge clk);
+
+      reset_testbench();
 
       //-----------------------------------------------------------------------
       // Case 1: fill one and consume it.
       //-----------------------------------------------------------------------
       @(posedge clk);
-      dispatch_equeueint_en   = 1'b1;
-      issueint_equeueint_done = 1'b1;
       for (i = 5; i < 6; i = i + 1) begin
+         dispatch_equeueint_en     = 1'b1;
+         issueint_equeueint_done   = 1'b1;
          dispatch_equeueint_opcode = i;
          dispatch_equeue_rdtag     = i;
          dispatch_equeue_rstag     = i;
@@ -162,16 +126,31 @@ module tb_equeueint();
       dispatch_equeueint_en   = 1'b0;
       issueint_equeueint_done = 1'b1;
       repeat (10) @(posedge clk);
-      dispatch_equeueint_en   = 1'b0;
-      issueint_equeueint_done = 1'b0;
-      repeat (10) @(posedge clk);
-      reset = 1'b1;
-      @(posedge clk);
-      reset = 1'b0;
-      @(posedge clk);
 
-
+      reset_testbench();
    end
+
+   task reset_testbench();
+      begin
+         @(posedge clk);
+         dispatch_equeueint_en     =  1'b0;
+         issueint_equeueint_done   =  1'b0;
+         dispatch_equeueint_opcode =  3'h0;
+         dispatch_equeue_rdtag     =  6'h0;
+         dispatch_equeue_rstag     =  6'h0;
+         dispatch_equeue_rttag     =  6'h0;
+         dispatch_equeue_rsdata    = 32'h0;
+         dispatch_equeue_rtdata    = 32'h0;
+         dispatch_equeue_rsvalid   =  1'b0;
+         dispatch_equeue_rtvalid   =  1'b0;
+         cdb_equeueint_data        = 32'h0;
+         cdb_equeueint_tag         =  6'h0;
+         cdb_equeueint_valid       =  1'b0;
+
+         reset = 1'b1; @(posedge clk);
+         reset = 1'b0; @(posedge clk);
+      end
+   endtask
 
    initial begin
       reset = 1'b1; #10; reset = 1'b0;

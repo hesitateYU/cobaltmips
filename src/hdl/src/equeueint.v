@@ -41,11 +41,11 @@ module equeueint (
    reg        inst_rtvalid_r[N_SREG:0], inst_rtvalid[N_SREG-1:0];
    reg        inst_valid_r  [N_SREG:0], inst_valid  [N_SREG-1:0];
 
-   reg do_shift            [N_SREG-1:0];
-   reg do_rs_update        [N_SREG-1:0];
-   reg do_rt_update        [N_SREG-1:0];
-   reg inst_selected       [N_SREG-1:0];
-   reg inst_ready          [N_SREG-1:0];
+   reg do_shift     [N_SREG-1:0];
+   reg do_rs_update [N_SREG-1:0];
+   reg do_rt_update [N_SREG-1:0];
+   reg inst_selected[N_SREG-1:0];
+   reg inst_ready   [N_SREG-1:0];
 
    always @(*) begin : equeueint_fake_reg_proc
       integer i;
@@ -66,7 +66,7 @@ module equeueint (
       integer i;
       for (i = 0; i < N_SREG; i = i + 1) begin
          // Check if both operands have been solved.
-         inst_ready[i]           = inst_rsvalid_r[i] & inst_rtvalid_r[i];
+         inst_ready[i] = inst_rsvalid_r[i] & inst_rtvalid_r[i];
 
          // Check if published data from CDB matches a tag in any of the
          // pending instructions.
@@ -96,8 +96,8 @@ module equeueint (
       for (i = 0; i < N_SREG;     i = i + 1) selected[i] = inst_selected[i];
 
       //
-      // TODO: replace with a for loop. Can't do reduction & or | unless array boundary is
-      //       specified as a constant (not as "selected[i:0]").
+      // TODO: replace with a for loop. Can't do reduction & or | unless array
+      //       boundary is specified as a constant (not as "selected[i:0]").
       //
       // Shift registers when:
       //          +------------+-----------------------------------------------------------+--------------------------------
@@ -116,26 +116,21 @@ module equeueint (
       //            | must be     |                                              |
       //            | valid       |                                              |
       //            +-------------+----------------------------------------------+---------------
-      inst_valid[3] = do_shift[3] | (valid_r[3] & ~(issueint_done & selected[3]) & ~do_shift[2]);
-      inst_valid[2] = do_shift[2] | (valid_r[2] & ~(issueint_done & selected[2]) & ~do_shift[1]);
-      inst_valid[1] = do_shift[1] | (valid_r[1] & ~(issueint_done & selected[1]) & ~do_shift[0]);
-      inst_valid[0] = do_shift[0] | (valid_r[0] & ~(issueint_done & selected[0]));
+      inst_valid[3] = do_shift[3] | ( valid_r[3] & ~(issueint_done & selected[3]) & ~do_shift[2] );
+      inst_valid[2] = do_shift[2] | ( valid_r[2] & ~(issueint_done & selected[2]) & ~do_shift[1] );
+      inst_valid[1] = do_shift[1] | ( valid_r[1] & ~(issueint_done & selected[1]) & ~do_shift[0] );
+      inst_valid[0] = do_shift[0] | ( valid_r[0] & ~(issueint_done & selected[0])                );
    end
 
    always @(*) begin : equeueint_oreg_assign
       integer i;
       // We don't take into account the 'fake' register.
-      reg [N_SREG-1:0] valid, valid_and_ready;
-
-      // Unless all registers are occupied and issue unit is ready to process
-      // then queue is not considered full because a shift is pending.
-      for (i = 0; i < N_SREG; i = i + 1) valid[i] = inst_valid_r[i];
-      dispatch_ready = ~((&valid) & ~issueint_done);
+      reg [N_SREG-1:0] valid_r, valid_and_ready;
 
       // If at least one instruction is ready, then signal the issue unit to
       // continue.
       for (i = 0; i < N_SREG; i = i + 1) valid_and_ready[i] = inst_valid_r[i] & inst_ready[i];
-      issueint_ready  = |valid_and_ready;
+      issueint_ready = |valid_and_ready;
       // The oldest and valid register is sent to the issue unit. Priority
       // encoder inferred. If no instruction is ready, then assign the
       // register at the bottom.
@@ -154,6 +149,12 @@ module equeueint (
             end
          end
       end
+
+      // Unless all registers are occupied and issue unit is not ready to
+      // process then queue is not considered full because a shift is
+      // pending.
+      for (i = 0; i < N_SREG; i = i + 1) valid_r[i] = inst_valid_r[i];
+      dispatch_ready = ~((&valid_r) & ~(issueint_done & |valid_and_ready));
    end
 
    always @(*) begin : equeueint_shift_proc
@@ -164,7 +165,8 @@ module equeueint (
          inst_rstag [i] = (do_shift[i]) ? inst_rstag_r [i+1] : inst_rstag_r [i];
          inst_rttag [i] = (do_shift[i]) ? inst_rttag_r [i+1] : inst_rttag_r [i];
 
-         // Select if data is taken from CDB (update) or the previous register (shift).
+         // Select if data is taken from CDB (update) or the previous register
+         // (shift).
          case ({do_shift[i], do_rs_update[i]})
             2'b00:        begin inst_rsdata[i] = inst_rsdata_r[i];   inst_rsvalid[i] = inst_rsvalid_r[i];   end
             2'b01, 2'b11: begin inst_rsdata[i] = cdb_data;           inst_rsvalid[i] = 1'b1;                end

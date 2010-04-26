@@ -8,7 +8,7 @@ module tb_equeueint();
    reg  clk;
    reg  reset;
 
-   reg  [  2:0] dispatch_equeueint_opcode;
+   reg  [  3:0] dispatch_equeueint_opcode;
    reg          dispatch_equeueint_en;
    wire         equeueint_dispatch_ready;
 
@@ -24,7 +24,7 @@ module tb_equeueint();
    reg  [  5:0] cdb_equeueint_tag;
    reg          cdb_equeueint_valid;
 
-   wire [  2:0] equeueint_issueint_opcode;
+   wire [  3:0] equeueint_issueint_opcode;
    wire [  5:0] equeueint_issueint_rdtag;
    wire [ 31:0] equeueint_issueint_rsdata;
    wire [ 31:0] equeueint_issueint_rtdata;

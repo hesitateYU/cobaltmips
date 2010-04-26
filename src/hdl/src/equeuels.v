@@ -44,35 +44,13 @@ module equeuels (
    reg        inst_rtvalid_r[N_SREG:0], inst_rtvalid[N_SREG-1:0];
    reg        inst_valid_r  [N_SREG:0], inst_valid  [N_SREG-1:0];
 
-   reg inst_ready  [N_SREG-1:0];
-   reg do_shift    [N_SREG-1:0];
-   reg do_rs_update[N_SREG-1:0];
-   reg do_rt_update[N_SREG-1:0];
+   reg do_shift     [N_SREG-1:0];
+   reg do_rs_update [N_SREG-1:0];
+   reg do_rt_update [N_SREG-1:0];
+   reg inst_selected[N_SREG-1:0];
+   reg inst_ready   [N_SREG-1:0];
 
-   always @(*) begin : equeuels_update_flags_proc
-      integer i;
-      for (i = 0; i < N_SREG ; i = i + 1) begin
-         // Check if both operands have been solved and register is occupied.
-         // For LOAD operations, RT register is not required.
-         inst_ready[i] = inst_valid_r[i] & inst_rsvalid_r[i] & (inst_rtvalid_r[i] | inst_opcode_r[i]);
-
-         // Check if published data from CDB matches a tag in any of the
-         // pending instructions.
-         do_rs_update[i] = cdb_valid & cdb_tag == inst_rstag_r[i];
-         do_rt_update[i] = cdb_valid & cdb_tag == inst_rttag_r[i];
-      end
-   end
-
-   always @(*) begin : equeuels_shift_proc
-      integer i;
-      for (i = 0; i < N_SREG ; i = i + 1) begin
-         // Shift current register only when next register is not occupied.
-         do_shift[i] = ~inst_valid_r[i];
-      end
-      // Don't shift last register until operation is ready and issue unit has
-      // finished processing previous instruction.
-      do_shift[0] = inst_ready[0] & issuels_done;
-
+   always @(*) begin : equeuels_fake_reg_proc
       // The top register is fake, it just stores (no flops) the input from
       // dispatch unit. Used to simplify register shifting and updating.
       // Offset sent by dispatch unit must be sign extended.
@@ -87,48 +65,90 @@ module equeuels (
       inst_rsvalid_r[N_SREG] = dispatch_rsvalid;
       inst_rtvalid_r[N_SREG] = dispatch_rtvalid;
       inst_valid_r  [N_SREG] = dispatch_en;
-
-      for (i = 0; i < N_SREG; i = i + 1) begin
-         inst_offset[i] = (do_shift[i]) ? inst_offset_r[i + 1] : inst_offset_r[i];
-         inst_opcode[i] = (do_shift[i]) ? inst_opcode_r[i + 1] : inst_opcode_r[i];
-         inst_rdtag [i] = (do_shift[i]) ? inst_rdtag_r [i + 1] : inst_rdtag_r [i];
-         inst_rstag [i] = (do_shift[i]) ? inst_rstag_r [i + 1] : inst_rstag_r [i];
-         inst_rttag [i] = (do_shift[i]) ? inst_rttag_r [i + 1] : inst_rttag_r [i];
-         inst_valid [i] = (do_shift[i]) ? inst_valid_r [i + 1] : inst_valid_r [i];
-
-         case ({do_shift[i], do_rs_update[i]})
-            2'b00:        begin inst_addr[i] = inst_addr_r[i];                                               end
-            2'b01, 2'b11: begin inst_addr[i] = cdb_data + { {16 {inst_offset_r[i][15]} }, inst_offset_r[i]}; end
-            2'b10:        begin inst_addr[i] = inst_addr_r[i+1];                                             end
-         endcase
-
-         // Select if data is taken from CDB (update) or the previous register (shift).
-         case ({do_shift[i], do_rs_update[i]})
-            2'b00:        begin inst_rsdata[i] = inst_rsdata_r[i];   inst_rsvalid[i] = inst_rsvalid_r[i];   end
-            2'b01, 2'b11: begin inst_rsdata[i] = cdb_data;           inst_rsvalid[i] = 1'b1;                end
-            2'b10:        begin inst_rsdata[i] = inst_rsdata_r[i+1]; inst_rsvalid[i] = inst_rsvalid_r[i+1]; end
-         endcase
-         case ({do_shift[i], do_rt_update[i]})
-            2'b00:        begin inst_rtdata[i] = inst_rtdata_r[i];   inst_rtvalid[i] = inst_rtvalid_r[i];   end
-            2'b01, 2'b11: begin inst_rtdata[i] = cdb_data;           inst_rtvalid[i] = 1'b1;                end
-            2'b10:        begin inst_rtdata[i] = inst_rtdata_r[i+1]; inst_rtvalid[i] = inst_rtvalid_r[i+1]; end
-         endcase
-      end
    end
+
+   always @(*) begin : equeuels_update_flags_proc
+      integer i;
+      for (i = 0; i < N_SREG ; i = i + 1) begin
+         // Check if both operands have been solved, for LOAD operations, RT
+         // register is not required.
+         inst_ready[i] = inst_rsvalid_r[i] & (inst_rtvalid_r[i] | inst_opcode_r[i]);
+
+         // Check if published data from CDB matches a tag in any of the
+         // pending instructions.
+         do_rs_update[i] = cdb_valid & cdb_tag == inst_rstag_r[i];
+         do_rt_update[i] = cdb_valid & cdb_tag == inst_rttag_r[i];
+      end
+
+      // One hot instruction selector, set to one if instruction is valid and
+      // ready to execute, with limitations used for memory disambiguation.
+      //  + RAW: Load may bypass store if addresses are different.
+      //  + WAR: Store may bypass load if addresses are different.
+      //  + WAW: Store must not bypass any other store.
+      //  + RAR: Load may always bypass any other load.
+      //
+      //  NOTE: This code uses the most conservative cases, loads and stores
+      //        are always executed as a FIFO. No load or store can never
+      //        bypass any other load nor store under any circumstance.
+      //        Instruction at index 0 (bottom) always has precedence.
+      //
+      for (i = 0; i < N_SREG; i = i + 1) inst_selected[i] = 1'b0;
+      //begin : equeuels_inst_select_mux
+      //   for (i = 0; i < N_SREG; i = i + 1) begin
+      //      if (inst_valid_r[i] & inst_ready[i]) begin
+      //         inst_selected[i] = 1'b1;
+      //         disable equeuels_inst_select_mux;
+      //      end
+      //   end
+      //end
+      inst_selected[0] = inst_valid_r[0] & inst_ready[0];
+   end
+
+   always @(*) begin : equeuels_do_shift_calc_proc
+      integer i;
+      reg [N_SREG  :0] valid_r;
+      reg [N_SREG-1:0] selected;
+
+      for (i = 0; i < N_SREG + 1; i = i + 1) valid_r[i]  = inst_valid_r[i];
+      for (i = 0; i < N_SREG;     i = i + 1) selected[i] = inst_selected[i];
+
+      //
+      // TODO: replace with a for loop. Can't do reduction & or | unless array
+      //       boundary is specified as a constant (not as "selected[i:0]").
+      //
+      // Shift registers when:
+      //          +------------+-----------------------------------------------------------+--------------------------------
+      //          | Upper reg  |  There is some space available. Some registers are either | Upper register is not
+      //          | is valid.  |  disabled or are already being dispatched.                | being dispatched.
+      //          +------------+-----------------------------------------------------------+--------------------------------
+      do_shift[3] = valid_r[4] & ( (issuels_done & (|selected[3:0])) | ~(&valid_r[3:0]) );
+      do_shift[2] = valid_r[3] & ( (issuels_done & (|selected[2:0])) | ~(&valid_r[2:0]) ) & ~(issuels_done & selected[3]);
+      do_shift[1] = valid_r[2] & ( (issuels_done & (|selected[1:0])) | ~(&valid_r[1:0]) ) & ~(issuels_done & selected[2]);
+      do_shift[0] = valid_r[1] & ( (issuels_done & (|selected[0:0])) | ~(&valid_r[0:0]) ) & ~(issuels_done & selected[1]);
+      // Registers are valid when:
+      //            +-------------+----------------------------------------------+---------------
+      //            | If we shift | Register is not currently being dispatched.  | Lower reg
+      //            | current reg |                                              | is stalled.
+      //            | then upper  |                                              |
+      //            | must be     |                                              |
+      //            | valid       |                                              |
+      //            +-------------+----------------------------------------------+---------------
+      inst_valid[3] = do_shift[3] | ( valid_r[3] & ~(issuels_done & selected[3]) & ~do_shift[2] );
+      inst_valid[2] = do_shift[2] | ( valid_r[2] & ~(issuels_done & selected[2]) & ~do_shift[1] );
+      inst_valid[1] = do_shift[1] | ( valid_r[1] & ~(issuels_done & selected[1]) & ~do_shift[0] );
+      inst_valid[0] = do_shift[0] | ( valid_r[0] & ~(issuels_done & selected[0])                );
+   end
+
 
    always @(*) begin : equeuels_oreg_assign
       integer i;
-      reg [N_SREG-1:0] valid, ready;
-
-      // If all registers are occupied and issue unit is ready to process then
-      // queue is not full considered full because a shift is pending.
-      for (i = 0; i < N_SREG; i = i + 1) valid[i] = inst_valid_r[i];
-      dispatch_ready = ~((&valid) & ~issuels_done);
+      // We don't take into account the 'fake' register.
+      reg [N_SREG-1:0] valid_r, valid_and_ready;
 
       // If at least one instruction is ready, then signal the issue unit to
       // continue.
-      for (i = 0; i < N_SREG; i = i + 1) ready[i] = inst_ready[i];
-      issuels_ready  = |ready;
+      for (i = 0; i < N_SREG; i = i + 1) valid_and_ready[i] = inst_valid_r[i] & inst_ready[i];
+      issuels_ready  = |valid_and_ready;
       // The oldest and valid register is sent to the issue unit. Priority
       // encoder inferred. If no instruction is ready, then assign the
       // register at the bottom.
@@ -146,6 +166,43 @@ module equeuels (
                disable equeuels_regdata_mux;
             end
          end
+      end
+
+      // Unless all registers are occupied and issue unit is not ready to
+      // process then queue is not considered full because a shift is
+      // pending.
+      for (i = 0; i < N_SREG; i = i + 1) valid_r[i] = inst_valid_r[i];
+      dispatch_ready = ~((&valid_r) & ~(issuels_done & |valid_and_ready));
+   end
+
+   always @(*) begin : equeuels_shift_proc
+      integer i;
+      for (i = 0; i < N_SREG; i = i + 1) begin
+         inst_offset[i] = (do_shift[i]) ? inst_offset_r[i + 1] : inst_offset_r[i];
+         inst_opcode[i] = (do_shift[i]) ? inst_opcode_r[i + 1] : inst_opcode_r[i];
+         inst_rdtag [i] = (do_shift[i]) ? inst_rdtag_r [i + 1] : inst_rdtag_r [i];
+         inst_rstag [i] = (do_shift[i]) ? inst_rstag_r [i + 1] : inst_rstag_r [i];
+         inst_rttag [i] = (do_shift[i]) ? inst_rttag_r [i + 1] : inst_rttag_r [i];
+         inst_valid [i] = (do_shift[i]) ? inst_valid_r [i + 1] : inst_valid_r [i];
+
+         case ({do_shift[i], do_rs_update[i]})
+            2'b00:        begin inst_addr[i] = inst_addr_r[i];                                               end
+            2'b01, 2'b11: begin inst_addr[i] = cdb_data + { {16 {inst_offset_r[i][15]} }, inst_offset_r[i]}; end
+            2'b10:        begin inst_addr[i] = inst_addr_r[i+1];                                             end
+         endcase
+
+         // Select if data is taken from CDB (update) or the previous register
+         // (shift).
+         case ({do_shift[i], do_rs_update[i]})
+            2'b00:        begin inst_rsdata[i] = inst_rsdata_r[i];   inst_rsvalid[i] = inst_rsvalid_r[i];   end
+            2'b01, 2'b11: begin inst_rsdata[i] = cdb_data;           inst_rsvalid[i] = 1'b1;                end
+            2'b10:        begin inst_rsdata[i] = inst_rsdata_r[i+1]; inst_rsvalid[i] = inst_rsvalid_r[i+1]; end
+         endcase
+         case ({do_shift[i], do_rt_update[i]})
+            2'b00:        begin inst_rtdata[i] = inst_rtdata_r[i];   inst_rtvalid[i] = inst_rtvalid_r[i];   end
+            2'b01, 2'b11: begin inst_rtdata[i] = cdb_data;           inst_rtvalid[i] = 1'b1;                end
+            2'b10:        begin inst_rtdata[i] = inst_rtdata_r[i+1]; inst_rtvalid[i] = inst_rtvalid_r[i+1]; end
+         endcase
       end
    end
 

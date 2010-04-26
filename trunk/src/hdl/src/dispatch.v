@@ -231,18 +231,18 @@ module dispatch (
    end
 
    regfile regfile (
-      .clk             (clk                     ),
-      .reset           (reset                   ),
+      .clk             (clk                    ),
+      .reset           (reset                  ),
 
-      .cdb_wdata       (cdb_data                ),
-      .rst_wen_onehot  (rst_regfile_wen_onehot  ),
+      .cdb_wdata       (cdb_data               ),
+      .rst_wen_onehot  (rst_regfile_wen_onehot ),
 
       .dispatch_rsaddr (dispatch_regfile_rsaddr),
       .dispatch_rtaddr (dispatch_regfile_rtaddr),
-      .debug_addr      (debug_regfile_addr      ),
+      .debug_addr      (debug_regfile_addr     ),
       .dispatch_rsdata (regfile_dispatch_rsdata),
       .dispatch_rtdata (regfile_dispatch_rtdata),
-      .debug_data      (debug_regfile_data      )
+      .debug_data      (debug_regfile_data     )
    );
 
    rst rst(

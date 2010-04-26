@@ -70,7 +70,7 @@ module equeuels (
    always @(*) begin : equeuels_update_flags_proc
       integer i;
       for (i = 0; i < N_SREG ; i = i + 1) begin
-         // Check if both operands have been solved, for LOAD operations, RT
+         // Check if both operands have been solved. For LOAD operations, RT
          // register is not required.
          inst_ready[i] = inst_rsvalid_r[i] & (inst_rtvalid_r[i] | inst_opcode_r[i]);
 

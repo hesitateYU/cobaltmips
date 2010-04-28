@@ -8,7 +8,7 @@ module icache #(
    parameter integer W_IDATA      = 32,
    parameter integer W_ODATA      = 128,
    parameter integer W_ADDR       = 6,
-   parameter integer INCLUDE_OREG = 1'b0
+   parameter integer INCLUDE_OREG = 1
 )(
    input                    clk,
    input                    reset,
@@ -88,10 +88,10 @@ module icache #(
 
       // Load program in verilog format.
       //`include "programs/rtype.vh"
-      `include "programs/rtype_simple.vh"
+      //`include "programs/rtype_simple.vh"
 
       // Load program in hex format.
-      //$readmemh("programs/incremental.txt", mem_init);
+      $readmemh("programs/incremental.txt", mem_init);
 
       for (i = 0; i < N_ENTRY; i = i + 1) $display("[%h] %h", i * (2**N_BYTEALIGN), mem_init[i]);
    end

@@ -106,7 +106,7 @@ module cpu (
       .W_IDATA        ( 32                    ),
       .W_ODATA        ( 128                   ),
       .W_ADDR         ( 6                     ),
-      .INCLUDE_OREG   ( 1'b0                  )
+      .INCLUDE_OREG   ( 1                     )
    ) icache (
       .clk            ( clk                   ),
       .reset          ( reset                 ),

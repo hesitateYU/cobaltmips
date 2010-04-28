@@ -95,10 +95,10 @@ module ifq (
       //       are still waiting for the instruction to arrive? We need to set
       //       a register indicating that icache_ren has been issued but
       //       icache_dout_valid hasn't arrived yet.
-      //       Fow now, we never set icache_abort.
+      //       For now, we never set icache_abort.
       //
       icache_abort = 1'b0;
-      icache_pcin = (dispatch_branch_valid) ? dispatch_branch_addr : pcin_r;
+      icache_pcin  = (dispatch_branch_valid) ? dispatch_branch_addr : pcin_r;
       icache_ren   = ~(dispatch_branch_valid | is_full);
 
       dispatch_pcout_plus4 = (dispatch_branch_valid) ? pcout : pcout_r;

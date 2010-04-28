@@ -37,4 +37,5 @@ src/execunits/add/CLA_32bit.v
 tb/tb_top.v
 tb/tb_equeueint.v
 tb/tb_issue.v
+tb/tb_rst.v
 

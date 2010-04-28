@@ -8,8 +8,9 @@ module regfile #(
    input                   clk,
    input                   reset,
 
-   // Single write port, data comes from CDB and address is
-   // encoded as one-hot from register status table.
+   // Single write port, data comes from CDB and wen and address
+   // is encoded as one-hot from register status table. If one-hot
+   // vector is all zeros then don't write anything.
    input      [W_DATA-1:0] cdb_wdata,
    input      [W_DATA-1:0] rst_wen_onehot,
 
@@ -35,7 +36,7 @@ module regfile #(
 
       // Make sure one-hot vector has one (or zero) active bits.
       for (i = 0; i < N_ENTRY; i = i + 1) if (rst_wen_onehot[i]) count = count + 1;
-//      if (count != 0 && count != 1) $fatal("More than one write in one-hot vector");
+      if (count > 1) $display("FATAL: More than one write in one-hot vector");
    end
 
    always @(*) begin : reg_file_read_proc

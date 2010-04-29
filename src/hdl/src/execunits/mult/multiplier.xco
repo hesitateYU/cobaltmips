@@ -1,7 +1,7 @@
 ##############################################################
 #
 # Xilinx Core Generator version J.36
-# Date: Thu Apr 29 02:38:29 2010
+# Date: Thu Apr 29 23:46:53 2010
 #
 ##############################################################
 #
@@ -26,7 +26,7 @@ SET foundationsym = False
 SET implementationfiletype = Ngc
 SET package = fg320
 SET removerpms = False
-SET simulationfiles = Behavioral
+SET simulationfiles = Structural
 SET speedgrade = -5
 SET verilogsim = True
 SET vhdlsim = False
@@ -36,13 +36,13 @@ SELECT Multiplier family Xilinx,_Inc. 10.0
 # END Select
 # BEGIN Parameters
 CSET ccmimp=Distributed_Memory
-CSET clockenable=true
+CSET clockenable=false
 CSET component_name=multiplier
 CSET constvalue=129
 CSET dynamic_constant_reload=false
 CSET multiplier_construction=Use_Mults
 CSET multtype=Parallel_Multiplier
-CSET optgoal=Area
+CSET optgoal=Speed
 CSET outputwidthhigh=31
 CSET outputwidthlow=0
 CSET pipestages=3
@@ -53,12 +53,12 @@ CSET portbwidth=16
 CSET reloadable=false
 CSET roundpoint=0
 CSET sclrcepriority=SCLR_Overrides_CE
-CSET syncclear=true
+CSET syncclear=false
 CSET use_custom_output_width=false
 CSET use_load_done=false
 CSET userounding=false
 CSET zerodetect=false
 # END Parameters
 GENERATE
-# CRC: 31f26b88
+# CRC: 96594b21
 

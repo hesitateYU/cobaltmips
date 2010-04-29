@@ -1,5 +1,6 @@
 `ifndef ISSUE_V
 `define ISSUE_V
+`timescale 1 ns/1 ps
 
 module issue (
    input              clk,
@@ -94,7 +95,6 @@ module issue (
                //LRU = 1'b1;
             end
          end
-
       end
    end
 
@@ -140,10 +140,10 @@ module issue (
       .issueint_alubranch_taken  (cdb_branch_taken)
    );
    // divider exec unitt
-  /* divider_wrapper divider_wrapper(
+   divider_wrapper divider_wrapper(
          .clk                 (clk       ),
          .reset               (reset     ),
-         .issuediv_enable     (issue_div ),
+         .issuediv_enable     (ready_div ),
          .issuediv_rsdata     (rsdata    ),
          .issuediv_rtdata     (rtdata    ),
          .issuediv_rdtag      (rdtag     ),
@@ -151,9 +151,9 @@ module issue (
          .issuediv_busy       (div_exec_ready),
          .issuediv_out        (div_out   ),
          .issuediv_rdtag_out  (cdb_tagout)
-   ); */
+   );
    //multiplier exec unit
-  /* multiplier_wrapper multiplier_wrapper(
+   multiplier_wrapper multiplier_wrapper(
       .clk                 (clk        ),
       .reset               (reset      ),
       .issuemult_rsdata    (rsdata     ),

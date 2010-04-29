@@ -2,6 +2,8 @@
 `ifndef ISSUEINT_V
 `define ISSUEINT_V
 
+`timescale 1 ns/1 ps
+
 module issueint (
          input             clk,
          input             reset,
@@ -72,7 +74,9 @@ parameter [3:0] ADD  = 4'b0000,
             issueint_out = (issueint_rsdata < issueint_rtdata) ? 1'b1: 1'b0;;
          end
          default: begin
-            issueint_out = issueint_out;
+            issueint_out = 32'h0;
+            rsdata_r     = 32'h0;
+            rtdata_r     = 32'h0;
          end
       endcase
    end

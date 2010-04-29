@@ -194,15 +194,15 @@ end
    .cdb_branch_taken( cdb_branch_taken)
 ); */
 multiplier_wrapper mult_wpr(
-         .clk              (clk),
-         .reset            (reset),
-         .issuemult_rsdata (rsdata),
-         .issuemult_rtdata (rtdata),
-         .issuemult_rdtag  (rdtag),
-         .issuemult_enable (ready_mult),
+         .clk                 (clk       ),
+         //.reset               (reset     ),
+         .issuemult_rsdata    (rsdata    ),
+         .issuemult_rtdata    (rtdata    ),
+         .issuemult_rdtag     (rdtag     ),
+         //.issuemult_enable    (ready_mult),
 
-         .issuemult_out    (cdb_out),
-         .issuemult_rdtag_out(cdb_tagout)
+         .issuemult_out       (cdb_out   ),
+         .issuemult_rdtag_out (cdb_tagout)
    );
 
     divider_wrapper divider_wrapper(

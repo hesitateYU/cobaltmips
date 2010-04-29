@@ -1,7 +1,7 @@
 ##############################################################
 #
 # Xilinx Core Generator version J.36
-# Date: Fri Apr 02 00:28:25 2010
+# Date: Thu Apr 29 02:38:29 2010
 #
 ##############################################################
 #
@@ -36,16 +36,16 @@ SELECT Multiplier family Xilinx,_Inc. 10.0
 # END Select
 # BEGIN Parameters
 CSET ccmimp=Distributed_Memory
-CSET clockenable=false
+CSET clockenable=true
 CSET component_name=multiplier
 CSET constvalue=129
 CSET dynamic_constant_reload=false
-CSET multiplier_construction=Use_LUTs
+CSET multiplier_construction=Use_Mults
 CSET multtype=Parallel_Multiplier
-CSET optgoal=Speed
+CSET optgoal=Area
 CSET outputwidthhigh=31
 CSET outputwidthlow=0
-CSET pipestages=4
+CSET pipestages=3
 CSET portatype=Signed
 CSET portawidth=16
 CSET portbtype=Signed
@@ -60,5 +60,5 @@ CSET userounding=false
 CSET zerodetect=false
 # END Parameters
 GENERATE
-# CRC:  8dc8aa8
+# CRC: 31f26b88
 

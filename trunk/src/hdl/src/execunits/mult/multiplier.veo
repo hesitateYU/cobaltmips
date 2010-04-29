@@ -35,6 +35,7 @@ multiplier YourInstanceName (
 	.clk(clk),
 	.a(a), // Bus [15 : 0] 
 	.b(b), // Bus [15 : 0] 
+	.ce(ce),
 	.sclr(sclr),
 	.p(p)); // Bus [31 : 0] 
 

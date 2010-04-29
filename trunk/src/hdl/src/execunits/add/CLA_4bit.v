@@ -1,3 +1,7 @@
+`ifndef CLA_4BIT_V 
+`define CLA_4BIT_V
+
+`timescale 1 ns/1 ps
 
 module CLA_4bit (
    output wire [3:0] s, 
@@ -17,5 +21,6 @@ module CLA_4bit (
    assign cout=g[3] | (g[2] & p[3]) | (g[1] & p[2] & p[3]) | (g[0] & p[1] & p[2] & p[3]) | (p[0] & p[1] & p[2] & p[3] & c0);
    assign s[0]=p[0]^c0;
    assign s[3:1]=p[3:1]^c[3:1];
+
 endmodule
- 
+`endif 

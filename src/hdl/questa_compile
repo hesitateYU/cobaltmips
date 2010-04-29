@@ -1,3 +1,4 @@
 vlib work
-vlog -sv -incr +mfcu -f compile_questa_sv.f
+vcom +acc -f compile_questa_vhd.f 
+vlog +acc -incr -sv -f +mfcu compile_questa_sv.f
 

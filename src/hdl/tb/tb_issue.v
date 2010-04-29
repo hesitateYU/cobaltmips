@@ -1,7 +1,7 @@
 
-
 `ifndef TB_TOP_V
 `define TB_TOP_V
+
 
 module tb_issue();
    reg              clk;
@@ -30,25 +30,26 @@ module tb_issue();
    wire             cdb_valid;
    wire             cdb_branch;
    wire             cdb_branch_taken;
+   wire [31:0]      div_out;
 
 
-   initial begin
-      reset = 1'b1; #10; reset = 1'b0;
-   end
 
    initial begin
       clk = 1'b0;
       forever #5 clk <= ~clk;
    end
+ initial begin
+      reset = 1'b1; #10; reset = 1'b0;
+   end
 
-   initial begin : main_proc
+  initial begin : main_proc
       integer i;
       //-----------------------------------------------------------------------
       // Initial setup.
       //-----------------------------------------------------------------------
       opcode         =  4'h0;
-      rsdata         = 32'h0;
-      rtdata         = 32'h0;
+      rsdata         = 32'h6;
+      rtdata         = 32'h2;
       rdtag          =  6'h0;
 
       ready_int      =  1'b0;
@@ -56,15 +57,16 @@ module tb_issue();
       ready_div      =  1'b0;
       ready_ld_buf   =  1'b0;
 
-      repeat (5) @(posedge clk);
+      repeat (10) @(posedge clk);
       reset = 1'b1;
       @(posedge clk);
       reset = 1'b0;
       @(posedge clk);
-
+      ready_mult = 1'b1;
       //-----------------------------------------------------------------------
       // Case 0: Add
       //-----------------------------------------------------------------------
+      /*
       @(posedge clk);
       opcode    =  4'h0;
       ready_int =  1'b1;
@@ -87,16 +89,20 @@ module tb_issue();
       rsdata    = 32'hFFFFFFFF;
       rtdata    = 32'hFFFFFFFF;
       rdtag     =  6'hB;
-
+*/
       //-----------------------------------------------------------------------
       // Case 2: Substraction 
       //-----------------------------------------------------------------------
-      @(posedge clk);
-      opcode    = 4'h2;
-      ready_int = 1;
-      rsdata    = 32'hF;
-      rtdata    = 32'h5;
-      rdtag     =  6'hB;
+     // ready_mult = 0 ;
+     // @(posedge clk);
+      //@(posedge clk);
+      //@(posedge clk);
+     // opcode    = 4'h2;
+     // ready_mult = 1;
+      //rsdata    = 32'hF;
+      //rtdata    = 32'h5;
+      //rdtag     =  6'hB;
+      /*
       //-----------------------------------------------------------------------
       // Case 3: AND
       //-----------------------------------------------------------------------
@@ -156,10 +162,10 @@ module tb_issue();
       rdtag     = 6'h8;
       @(posedge clk);
       ready_int = 0;
+*/
 
-
-   end
-   issue issue (
+end
+/*   issue issue (
    .clk        (clk        ),
    .reset      (reset      ),
 
@@ -186,7 +192,31 @@ module tb_issue();
    .cdb_valid     ( cdb_valid       ),
    .cdb_branch    ( cdb_branch       ),
    .cdb_branch_taken( cdb_branch_taken)
-);
+); */
+multiplier_wrapper mult_wpr(
+         .clk              (clk),
+         .reset            (reset),
+         .issuemult_rsdata (rsdata),
+         .issuemult_rtdata (rtdata),
+         .issuemult_rdtag  (rdtag),
+         .issuemult_enable (ready_mult),
+
+         .issuemult_out    (cdb_out),
+         .issuemult_rdtag_out(cdb_tagout)
+   );
+
+    divider_wrapper divider_wrapper(
+         .clk                 (clk       ),
+         .reset               (reset     ),
+         .issuediv_enable     (ready_div ),
+         .issuediv_rsdata     (rsdata    ),
+         .issuediv_rtdata     (rtdata    ),
+         .issuediv_rdtag      (rdtag     ),
+
+         .issuediv_busy       (div_exec_ready),
+         .issuediv_out        (div_out   ),
+         .issuediv_rdtag_out  (cdb_tagout)
+   );
 
 endmodule
 

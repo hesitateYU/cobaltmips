@@ -1,4 +1,4 @@
-# Date: Fri Apr 02 00:26:05 2010
+# Date: Thu Apr 29 23:37:28 2010
 SET addpads = False
 SET asysymbol = False
 SET busformat = BusFormatAngleBracketNotRipped
@@ -12,7 +12,7 @@ SET foundationsym = False
 SET implementationfiletype = Ngc
 SET package = fg320
 SET removerpms = False
-SET simulationfiles = Behavioral
+SET simulationfiles = Structural
 SET speedgrade = -5
 SET verilogsim = True
 SET vhdlsim = False

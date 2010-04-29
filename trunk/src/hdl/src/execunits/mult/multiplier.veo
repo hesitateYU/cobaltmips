@@ -35,14 +35,6 @@ multiplier YourInstanceName (
 	.clk(clk),
 	.a(a), // Bus [15 : 0] 
 	.b(b), // Bus [15 : 0] 
-	.ce(ce),
-	.sclr(sclr),
 	.p(p)); // Bus [31 : 0] 
 
 // INST_TAG_END ------ End INSTANTIATION Template ---------
-
-// You must compile the wrapper file multiplier.v when simulating
-// the core, multiplier. When compiling the wrapper file, be sure to
-// reference the XilinxCoreLib Verilog simulation library. For detailed
-// instructions, please refer to the "CORE Generator Help".
-

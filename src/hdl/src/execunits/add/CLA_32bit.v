@@ -1,6 +1,8 @@
 `ifndef CLA_32BIT_V
 `define CLA_32BIT_V
 
+`timescale 1 ns/1 ps
+
 module CLA_32bit (
       output wire [31:0] sum, 
       output wire carryout,

@@ -2,6 +2,8 @@
 `ifndef EQUEUELS_V
 `define EQUEUELS_V
 
+`timescale 1ns/1ps
+
 module equeuels (
    input             clk,
    input             reset,

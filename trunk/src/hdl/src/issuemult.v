@@ -1,5 +1,8 @@
+
 `ifndef ISSUEMULT_V
 `define ISSUEMULT_V
+
+`timescale 1ns/1ps
 
 module issuemult (
          input             clk,

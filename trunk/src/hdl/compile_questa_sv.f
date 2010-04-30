@@ -6,8 +6,12 @@
 +incdir+src/execunits/ld_st
 +incdir+tb
 
+src/icache_mem.v
+src/dcache_mem.v
+
 src/ifq.v
 src/icache.v
+src/dcache.v
 src/dispatch.v
 src/regfile.v
 src/rst.v

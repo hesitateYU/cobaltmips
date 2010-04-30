@@ -1,6 +1,8 @@
 `ifndef DATA_CACHE_V 
 `define DATA_CACHE_V
 
+`timescale 1ns/1ps
+
 module data_cache #(
    parameter W_DATA = 32,
    parameter W_ADDR = 127

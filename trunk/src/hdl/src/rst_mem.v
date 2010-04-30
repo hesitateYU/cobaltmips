@@ -2,6 +2,8 @@
 `ifndef RST_MEM_V
 `define RST_MEM_V
 
+`timescale 1ns/1ps
+
 module rst_mem #(
    parameter integer W_ADDR       = 5,
    parameter integer W_DATA       = 7,

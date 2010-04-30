@@ -2,6 +2,8 @@
 `ifndef TAGFIFO_V
 `define TAGFIFO_V
 
+`timescale 1ns/1ps
+
 module tagfifo #(
    parameter W_DATA = 6,
    parameter W_ADDR = 6

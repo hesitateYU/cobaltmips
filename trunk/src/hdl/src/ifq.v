@@ -2,6 +2,8 @@
 `ifndef IFQ_V
 `define IFQ_V
 
+`timescale 1ns/1ps
+
 module ifq (
    input              clk,
    input              reset,

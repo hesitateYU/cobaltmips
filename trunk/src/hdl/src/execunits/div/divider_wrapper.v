@@ -1,7 +1,8 @@
 
 `ifndef DIVIDER_WRAPPER_V
 `define DIVIDER_WRAPPER_V
-`timescale 1 ns/1 ps
+
+`timescale 1ns/1ps
 
 module divider_wrapper(
          input         clk,
@@ -26,10 +27,8 @@ module divider_wrapper(
       .div_tag_out      (issuediv_rdtag_out),
       .div_res          (issuediv_out),
       .div_rfd          (issuediv_busy)
-      );
+   );
 
-
-   
 endmodule
 
 `endif

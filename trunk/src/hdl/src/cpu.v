@@ -1,7 +1,8 @@
 
-
 `ifndef CPU_V
 `define CPU_V
+
+`timescale 1ns/1ps
 
 `include "globals.vh"
 
@@ -103,10 +104,9 @@ module cpu (
    end
 
    icache #(
-      .W_IDATA        ( 32                    ),
-      .W_ODATA        ( 128                   ),
-      .W_ADDR         ( 6                     ),
-      .INCLUDE_OREG   ( 1                     )
+      .W_DATA         ( 128 ),
+      .W_ADDR         (  32 ),
+      .N_BYTEALIGN    (   4 )
    ) icache (
       .clk            ( clk                   ),
       .reset          ( reset                 ),

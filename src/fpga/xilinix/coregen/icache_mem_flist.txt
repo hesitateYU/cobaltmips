@@ -1,0 +1,13 @@
+# Output products list for <icache_mem>
+icache_mem.asy
+icache_mem.gise
+icache_mem.ise
+icache_mem.mif
+icache_mem.ngc
+icache_mem.v
+icache_mem.veo
+icache_mem.xco
+icache_mem.xise
+icache_mem_flist.txt
+icache_mem_padded.ngc
+icache_mem_xmdf.tcl

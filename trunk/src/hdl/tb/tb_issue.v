@@ -83,10 +83,6 @@ module tb_issue();
       rdtag     =  6'ha;
 
       @(posedge clk);
-      @(posedge clk);
-      @(posedge clk);
-      @(posedge clk);
-      @(posedge clk);
       ready_int =  1'b0;
       ready_div =  1'b0;
       //-----------------------------------------------------------------------

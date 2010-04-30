@@ -46,14 +46,14 @@ module icache_mem(
 
 input clka;
 input ena;
-input [4 : 0] addra;
+input [5 : 0] addra;
 output [127 : 0] douta;
 
 // synthesis translate_off
 
       BLK_MEM_GEN_V3_1 #(
-		.C_ADDRA_WIDTH(5),
-		.C_ADDRB_WIDTH(5),
+		.C_ADDRA_WIDTH(6),
+		.C_ADDRB_WIDTH(6),
 		.C_ALGORITHM(1),
 		.C_BYTE_SIZE(9),
 		.C_COMMON_CLK(0),
@@ -74,13 +74,13 @@ output [127 : 0] douta;
 		.C_HAS_RSTB(0),
 		.C_INITA_VAL("0"),
 		.C_INITB_VAL("0"),
-		.C_INIT_FILE_NAME("icache_mem.mif"),
+		.C_INIT_FILE_NAME("programs/icache_mem.mif"),
 		.C_LOAD_INIT_FILE(1),
 		.C_MEM_TYPE(3),
 		.C_MUX_PIPELINE_STAGES(0),
 		.C_PRIM_TYPE(1),
-		.C_READ_DEPTH_A(32),
-		.C_READ_DEPTH_B(32),
+		.C_READ_DEPTH_A(64),
+		.C_READ_DEPTH_B(64),
 		.C_READ_WIDTH_A(128),
 		.C_READ_WIDTH_B(128),
 		.C_RSTRAM_A(0),
@@ -91,12 +91,12 @@ output [127 : 0] douta;
 		.C_SIM_COLLISION_CHECK("ALL"),
 		.C_USE_BYTE_WEA(0),
 		.C_USE_BYTE_WEB(0),
-		.C_USE_DEFAULT_DATA(0),
+		.C_USE_DEFAULT_DATA(1),
 		.C_USE_ECC(0),
 		.C_WEA_WIDTH(1),
 		.C_WEB_WIDTH(1),
-		.C_WRITE_DEPTH_A(32),
-		.C_WRITE_DEPTH_B(32),
+		.C_WRITE_DEPTH_A(64),
+		.C_WRITE_DEPTH_B(64),
 		.C_WRITE_MODE_A("WRITE_FIRST"),
 		.C_WRITE_MODE_B("WRITE_FIRST"),
 		.C_WRITE_WIDTH_A(128),

@@ -1,0 +1,12 @@
+# Output products list for <dcache_mem>
+dcache_mem.asy
+dcache_mem.gise
+dcache_mem.ise
+dcache_mem.ngc
+dcache_mem.v
+dcache_mem.veo
+dcache_mem.xco
+dcache_mem.xise
+dcache_mem_flist.txt
+dcache_mem_padded.ngc
+dcache_mem_xmdf.tcl

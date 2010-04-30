@@ -1,1 +1,1 @@
-vsim -novopt -lib work -do vsim.do -L unisims_ver  -L simprims_ver -L XilinxCoreLib_ver work.glbl -L unimacro_ver  -c $1
+vsim -novopt -lib work -do vsim.do -L unisims_ver  -L simprim -L XilinxCoreLib_ver work.glbl -L unimacro_ver  -c $1

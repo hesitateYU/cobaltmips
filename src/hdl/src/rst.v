@@ -1,5 +1,8 @@
+
 `ifndef RST_V
 `define RST_V
+
+`timescale 1ns/1ps
 
 module rst (
    input             clk,

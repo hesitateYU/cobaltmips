@@ -1,5 +1,8 @@
+
 `ifndef ISSUEDIV_V
 `define ISSUEDIV_V
+
+`timescale 1ns/1ps
 
 module issuediv (
          input             clk,

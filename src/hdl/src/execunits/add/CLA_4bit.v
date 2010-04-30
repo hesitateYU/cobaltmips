@@ -1,13 +1,14 @@
-`ifndef CLA_4BIT_V 
+
+`ifndef CLA_4BIT_V
 `define CLA_4BIT_V
 
-`timescale 1 ns/1 ps
+`timescale 1ns/1ps
 
 module CLA_4bit (
-   output wire [3:0] s, 
+   output wire [3:0] s,
    output wire       cout,
-   input       [3:0] i1, 
-   input       [3:0] i2, 
+   input       [3:0] i1,
+   input       [3:0] i2,
    input             c0
 );
    wire [3:0] g;
@@ -23,4 +24,6 @@ module CLA_4bit (
    assign s[3:1]=p[3:1]^c[3:1];
 
 endmodule
-`endif 
+
+`endif
+

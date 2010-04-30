@@ -2,6 +2,8 @@
 `ifndef DISPATCH_V
 `define DISPATCH_V
 
+`timescale 1ns/1ps
+
 `include "globals.vh"
 
 module dispatch (

@@ -1,5 +1,8 @@
+
 `ifndef REGFILE_V
 `define REGFILE_V
+
+`timescale 1ns/1ps
 
 module regfile #(
    parameter W_DATA = 32,

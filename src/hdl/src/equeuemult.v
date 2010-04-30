@@ -2,6 +2,8 @@
 `ifndef EQUEUEMULT_V
 `define EQUEUEMULT_V
 
+`timescale 1ns/1ps
+
 module equeuemult (
    input             clk,
    input             reset,

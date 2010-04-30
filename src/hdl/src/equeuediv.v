@@ -2,6 +2,8 @@
 `ifndef EQUEUEDIV_V
 `define EQUEUEDIV_V
 
+`timescale 1ns/1ps
+
 module equeuediv (
    input             clk,
    input             reset,

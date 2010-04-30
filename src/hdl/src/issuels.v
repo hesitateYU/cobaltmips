@@ -2,6 +2,8 @@
 `ifndef ISSUELS_V
 `define ISSUELS_V
 
+`timescale 1ns/1ps
+
 module issuels (
    input             clk,
    input             reset,
@@ -20,7 +22,7 @@ module issuels (
 
 
 // Data cache
-data_cache data_cache (
+   data_cache data_cache (
       .clk           (clk         ),
       .reset         (reset       ),
       .data          (ls_data     ),

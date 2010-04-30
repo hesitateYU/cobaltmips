@@ -43,47 +43,56 @@ module tb_issue();
    end
 
   initial begin : main_proc
-      integer i;
       //-----------------------------------------------------------------------
       // Initial setup.
       //-----------------------------------------------------------------------
       opcode         =  4'h0;
-      rsdata         = 32'h6;
-      rtdata         = 32'h2;
+      rsdata         = 32'h0;
+      rtdata         = 32'h0;
       rdtag          =  6'h0;
-
       ready_int      =  1'b0;
       ready_mult     =  1'b0;
       ready_div      =  1'b0;
       ready_ld_buf   =  1'b0;
+      
 
       repeat (10) @(posedge clk);
       reset = 1'b1;
       @(posedge clk);
       reset = 1'b0;
       @(posedge clk);
-      ready_mult = 1'b1;
       //-----------------------------------------------------------------------
       // Case 0: Add
       //-----------------------------------------------------------------------
-      /*
+      
       @(posedge clk);
       opcode    =  4'h0;
       ready_int =  1'b1;
+      ready_div =  1'b0;
       rsdata    = 32'hA;
       rtdata    = 32'h5;
       rdtag     =  6'hE;
 
       @(posedge clk);
-      opcode    =  4'h0;
+      @(posedge clk);
+      @(posedge clk);
       ready_int =  1'b0;
-      rsdata    = 32'h1;
-      rtdata    = 32'h1;
+      ready_div =  1'b1;
+      rsdata    = 32'h6;
+      rtdata    = 32'h3;
       rdtag     =  6'ha;
+
+      @(posedge clk);
+      @(posedge clk);
+      @(posedge clk);
+      @(posedge clk);
+      @(posedge clk);
+      ready_int =  1'b0;
+      ready_div =  1'b0;
       //-----------------------------------------------------------------------
       // Case 1: Add + overflow
       //-----------------------------------------------------------------------
-      @(posedge clk);
+/*      @(posedge clk);
       opcode    =  4'h0;
       ready_int =  1'b1;
       rsdata    = 32'hFFFFFFFF;
@@ -165,7 +174,7 @@ module tb_issue();
 */
 
 end
-/*   issue issue (
+   issue issue (
    .clk        (clk        ),
    .reset      (reset      ),
 
@@ -192,8 +201,8 @@ end
    .cdb_valid     ( cdb_valid       ),
    .cdb_branch    ( cdb_branch       ),
    .cdb_branch_taken( cdb_branch_taken)
-); */
-multiplier_wrapper mult_wpr(
+);
+/*multiplier_wrapper mult_wpr(
          .clk                 (clk       ),
          //.reset               (reset     ),
          .issuemult_rsdata    (rsdata    ),
@@ -216,7 +225,7 @@ multiplier_wrapper mult_wpr(
          .issuediv_busy       (div_exec_ready),
          .issuediv_out        (div_out   ),
          .issuediv_rdtag_out  (cdb_tagout)
-   );
+   ); */
 
 endmodule
 

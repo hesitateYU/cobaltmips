@@ -35,7 +35,7 @@ module issue (
 
    localparam INT_BEFORE_LOAD = 1;
 
-   reg  [7:0] cdb_slot, cdb_slot_r;
+   reg  [6:0] cdb_slot, cdb_slot_r;
    wire [3:0] mux_cdb_ctrl;
    reg        LRU;
    reg  [5:0] div_cdb_ctrl, div_cdb_ctrl_r;
@@ -123,7 +123,7 @@ module issue (
             cdb_out = int_out;
          end
          default: begin
-            cdb_out = int_out;
+            cdb_out = cdb_out;
          end
       endcase
    end

@@ -42,4 +42,6 @@ tb/tb_top.v
 tb/tb_equeueint.v
 tb/tb_issue.v
 tb/tb_rst.v
+tb/tb_ifq.v
+tb/tb_dcache.v
 

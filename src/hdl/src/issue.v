@@ -75,7 +75,7 @@ module issue (
    always @(*) begin: issue_unit_logic
       issue_int   =  (~cdb_slot_r[1] & ready_int)    & (~ready_ld_buf |  INT_BEFORE_LOAD);
       issue_ld_buf = (~cdb_slot_r[1] & ready_ld_buf) & (~ready_int    | ~INT_BEFORE_LOAD);
-      issue_div    = ~div_exec_ready & ready_div;
+      issue_div    = ~div_exec_ready & cdb_slot_r[6];
       issue_mult   = ~cdb_slot_r[4] & ready_mult;
    end
 
@@ -184,19 +184,19 @@ module issue (
    );
    //load/store exec unit
    dcache dcache (
-      .clk           (clk),
-      .wen           (ld_st_opcode     ), //opcode
-      .en            (ready_ld_buf     ),
-      .addr          (rsdata           ),
-      .wdata         (rtdata           ),
-      .tag_in        (rdtag            ),
-      .ls_ready_in   (issuequeue_ready ),
-      .ls_done_in    (                 ),
-      .ls_done_out   (issue_queuedone  ),
-      .ls_ready_out  (                 ),
-      .tag_out       (ld_tagout        ),
-      .rdata         (ld_buf_out       )
-   //
+      .clk           (clk          ),
+      .wen           (ld_st_opcode ), //opcode
+      
+      .addr          (rsdata       ),
+      .wdata         (rtdata       ),
+      .rdata         (ld_buf_out   ),
+      .tag_in        (rdtag        ),
+   //input  wire [ 5:0] tag_in,
+      .ls_ready_in   (),
+      .ls_done_in    (),
+      .ls_done_out   (),
+      .ls_ready_out  (),
+      .tag_out       (ld_tagout)
    );
 
 endmodule

@@ -27,8 +27,8 @@ module issue (
    output reg         issue_div_done,
 
    output reg [31:0]  cdb_out,
-   output     [ 5:0]  cdb_tagout,
-   output             cdb_valid,
+   output reg [ 5:0]  cdb_tagout,
+   output reg         cdb_valid,
    output             cdb_branch,
    output             cdb_branch_taken
 );
@@ -47,7 +47,7 @@ module issue (
    wire [31:0]   ld_buf_out;
 
    wire div_exec_ready;
-
+   wire [5:0] ld_tagout, int_tagout, div_tagout, mult_tagout;
    //CDB reservation registers
    always @(*) begin : cdb_slots_proc
          cdb_slot [6] = ready_div;
@@ -72,7 +72,7 @@ module issue (
    always @(*) begin: issue_unit_logic
       issue_int   =  (~cdb_slot_r[1] & ready_int)    & (~ready_ld_buf |  INT_BEFORE_LOAD);
       issue_ld_buf = (~cdb_slot_r[1] & ready_ld_buf) & (~ready_int    | ~INT_BEFORE_LOAD);
-      issue_div    = div_exec_ready & ready_div;
+      issue_div    = ~div_exec_ready & ready_div;
       issue_mult   = ~cdb_slot_r[4] & ready_mult;
    end
 
@@ -87,11 +87,11 @@ module issue (
 
    always @(*) begin : div_delay_proc
          div_cdb_ctrl [5] = issue_div;
-         div_cdb_ctrl [4] = div_cdb_ctrl [5];
-         div_cdb_ctrl [3] = div_cdb_ctrl [4];
-         div_cdb_ctrl [2] = div_cdb_ctrl [3];
-         div_cdb_ctrl [1] = div_cdb_ctrl [2];
-         div_cdb_ctrl [0] = div_cdb_ctrl [1];
+         div_cdb_ctrl [4] = div_cdb_ctrl_r [5];
+         div_cdb_ctrl [3] = div_cdb_ctrl_r [4];
+         div_cdb_ctrl [2] = div_cdb_ctrl_r [3];
+         div_cdb_ctrl [1] = div_cdb_ctrl_r [2];
+         div_cdb_ctrl [0] = div_cdb_ctrl_r [1];
    end
 
    always @(posedge clk) begin: mult_reg_assign
@@ -109,21 +109,29 @@ module issue (
    assign mux_cdb_ctrl = {issue_int, div_cdb_ctrl_r[0], mult_cdb_ctrl_r[0], issue_ld_buf};
 
    always @(*) begin : mux_cdb_out
+      cdb_valid      = 1'b0;
+      issue_div_done = 1'b0;
       case (mux_cdb_ctrl)
          4'b0001: begin
-           cdb_out = ld_buf_out; 
+           cdb_out   = ld_buf_out; 
+           cdb_tagout= ld_tagout;
          end
          4'b0010: begin
-           cdb_out = mult_out; 
+           cdb_out    = mult_out; 
+           cdb_tagout = mult_tagout;
          end
          4'b0100: begin
-            cdb_out = div_out;
+            cdb_out    = div_out;
+            cdb_tagout = div_tagout;
+            issue_div_done = 1'b1;
          end
          4'b1000: begin
-            cdb_out = int_out;
+            cdb_out    = int_out;
+            cdb_tagout = int_tagout;
          end
          default: begin
             cdb_out = cdb_out;
+            cdb_tagout = cdb_tagout;
          end
       endcase
    end
@@ -140,7 +148,7 @@ module issue (
       .issueint_rdtag            (rdtag         ),
 
       .issueint_out              (int_out       ),
-      .issueint_rdtag_out        (cdb_tagout    ),
+      .issueint_rdtag_out        (int_tagout    ),
 
       .issueint_carryout         (issue_carryout),
       .issueint_overflow         (issue_overflow),
@@ -158,7 +166,7 @@ module issue (
 
          .issuediv_busy       (div_exec_ready),
          .issuediv_out        (div_out   ),
-         .issuediv_rdtag_out  (cdb_tagout)
+         .issuediv_rdtag_out  (div_tagout)
    );
    //multiplier exec unit
 /*   multiplier_wrapper multiplier_wrapper(
@@ -169,7 +177,7 @@ module issue (
       .issuemult_rdtag     (rdtag      ),
 
       .issuemult_out       (mult_out   ),
-      .issuemult_rdtag_out (cdb_tagout )
+      .issuemult_rdtag_out (mult_tagout )
    );
    //load/store exec unit
    issuels issuels(
@@ -183,7 +191,7 @@ module issue (
 
       .ls_done_out      (),
       .ls_data_out      (ld_buf_out    ),
-      .ls_tag_out       (cdb_tagout    ),
+      .ls_tag_out       (ld_tagout    ),
       .ls_done          (),
       .ls_ready_out     ()
    ); */

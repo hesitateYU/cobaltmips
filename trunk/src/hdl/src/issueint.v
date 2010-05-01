@@ -38,6 +38,7 @@ parameter [3:0] ADD  = 4'b0000,
    wire [31:0] sum_out;
 
    assign issueint_rdtag_out = issueint_rdtag;
+
    always @(posedge clk) begin : reg_data
       if (reset) begin
          rsdata_r <= 32'h0;
@@ -74,9 +75,9 @@ parameter [3:0] ADD  = 4'b0000,
             issueint_out = (issueint_rsdata < issueint_rtdata) ? 1'b1: 1'b0;;
          end
          default: begin
-            issueint_out = 32'h0;
-            rsdata_r     = 32'h0;
-            rtdata_r     = 32'h0;
+            issueint_out = issueint_out;
+            rsdata_r     = rsdata_r;
+            rtdata_r     = rtdata_r;
          end
       endcase
    end

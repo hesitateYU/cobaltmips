@@ -1,7 +1,8 @@
 
+`ifndef TB_EQUEUEINT_V
+`define TB_EQUEUEINT_V
 
-`ifndef TB_TOP_V
-`define TB_TOP_V
+`timescale 1ns/1ps
 
 module tb_equeueint();
 
@@ -106,7 +107,7 @@ module tb_equeueint();
       reset_testbench();
 
       //-----------------------------------------------------------------------
-      // Case 1: fill one and consume it.
+      // Case 4: fill one and consume it.
       //-----------------------------------------------------------------------
       @(posedge clk);
       for (i = 5; i < 6; i = i + 1) begin
@@ -128,7 +129,44 @@ module tb_equeueint();
       repeat (10) @(posedge clk);
 
       reset_testbench();
+
+
+      //-----------------------------------------------------------------------
+      // Case 5: fill instructions not yet ready, then send updates through
+      //         cdb.
+      //-----------------------------------------------------------------------
+      @(posedge clk);
+      for (i = 5; i < 15; i = i + 1) begin
+         dispatch_equeueint_en     = 1'b1;
+         issueint_equeueint_done   = 1'b0;
+         dispatch_equeueint_opcode = i;
+         dispatch_equeue_rdtag     = i;
+         dispatch_equeue_rstag     = i;
+         dispatch_equeue_rttag     = i;
+         dispatch_equeue_rsdata    = i;
+         dispatch_equeue_rtdata    = i;
+         dispatch_equeue_rsvalid   = 1'b0;
+         dispatch_equeue_rtvalid   = 1'b0;
+         @(posedge clk);
+      end
+      dispatch_equeueint_en = 1'b0;
+      for (i = 5; i < 15; i = i + 1) begin
+         cdb_equeueint_data  = i * 1000;
+         cdb_equeueint_tag   = i;
+         // Publish in cdb some tags (not all of them)
+         cdb_equeueint_valid = i%2;
+         @(posedge clk);
+      end
+      // Now, consume all tags valid.
+      @(posedge clk);
+      dispatch_equeueint_en   = 1'b0;
+      issueint_equeueint_done = 1'b1;
+      repeat (10) @(posedge clk);
+
+      reset_testbench();
+
    end
+
 
    task reset_testbench();
       begin

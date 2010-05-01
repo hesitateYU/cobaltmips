@@ -34,7 +34,7 @@ module tb_issue();
    wire [31:0]      div_out;
 
 
-
+   integer i;
    initial begin
       clk = 1'b0;
       forever #5 clk <= ~clk;
@@ -63,10 +63,23 @@ module tb_issue();
       reset = 1'b0;
       @(posedge clk);
       //-----------------------------------------------------------------------
-      // Case 0: Add
+      // initialize d-cache 
       //-----------------------------------------------------------------------
-      
       @(posedge clk);
+      for (i = 0; i < 10; i = i + 1) begin
+         rsdata = i;
+         rtdata = i;
+         ld_st_opcode = 1'b1;
+         ready_ld_buf =1'b1;
+         @(posedge clk);
+      end
+
+      for (i = 0; i < 10; i = i + 1) begin
+         ld_st_opcode = 1'b0;
+         @(posedge clk);
+      end
+       ready_ld_buf =1'b0;
+     /* @(posedge clk);
       opcode    =  4'h0;
       ready_int =  1'b1;
       ready_div =  1'b0;
@@ -90,25 +103,37 @@ module tb_issue();
       ready_div =  1'b0;
       @(posedge clk);
       @(posedge clk);
-      @(posedge clk);
+      @(posedge clk); */
+      ld_st_opcode = 1'b1;  // 1 = write(store) / 0 = read (load)
+
       rsdata       = 32'h00;
-      rtdata       = 32'habadbabe;
-      rdtag        = 6'h12;
+      rtdata       = 32'h06;
+      rdtag        = 6'h33;
       ready_ld_buf = 1'b1;
-      ld_st_opcode = 1'b1;
+      @(posedge clk);
+      ready_ld_buf = 1'b1;
       @(posedge clk);
       ready_ld_buf = 1'b0;
       @(posedge clk);
+      ld_st_opcode = 1'b0;
+      rsdata       = 32'h01;
+      rtdata       = 32'h06;
+      rdtag        = 6'h33;
       @(posedge clk);
       ld_st_opcode = 1'b0;
-      rsdata       = 32'h00;
-      rtdata       = 32'hbebebebe;
-      rdtag        = 6'h13;
+      rsdata       = 32'h02;
+      rtdata       = 32'h06;
+      rdtag        = 6'h33;
       @(posedge clk);
-      ready_ld_buf = 1'b1;
-
-
-      
+      ld_st_opcode = 1'b0;
+      rsdata       = 32'h03;
+      rtdata       = 32'h06;
+      @(posedge clk);
+      ld_st_opcode = 1'b0;
+      rsdata       = 32'h04;
+      rtdata       = 32'h06;
+      rdtag        = 6'h33;
+      rdtag        = 6'h33;
       //-----------------------------------------------------------------------
       // Case 1: Add + overflow
       //-----------------------------------------------------------------------
@@ -194,7 +219,18 @@ module tb_issue();
 */
 
 end
-   issue issue (
+dcache dcache (
+      .clk           (clk),
+      .wen           (ld_st_opcode     ), //opcode
+      .addr          (rsdata           ),
+      .wdata         (rtdata           ),
+      .tag_in        (rdtag            ),
+      .tag_out       (ld_tagout        ),
+      .rdata         (ld_buf_out       )
+   //
+   );
+
+/*   issue issue (
    .clk        (clk        ),
    .reset      (reset      ),
 

@@ -12,12 +12,15 @@ module issue (
    input [31:0]       rsdata,
    input [31:0]       rtdata,
    input [ 5:0]       rdtag,
+   input              ld_st_opcode,
+   input              issuequeue_ready,
 
    input              ready_int,
    input              ready_mult,
    input              ready_div,
    input              ready_ld_buf,
 
+   output reg         issue_queuedone,
    output reg         issue_int,
    output reg         issue_mult,
    output reg         issue_div,
@@ -102,8 +105,8 @@ module issue (
 
    always @(*) begin : mult_delay_proc
          mult_cdb_ctrl [2] = issue_mult;
-         mult_cdb_ctrl [1] = mult_cdb_ctrl [2];
-         mult_cdb_ctrl [0] = mult_cdb_ctrl [1];
+         mult_cdb_ctrl [1] = mult_cdb_ctrl_r [2];
+         mult_cdb_ctrl [0] = mult_cdb_ctrl_r [1];
    end
 
    assign mux_cdb_ctrl = {issue_int, div_cdb_ctrl_r[0], mult_cdb_ctrl_r[0], issue_ld_buf};
@@ -169,9 +172,9 @@ module issue (
          .issuediv_rdtag_out  (div_tagout)
    );
    //multiplier exec unit
-/*   multiplier_wrapper multiplier_wrapper(
+   multiplier_wrapper multiplier_wrapper(
       .clk                 (clk        ),
-      .reset               (reset      ),
+     // .reset               (reset      ),
       .issuemult_rsdata    (rsdata     ),
       .issuemult_rtdata    (rtdata     ),
       .issuemult_rdtag     (rdtag      ),
@@ -180,21 +183,21 @@ module issue (
       .issuemult_rdtag_out (mult_tagout )
    );
    //load/store exec unit
-   issuels issuels(
-      .clk              (clk           ),
-      .reset            (reset         ),
-      .ls_ready_in      (ready_ld_buf  ),
-      .ls_data          (rsdata        ),
-      .ls_address       (rtdata        ),
-      .ls_tag           (rdtag         ),
-      .opcode           (opcode        ),
-
-      .ls_done_out      (),
-      .ls_data_out      (ld_buf_out    ),
-      .ls_tag_out       (ld_tagout    ),
-      .ls_done          (),
-      .ls_ready_out     ()
-   ); */
+   dcache dcache (
+      .clk           (clk),
+      .wen           (ld_st_opcode     ), //opcode
+      .en            (ready_ld_buf     ),
+      .addr          (rsdata           ),
+      .wdata         (rtdata           ),
+      .tag_in        (rdtag            ),
+      .ls_ready_in   (issuequeue_ready ),
+      .ls_done_in    (                 ),
+      .ls_done_out   (issue_queuedone  ),
+      .ls_ready_out  (                 ),
+      .tag_out       (ld_tagout        ),
+      .rdata         (ld_buf_out       )
+   //
+   );
 
 endmodule
 

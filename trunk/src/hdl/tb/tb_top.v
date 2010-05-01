@@ -1,7 +1,8 @@
 
-
 `ifndef TB_TOP_V
 `define TB_TOP_V
+
+`timescale 1ns/1ps
 
 module tb_top();
 

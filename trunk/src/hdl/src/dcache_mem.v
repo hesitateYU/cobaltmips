@@ -39,7 +39,6 @@
 
 module dcache_mem(
 	clka,
-	ena,
 	wea,
 	addra,
 	dina,
@@ -47,7 +46,6 @@ module dcache_mem(
 
 
 input clka;
-input ena;
 input [0 : 0] wea;
 input [6 : 0] addra;
 input [31 : 0] dina;
@@ -65,7 +63,7 @@ output [31 : 0] douta;
 		.C_DISABLE_WARN_BHV_COLL(0),
 		.C_DISABLE_WARN_BHV_RANGE(0),
 		.C_FAMILY("spartan3"),
-		.C_HAS_ENA(1),
+		.C_HAS_ENA(0),
 		.C_HAS_ENB(0),
 		.C_HAS_INJECTERR(0),
 		.C_HAS_MEM_OUTPUT_REGS_A(0),
@@ -108,12 +106,12 @@ output [31 : 0] douta;
 		.C_XDEVICEFAMILY("spartan3e"))
 	inst (
 		.CLKA(clka),
-		.ENA(ena),
 		.WEA(wea),
 		.ADDRA(addra),
 		.DINA(dina),
 		.DOUTA(douta),
 		.RSTA(),
+		.ENA(),
 		.REGCEA(),
 		.CLKB(),
 		.RSTB(),

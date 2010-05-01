@@ -1,6 +1,6 @@
 
-`ifndef TB_TOP_V
-`define TB_TOP_V
+`ifndef TB_ISSUE_V
+`define TB_ISSUE_V
 
 
 module tb_issue();
@@ -12,6 +12,7 @@ module tb_issue();
    reg [31:0]       rtdata;
    reg [ 5:0]       rdtag;
 
+   reg              ld_st_opcode;
    reg              ready_int;
    reg              ready_mult;
    reg              ready_div;
@@ -54,7 +55,7 @@ module tb_issue();
       ready_mult     =  1'b0;
       ready_div      =  1'b0;
       ready_ld_buf   =  1'b0;
-      
+      ld_st_opcode   =  1'b0;
 
       repeat (10) @(posedge clk);
       reset = 1'b1;
@@ -74,17 +75,40 @@ module tb_issue();
       rdtag     =  6'hE;
 
       @(posedge clk);
+      ready_int = 1'b0;
       @(posedge clk);
       @(posedge clk);
-      ready_int =  1'b0;
       ready_div =  1'b1;
+      ready_mult=  1'b1;
       rsdata    = 32'h6;
       rtdata    = 32'h3;
       rdtag     =  6'ha;
 
       @(posedge clk);
+      ready_mult=  1'b0;
       ready_int =  1'b0;
       ready_div =  1'b0;
+      @(posedge clk);
+      @(posedge clk);
+      @(posedge clk);
+      rsdata       = 32'h00;
+      rtdata       = 32'habadbabe;
+      rdtag        = 6'h12;
+      ready_ld_buf = 1'b1;
+      ld_st_opcode = 1'b1;
+      @(posedge clk);
+      ready_ld_buf = 1'b0;
+      @(posedge clk);
+      @(posedge clk);
+      ld_st_opcode = 1'b0;
+      rsdata       = 32'h00;
+      rtdata       = 32'hbebebebe;
+      rdtag        = 6'h13;
+      @(posedge clk);
+      ready_ld_buf = 1'b1;
+
+
+      
       //-----------------------------------------------------------------------
       // Case 1: Add + overflow
       //-----------------------------------------------------------------------
@@ -178,6 +202,7 @@ end
    .rsdata     ( rsdata       ),
    .rtdata     ( rtdata       ),
    .rdtag      ( rdtag       ),
+   .ld_st_opcode(ld_st_opcode),
 
    .ready_int  ( ready_int    ),
    .ready_mult ( ready_mult   ),

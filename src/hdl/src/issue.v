@@ -15,7 +15,6 @@ module issue #(
    input [31:0]       rtdata,
    input [ 5:0]       rdtag,
    input              ld_st_opcode,
-   input              issuequeue_ready,
 
    input              ready_int,
    input              ready_mult,

@@ -87,6 +87,14 @@ module issue #(
          cdb_slot_r [0] <= (reset) ? 0 :  cdb_slot [0];
    end
 
+   //
+   // TODO: change the INT_BEFORE_LOAD parameter into a register. If a
+   //       load/store contend with an integer operation, give priority
+   //       to the integer operation. The next time both types contend,
+   //       then give priority to load/store operation.
+   //       That is, priority toggles each time both time of operations
+   //       contend.
+   //
    always @(*) begin: issue_unit_logic
       issue_int   =  (~cdb_slot_r[1] & issueint_ready)    & (~issuels_ready  |  INT_BEFORE_LOAD);
       issue_ld_buf = (~cdb_slot_r[1] & issuels_ready ) &    (~issueint_ready | ~INT_BEFORE_LOAD);

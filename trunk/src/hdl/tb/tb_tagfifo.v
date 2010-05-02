@@ -82,7 +82,7 @@ module tb_tagfifo();
    end
 
 
-   task reset_testbench(integer unsigned cycles);
+   task reset_testbench(integer unsigned cycles = 5);
       cb.dispatch_ren <= 0;
       cb.cdb_tag      <= 0;
       cb.cdb_valid    <= 0;
@@ -93,12 +93,12 @@ module tb_tagfifo();
 
    initial begin
       clk = 1'b0;
-      forever #5ns clk <= ~clk;
+      forever #5 clk = ~clk;
    end
 
    clocking cb @(posedge clk);
-      default input #1ns output #2ns;
-      output  reset;
+      default input #1 output #2;
+      output reset;
       output cdb_tag;
       output cdb_valid;
       output dispatch_ren;

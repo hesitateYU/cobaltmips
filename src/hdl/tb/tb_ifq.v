@@ -30,63 +30,63 @@ module tb_ifq();
       //-----------------------------------------------------------------------
       // Case 0: don't take anything, let IFQ to fill up.
       //-----------------------------------------------------------------------
-      @(posedge clk) #0;
-      dispatch_ifq_ren          = 0;
-      dispatch_ifq_branch_addr  = 0;
-      dispatch_ifq_branch_valid = 0;
-      repeat (10) @(posedge clk) #0;
+      @(posedge clk);
+      cb.dispatch_ifq_ren          <= 0;
+      cb.dispatch_ifq_branch_addr  <= 0;
+      cb.dispatch_ifq_branch_valid <= 0;
+      repeat (10) @(posedge clk);
       reset_testbench(5);
 
       //-----------------------------------------------------------------------
       // Case 1: the moment it has something to consume, start requesting data.
       //-----------------------------------------------------------------------
-      @(posedge clk) #0;
-      dispatch_ifq_ren          = 0;
-      dispatch_ifq_branch_addr  = 0;
-      dispatch_ifq_branch_valid = 0;
-      wait (~ifq_dispatch_empty);
-      dispatch_ifq_ren = 1;
-      repeat (20) @(posedge clk) #0;
+      @(posedge clk);
+      cb.dispatch_ifq_ren          <= 0;
+      cb.dispatch_ifq_branch_addr  <= 0;
+      cb.dispatch_ifq_branch_valid <= 0;
+      wait (~cb.ifq_dispatch_empty);
+      cb.dispatch_ifq_ren <= 1;
+      repeat (20) @(posedge clk);
       reset_testbench(5);
 
       //-----------------------------------------------------------------------
       // Case 2: fill queue and branch to a distant address.
       //-----------------------------------------------------------------------
-      @(posedge clk) #0;
-      dispatch_ifq_ren          = 0;
-      dispatch_ifq_branch_addr  = 0;
-      dispatch_ifq_branch_valid = 0;
-      wait (~ifq_dispatch_empty);
-      dispatch_ifq_ren = 1;
-      repeat (5) @(posedge clk) #0;
-      dispatch_ifq_branch_addr  = 4 * 10;
-      dispatch_ifq_branch_valid = 1;
-      @(posedge clk) #0;
-      dispatch_ifq_branch_valid = 0;
-      repeat (20) @(posedge clk) #0;
+      @(posedge clk);
+      cb.dispatch_ifq_ren          <= 0;
+      cb.dispatch_ifq_branch_addr  <= 0;
+      cb.dispatch_ifq_branch_valid <= 0;
+      wait (~cb.ifq_dispatch_empty);
+      cb.dispatch_ifq_ren <= 1;
+      repeat (5) @(posedge clk);
+      cb.dispatch_ifq_branch_addr  <= 4 * 10;
+      cb.dispatch_ifq_branch_valid <= 1;
+      @(posedge clk);
+      cb.dispatch_ifq_branch_valid <= 0;
+      repeat (20) @(posedge clk);
       reset_testbench(5);
 
       //-----------------------------------------------------------------------
       // Case 3: branch back and forward between 2 addresses.
       //-----------------------------------------------------------------------
-      @(posedge clk) #0;
-      dispatch_ifq_ren          = 0;
-      dispatch_ifq_branch_addr  = 0;
-      dispatch_ifq_branch_valid = 0;
-      wait (~ifq_dispatch_empty);
-      dispatch_ifq_ren = 1;
-      repeat (5) @(posedge clk) #0;
+      @(posedge clk)
+      cb.dispatch_ifq_ren          <= 0;
+      cb.dispatch_ifq_branch_addr  <= 0;
+      cb.dispatch_ifq_branch_valid <= 0;
+      wait (~cb.ifq_dispatch_empty);
+      cb.dispatch_ifq_ren <= 1;
+      repeat (5) @(posedge clk);
       repeat (5) begin
-         dispatch_ifq_branch_addr  = 4 * 0;
-         dispatch_ifq_branch_valid = 1;
-         @(posedge clk) #0;
-         dispatch_ifq_branch_addr  = 4 * 10;
-         dispatch_ifq_branch_valid = 1;
-         @(posedge clk) #0;
+         cb.dispatch_ifq_branch_addr  <= 4 * 0;
+         cb.dispatch_ifq_branch_valid <= 1;
+         @(posedge clk);
+         cb.dispatch_ifq_branch_addr  <= 4 * 10;
+         cb.dispatch_ifq_branch_valid <= 1;
+         @(posedge clk);
       end
-      @(posedge clk) #0;
-      dispatch_ifq_branch_valid = 0;
-      repeat (20) @(posedge clk) #0;
+      @(posedge clk)
+      cb.dispatch_ifq_branch_valid <= 0;
+      repeat (20) @(posedge clk)
 
 
       reset_testbench(100);
@@ -94,18 +94,36 @@ module tb_ifq();
 
 
    task reset_testbench(integer unsigned cycles);
-      dispatch_ifq_ren          = 0;
-      dispatch_ifq_branch_addr  = 0;
-      dispatch_ifq_branch_valid = 0;
-      reset = 1'b1;
-      repeat (cycles) @(posedge clk) #0;
-      reset = 1'b0;
+      cb.dispatch_ifq_ren          <= 0;
+      cb.dispatch_ifq_branch_addr  <= 0;
+      cb.dispatch_ifq_branch_valid <= 0;
+      cb.reset <= 1'b1;
+      repeat (cycles) @(posedge clk);
+      cb.reset <= 1'b0;
    endtask
 
    initial begin
       clk = 1'b0;
-      forever #5 clk <= ~clk;
+      forever #5 clk = ~clk;
    end
+
+   clocking cb @(posedge clk);
+      default input #1 output #2;
+      output reset;
+      output dispatch_ifq_ren;
+      output dispatch_ifq_branch_addr;
+      output dispatch_ifq_branch_valid;
+
+      input ifq_icache_pcin;
+      input ifq_icache_ren;
+      input ifq_icache_abort;
+      input icache_ifq_dout;
+      input icache_ifq_dout_valid;
+
+      input ifq_dispatch_pcout_plus4;
+      input ifq_dispatch_inst;
+      input ifq_dispatch_empty;
+   endclocking
 
    icache #(
       .W_DATA         ( 128 ),

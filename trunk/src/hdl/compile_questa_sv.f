@@ -15,7 +15,6 @@ src/dcache.v
 src/dispatch.v
 src/regfile.v
 src/rst.v
-src/rst_mem.v
 src/tagfifo.v
 
 src/equeueint.v

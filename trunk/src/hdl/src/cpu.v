@@ -261,6 +261,48 @@ module cpu (
       .issuemult_done   ( issuemult_equeuemult_done   )
    );
 
+   issue issue(
+      .clk              (clk                          ),
+      .reset            (reset                        ),
+
+      .issueint_opcode  (equeueint_issueint_opcode    ),
+      .issueint_rsdata  (equeueint_issueint_rsdata    ),
+      .issueint_rtdata  (equeueint_issueint_rtdata    ),
+      .issueint_rdtag   (equeueint_issueint_rdtag     ),
+
+      .issuels_opcode   (equeuels_issuels_opcode      ),
+      .issuels_rsdata   (equeuels_issuels_rsdata      ),
+      .issuels_rtdata   (equeuels_issuels_rtdata      ),
+      .issuels_rdtag    (equeuels_issuels_rdtag       ),
+
+      .issuediv_rsdata  (equeuediv_issuediv_rsdata    ),
+      .issuediv_rtdata  (equeuediv_issuediv_rtdata    ),
+      .issuediv_rdtag   (equeuediv_issuediv_rdtag     ),
+
+      .issuemult_rsdata (equeuemult_issuemult_rsdata ),
+      .issuemult_rtdata (equeuemult_issuemult_rtdata ),
+      .issuemult_rdtag  (equeuemult_issuemult_rdtag  ),
+
+      .issueint_ready   (equeueint_issueint_ready     ),
+      .issuemult_ready  (equeuemult_issuemult_ready   ),
+      .issuediv_ready   (equeuediv_issuediv_ready     ),
+      .issuels_ready    (equeuels_issuels_ready       ),
+
+      .issueint_carryout(issueint_carryout            ),
+      .issueint_overflow(issueint_overflow            ),
+
+      .issuediv_equeuediv_done    (issuediv_equeuediv_done        ),
+      .issueint_equeueint_done    (issueint_equeueint_done        ),
+      .issuemult_equeuemult_done  (issuemult_equeuemult_done      ),
+      .issuels_equeuels_done      (issuels_equeuels_done          ),
+
+      .cdb_out          (cdb_out                      ),
+      .cdb_tagout       (cdb_tagout                   ),
+      .cdb_valid        (cdb_valid                    ),
+      .cdb_branch       (cdb_branch                   ),
+      .cdb_branch_taken (cdb_branch_taken             )
+   );
+
 endmodule
 
 `endif

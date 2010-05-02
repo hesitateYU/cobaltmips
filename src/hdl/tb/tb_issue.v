@@ -240,7 +240,6 @@ module tb_issue();
       .rtdata           (rtdata),
       .rdtag            (rdtag),
       .ld_st_opcode     (ld_st_opcode),
-      .issuequeue_ready (),
 
       .ready_int        (ready_int),
       .ready_mult       (ready_mult),

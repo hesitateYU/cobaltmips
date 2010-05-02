@@ -46,7 +46,7 @@ module tb_regfile();
       repeat(2)  @(posedge clk);
       for (i = 0; i < 32; i = i + 1) begin
          rst_wen_onehot = 1<<i;
-         cdb_wdata = i;
+         cdb_wdata = i+1;
          @(posedge clk);
          #0;
       end

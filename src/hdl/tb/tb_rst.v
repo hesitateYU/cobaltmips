@@ -35,27 +35,27 @@ module tb_rst();
    initial begin : main_proc
       integer i;
 
-      reset_testbench();
+      reset_testbench(5);
 
       //-----------------------------------------------------------------------
       // Case 0: don't take anything.
       //-----------------------------------------------------------------------
-      @(posedge clk) #0;
+      @(posedge clk);
       for (i = 0; i < 32; i = i + 1) begin
          // Write port 0.
-         dispatch_tag       = i;
-         dispatch_valid     = 1;
-         dispatch_addr      = i;
-         dispatch_wen       = 0;
+         dispatch_tag       <= i;
+         dispatch_valid     <= 1;
+         dispatch_addr      <= i;
+         dispatch_wen       <= 0;
          // Write port 1.
-         cdb_tag            = 0;
-         cdb_valid          = 0;
+         cdb_tag            <= 0;
+         cdb_valid          <= 0;
          // RS and RT read ports.
-         dispatch_rsaddr    = 0;
-         dispatch_rtaddr    = 0;
-         @(posedge clk) #0;
+         dispatch_rsaddr    <= 0;
+         dispatch_rtaddr    <= 0;
+         @(posedge clk);
       end
-      reset_testbench();
+      reset_testbench(5);
 
       //-----------------------------------------------------------------------
       // Case 1:
@@ -64,71 +64,84 @@ module tb_rst();
       //  c. Clear all entries from CDB.
       //  d. Read, again, all entries.
       //-----------------------------------------------------------------------
-      @(posedge clk) #0;
-      cdb_tag            = 0;
-      cdb_valid          = 0;
-      dispatch_rsaddr    = 0;
-      dispatch_rtaddr    = 0;
+      @(posedge clk);
+      cdb_tag            <= 0;
+      cdb_valid          <= 0;
+      dispatch_rsaddr    <= 0;
+      dispatch_rtaddr    <= 0;
       for (i = 0; i < 32; i = i + 1) begin
-         dispatch_tag    = i;
-         dispatch_valid  = 1;
-         dispatch_addr   = i;
-         dispatch_wen    = 1;
-         @(posedge clk) #0;
+         dispatch_tag    <= i;
+         dispatch_valid  <= 1;
+         dispatch_addr   <= i;
+         dispatch_wen    <= 1;
+         @(posedge clk);
       end
-      dispatch_tag   = 0;
-      dispatch_valid = 0;
-      dispatch_addr  = 0;
-      dispatch_wen   = 0;
+      dispatch_tag   <= 0;
+      dispatch_valid <= 0;
+      dispatch_addr  <= 0;
+      dispatch_wen   <= 0;
 
       for (i = 0; i < 32; i = i + 1) begin
-         dispatch_rsaddr = i;
-         dispatch_rtaddr = i;
-         @(posedge clk) #0;
+         dispatch_rsaddr <= i;
+         dispatch_rtaddr <= i;
+         @(posedge clk);
       end
       for (i = 0; i < 32; i = i + 1) begin
          // Write port 1.
-         cdb_tag            = i;
-         cdb_valid          = 1;
-         @(posedge clk) #0;
+         cdb_tag            <= i;
+         cdb_valid          <= 1;
+         @(posedge clk);
       end
-      cdb_tag            = 0;
-      cdb_valid          = 0;
+      cdb_tag            <= 0;
+      cdb_valid          <= 0;
       for (i = 0; i < 32; i = i + 1) begin
          // RS and RT read ports.
-         dispatch_rsaddr = i;
-         dispatch_rtaddr = i;
-         @(posedge clk) #0;
+         dispatch_rsaddr <= i;
+         dispatch_rtaddr <= i;
+         @(posedge clk);
       end
 
-      reset_testbench();
+      reset_testbench(5);
 
    end
 
-   task reset_testbench();
-      begin
-         @(posedge clk) #0;
-         dispatch_tag       = 0;
-         dispatch_valid     = 0;
-         dispatch_addr      = 0;
-         dispatch_wen       = 0;
-         cdb_tag            = 0;
-         cdb_valid          = 0;
-         dispatch_rsaddr    = 0;
-         dispatch_rtaddr    = 0;
-         reset = 1'b1; @(posedge clk) #0;
-         reset = 1'b0; @(posedge clk) #0;
-      end
+   task reset_testbench(integer unsigned cycles = 5);
+      cb.dispatch_tag    <= 0;
+      cb.dispatch_valid  <= 0;
+      cb.dispatch_addr   <= 0;
+      cb.dispatch_wen    <= 0;
+      cb.cdb_tag         <= 0;
+      cb.cdb_valid       <= 0;
+      cb.dispatch_rsaddr <= 0;
+      cb.dispatch_rtaddr <= 0;
+      cb.reset <= 1'b1;
+      repeat (cycles) @(posedge clk);
+      cb.reset <= 1'b0;
    endtask
 
    initial begin
-      reset = 1'b1; #10; reset = 1'b0;
+      clk <= 1'b0;
+      forever #5 clk = ~clk;
    end
 
-   initial begin
-      clk = 1'b0;
-      forever #5 clk <= ~clk;
-   end
+   clocking cb @(posedge clk);
+      default input #1 output #2;
+      output reset;
+      output dispatch_tag;
+      output dispatch_valid;
+      output dispatch_addr;
+      output dispatch_wen;
+      output dispatch_rsaddr;
+      output dispatch_rtaddr;
+      output cdb_tag;
+      output cdb_valid;
+
+      input regfile_wen_onehot;
+      input dispatch_rstag;
+      input dispatch_rttag;
+      input dispatch_rsvalid;
+      input dispatch_rtvalid;
+   endclocking
 
    rst rst (
       .clk                ( clk                 ),

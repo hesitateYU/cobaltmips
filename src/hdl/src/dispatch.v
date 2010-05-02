@@ -55,16 +55,27 @@ module dispatch (
    localparam S_BRANCHSTALL = 1'b1;
 
    initial begin
-      ifq_ren          = 1'b1;
+      ifq_ren          = 1'b0;
       ifq_branch_valid = 1'b0;
-      ifq_branch_addr  = 31'h0;
+      ifq_branch_addr  = 32'h0;
+      wait (~reset);
+      wait (~ifq_empty);
+      repeat (40) begin
+         @(posedge clk);
+      end
+      repeat (10) begin
+         ifq_ren          = 1'b1;
+         @(posedge clk);
+      end
+
+
       #5;
       #110; ifq_branch_valid = 1'b1; ifq_branch_addr = 32'h5;
       #10   ifq_branch_valid = 1'b0;
       #140  ifq_ren = 1'b0;
       #40   ifq_ren = 1'b1;
    end
-
+   /*
    // Signal declarations for Regfile.
    reg  [ 4:0] dispatch_regfile_rsaddr;
    reg  [ 4:0] dispatch_regfile_rtaddr;
@@ -280,6 +291,7 @@ module dispatch (
       .cdb_valid      (cdb_valid             )
    );
 
+   */
 endmodule
 
 `endif

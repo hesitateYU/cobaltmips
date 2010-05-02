@@ -68,17 +68,85 @@ module tb_equeue_issue();
       cb.reset <= 1'b1; #10; cb.reset <= 1'b0;
       reset_tb_signals;
 
+      cb.dispatch_equeueint_opcode<=0;
+      cb.dispatch_equeue_rdtag   <= 6'h1;
+      cb.dispatch_equeue_rstag   <= 6'h2;
+      cb.dispatch_equeue_rttag   <= 6'h3;
+      cb.dispatch_equeue_rsdata  <= 32'h2;
+      cb.dispatch_equeue_rtdata  <= 32'h2;
+      cb.dispatch_equeue_rsvalid <= 1;
+      cb.dispatch_equeue_rtvalid <= 1;
+      cb.dispatch_equeueint_en   <= 1;
+
+
    end
 
    task reset_tb_signals;
       begin
-
+      cb.dispatch_equeueint_opcode<=0;
+      cb.dispatch_equeue_rdtag<=0;
+      cb.dispatch_equeue_rstag<=0;
+      cb.dispatch_equeue_rttag<=0;
+      cb.dispatch_equeue_rsdata<=0;
+      cb.dispatch_equeue_rtdata<=0;
+      cb.dispatch_equeue_rsvalid<=0;
+      cb.dispatch_equeue_rtvalid<=0;
+      cb.dispatch_equeueint_en<=0;
       end
    endtask
 
    clocking cb @(posedge clk);
       default input #1 output #2;
       output reset;
+      output dispatch_equeueint_opcode;
+      output dispatch_equeue_rdtag;
+      output dispatch_equeue_rstag;
+      output dispatch_equeue_rttag;
+      output dispatch_equeue_rsdata;
+      output dispatch_equeue_rtdata;
+      output dispatch_equeue_rsvalid;
+      output dispatch_equeue_rtvalid;
+      output dispatch_equeueint_en;
+      input                    dispatch_equeueint_ready;
+
+      //equeue outputs -> issue unit inputs
+      input  equeueint_issueint_opcode;
+      input  equeueint_issueint_rsdata;
+      input  equeueint_issueint_rtdata;
+      input  equeueint_issueint_rdtag;
+
+      input  equeuels_issuels_opcode;
+      input  equeuels_issuels_rsdata;
+      input  equeuels_issuels_rtdata;
+      input  equeuels_issuels_rdtag;
+
+      input  equeuediv_issuediv_rsdata;
+      input  equeuediv_issuediv_rtdata;
+      input  equeuediv_issuediv_rdtag;
+
+      input  equeuemult_issuemult_rsdata;
+      input  equeuemult_issuemult_rtdata;
+      input  equeuemult_issuemult_rdtag;
+      // issue outputs -> equeue input
+      input  equeueint_issueint_ready;
+      input  equeuemult_issuemult_ready;
+      input  equeuediv_issuediv_ready;
+      input  equeuels_issuels_ready;
+
+      input  issueint_carryout;
+      input  issueint_overflow;
+
+      input  issueint_equeueint_done;
+      input  issuediv_equeuediv_done;
+      input  issuemult_equeuemult_done;
+      input  issuels_equeuels_done;
+
+      input  cdb_out;
+      input  cdb_tagout;
+      input  cdb_valid;
+      input  cdb_branch;
+      input  cdb_branch_taken;
+
    endclocking
 
    equeueint equeueint (

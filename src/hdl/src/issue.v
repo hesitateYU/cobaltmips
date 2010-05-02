@@ -4,7 +4,9 @@
 
 `timescale 1ns/1ps
 
-module issue (
+module issue #(
+   parameter INT_BEFORE_LOAD = 1
+)(  
    input              clk,
    input              reset,
 
@@ -20,7 +22,6 @@ module issue (
    input              ready_div,
    input              ready_ld_buf,
 
-   output reg         issue_queuedone,
    output reg         issue_int,
    output reg         issue_mult,
    output reg         issue_div,
@@ -28,15 +29,17 @@ module issue (
    output             issue_carryout,
    output             issue_overflow,
    output reg         issue_div_done,
+   output reg         issue_mult_done,
+   output reg         issue_int_done,
+   output reg         issue_ld_done,
 
    output reg [31:0]  cdb_out,
    output reg [ 5:0]  cdb_tagout,
    output reg         cdb_valid,
-   output             cdb_branch,
-   output             cdb_branch_taken
+   output reg         cdb_branch,
+   output reg         cdb_branch_taken
 );
 
-   localparam INT_BEFORE_LOAD = 1;
 
    reg  [6:0] cdb_slot, cdb_slot_r;
    wire [3:0] mux_cdb_ctrl;
@@ -49,7 +52,7 @@ module issue (
    wire [31:0]   mult_out;
    wire [31:0]   ld_buf_out;
 
-   wire div_exec_ready;
+   wire div_exec_ready, issueint_alubranch, issueint_alubranch_taken ;
    wire [5:0] ld_tagout, int_tagout, div_tagout, mult_tagout;
    //CDB reservation registers
    always @(*) begin : cdb_slots_proc
@@ -112,31 +115,46 @@ module issue (
    assign mux_cdb_ctrl = {issue_int, div_cdb_ctrl_r[0], mult_cdb_ctrl_r[0], issue_ld_buf};
 
    always @(*) begin : mux_cdb_out
-      cdb_valid      = 1'b0;
-      issue_div_done = 1'b0;
+      cdb_valid        = 1'b0;
+      cdb_branch       = 1'b0;
+      cdb_branch_taken = 1'b0;
+      issue_div_done   = 1'b0;
       case (mux_cdb_ctrl)
          4'b0001: begin
            cdb_out   = ld_buf_out; 
            cdb_tagout= ld_tagout;
+           cdb_valid  = 1'b1;
          end
          4'b0010: begin
-           cdb_out    = mult_out; 
+           //cdb_out    = mult_out; 
+           cdb_out    = 32'h0; 
            cdb_tagout = mult_tagout;
+           cdb_valid  = 1'b1;
          end
          4'b0100: begin
             cdb_out    = div_out;
             cdb_tagout = div_tagout;
             issue_div_done = 1'b1;
+            cdb_valid  = 1'b1;
          end
          4'b1000: begin
             cdb_out    = int_out;
             cdb_tagout = int_tagout;
+            cdb_valid  = 1'b1;
+            cdb_branch = issueint_alubranch;
+            cdb_branch_taken = issueint_alubranch_taken;
          end
          default: begin
             cdb_out = cdb_out;
             cdb_tagout = cdb_tagout;
          end
       endcase
+   end
+
+   always @(*) begin: int_mult_done
+      issue_int_done  = issue_int;
+      issue_mult_done = (cdb_slot_r[1]==1);
+      issue_ld_done   = (cdb_slot_r[0]==1);
    end
 
    // Module instantiations
@@ -155,8 +173,8 @@ module issue (
 
       .issueint_carryout         (issue_carryout),
       .issueint_overflow         (issue_overflow),
-      .issueint_alubranch        (cdb_branch),
-      .issueint_alubranch_taken  (cdb_branch_taken)
+      .issueint_alubranch        (issueint_alubranch),
+      .issueint_alubranch_taken  (issueint_alubranch_taken)
    );
    // divider exec unitt
    divider_wrapper divider_wrapper(
@@ -186,16 +204,12 @@ module issue (
    dcache dcache (
       .clk           (clk          ),
       .wen           (ld_st_opcode ), //opcode
-      
+
       .addr          (rsdata       ),
       .wdata         (rtdata       ),
       .rdata         (ld_buf_out   ),
       .tag_in        (rdtag        ),
    //input  wire [ 5:0] tag_in,
-      .ls_ready_in   (),
-      .ls_done_in    (),
-      .ls_done_out   (),
-      .ls_ready_out  (),
       .tag_out       (ld_tagout)
    );
 

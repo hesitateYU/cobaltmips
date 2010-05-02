@@ -5,40 +5,50 @@
 `timescale 1ns/1ps
 
 module tb_issue();
-   reg              clk;
-   reg              reset;
+      reg                     clk;
+      reg                     reset;
 
-   reg [3:0]        opcode;
-   reg [31:0]       rsdata; //address for ld/st
-   reg [31:0]       rtdata; //data for ld/st
-   reg [ 5:0]       rdtag;
+      reg  [3:0]              equeueint_issueint_opcode;
+      reg  [31:0]             equeueint_issueint_rsdata;
+      reg  [31:0]             equeueint_issueint_rtdata;
+      reg  [ 5:0]             equeueint_issueint_rdtag;
 
-   reg              ld_st_opcode;
-   reg              ready_int;
-   reg              ready_mult;
-   reg              ready_div;
-   reg              ready_ld_buf;
+      reg                     equeuels_issuels_opcode;
+      reg  [31:0]             equeuels_issuels_rsdata;
+      reg  [31:0]             equeuels_issuels_rtdata;
+      reg  [ 5:0]             equeuels_issuels_rdtag;
 
-   wire             issue_int;
-   wire             issue_mult;
-   wire             issue_div;
-   wire             issue_ld_buf;
-   wire             issue_carryout;
-   wire             issue_overflow;
-   wire             issue_div_done;
-   wire  [31:0]     ld_buf_out;
+      reg  [31:0]             equeuediv_issuediv_rsdata;
+      reg  [31:0]             equeuediv_issuediv_rtdata;
+      reg  [ 5:0]             equeuediv_issuediv_rdtag;
 
-   wire  [31:0]     cdb_out;
-   wire  [ 5:0]     cdb_tagout;
-   wire             cdb_valid;
-   wire             cdb_branch;
-   wire             cdb_branch_taken;
-   wire [31:0]      div_out;
+      reg  [31:0]             equeuemult_issuemult_rsdata;
+      reg  [31:0]             equeuemult_issuemult_rtdata;
+      reg  [31:0]             equeuemult_issuemult_rdtag;
 
-   reg               wen;
-   reg [31:0]       addr;
-   reg [31:0]       wdata;
-   reg [31:0]       rdata;
+      reg                    equeueint_issueint_ready;
+      reg                    equeuemult_issuemult_ready;
+      reg                    equeuediv_issuediv_ready;
+      reg                    equeuels_issuels_ready;
+
+      wire                    issueint_carryout;
+      wire                    issueint_overflow;
+
+      wire                    issueint_equeueint_done;
+      wire                    issuediv_equeuediv_done;
+      wire                    issuemult_equeuemult_done;
+      wire                    issuels_equeuels_done;
+
+      wire [31:0]             cdb_out;
+      wire [ 5:0]             cdb_tagout;
+      wire                    cdb_valid;
+      wire                    cdb_branch;
+      wire                    cdb_branch_taken;
+
+     reg               wen;
+     reg [31:0]       addr;
+     reg [31:0]       wdata;
+     reg [31:0]       rdata;
 
    initial begin
       clk = 1'b0;
@@ -50,85 +60,102 @@ module tb_issue();
    end
    initial begin : main_proc
       integer i;
-      ready_ld_buf =0;
-      ld_st_opcode = 0;
-      rsdata = 0;
-      rtdata = 0;
-      rdtag = 0;
-      ready_int = 0;
-      ready_mult = 0;
-      ready_div =0;
+      equeuels_issuels_ready  = 0;
+      equeuels_issuels_opcode = 0;
+      equeuels_issuels_rsdata = 0;
+      equeuels_issuels_rtdata = 0;
+      equeuels_issuels_rdtag  = 0;
+      equeueint_issueint_ready = 0;
+      equeueint_issueint_rsdata = 0;
+      equeueint_issueint_rtdata = 0;
+      equeueint_issueint_rdtag = 0;
+      equeueint_issueint_opcode =0;
+      equeuemult_issuemult_ready= 0;
+      equeuemult_issuemult_rsdata=0;
+      equeuemult_issuemult_rtdata=0;
+      equeuemult_issuemult_rdtag=0;
+      equeuediv_issuediv_ready = 0;
+      equeuediv_issuediv_rsdata =0;
+      equeuediv_issuediv_rtdata =0;
+      equeuediv_issuediv_rdtag =0;
+      
 
       // Write to address-=0 data = A;
       @(posedge clk);
       #0;
-      ld_st_opcode =1;
-      rsdata = 0;
-      rtdata = 32'ha;
-      ready_ld_buf =1;
+      equeuels_issuels_opcode = 1;
+      equeuels_issuels_rsdata = 0;
+      equeuels_issuels_rtdata = 32'ha;
+      equeuels_issuels_ready  = 1;
       @(posedge clk);
       #0;
-      ready_ld_buf =0;
-      ld_st_opcode =0;
+      equeuels_issuels_ready =0;
+      equeuels_issuels_opcode=0;
       // read address=0
       @(posedge clk);
       #0
-      ready_ld_buf =1 ;
-      rsdata =0;
+      equeuels_issuels_ready = 1;
+      equeuels_issuels_rsdata =0;
       @(posedge clk);
       #0;
-      ready_ld_buf =0;
+      equeuels_issuels_ready =0;
 
       //wait 10 clock cycles
       repeat (10) @(posedge clk);
       #0;
       // Add 3+5 =8
-      opcode = 0;
-      ready_int = 1;
-      rsdata = 3;
-      rtdata = 5;
-      rdtag  = 9;
+      equeueint_issueint_opcode = 0;
+      equeueint_issueint_ready = 1;
+      equeueint_issueint_rsdata = 3;
+      equeueint_issueint_rtdata = 5;
+      equeueint_issueint_rdtag  = 9;
       @(posedge clk);
       #0;
-      ready_int =0;
+      equeueint_issueint_ready =0;
       // Divide 12/4=3;  and add 12+4 at the same time;
       @(posedge clk);
       #0;
       @(posedge clk);
       #0;
-      ready_div = 1;
-      ready_int = 1;
-      rsdata = 12;
-      rtdata = 4;
-      rdtag  = 5;
+      equeuediv_issuediv_ready = 1;
+      equeueint_issueint_ready = 1;
+      equeueint_issueint_rsdata = 12;
+      equeueint_issueint_rtdata = 4;
+      equeuediv_issuediv_rsdata = 12;
+      equeuediv_issuediv_rtdata = 4;
+      equeueint_issueint_rdtag  = 5;
+      equeuediv_issuediv_rdtag  = 5;
       @(posedge clk);
       #0;
-      ready_div = 0;
-      ready_int = 0;
+      equeuediv_issuediv_ready = 0;
+      equeueint_issueint_ready = 0;
       @(posedge clk);
       #0;
       // Int and ld/store at the same time: priority issue
-      ready_int = 1;
-      ready_ld_buf  = 1;
-      rsdata = 12;
-      rtdata = 1;
-      rdtag  = 4;
+      equeueint_issueint_ready = 1;
+      equeuels_issuels_ready  = 1;
+      equeueint_issueint_rsdata = 12;
+      equeueint_issueint_rtdata = 1;
+      equeueint_issueint_rdtag  = 4;
+      equeuels_issuels_rsdata = 12;
+      equeuels_issuels_rtdata = 1;
+      equeuels_issuels_rdtag   =4;
       @(posedge clk);
       #0;
-      ready_int = 0;
-      ready_ld_buf = 0;
+      equeueint_issueint_ready = 0;
+      equeuels_issuels_ready  = 0;
       // Mult
       @(posedge clk);
       #0;
       @(posedge clk);
       #0;
-      ready_mult =1 ;
-      rsdata =3;
-      rtdata =5;
-      rdtag = 1;
+      equeuemult_issuemult_ready =1 ;
+      equeuemult_issuemult_rsdata =3;
+      equeuemult_issuemult_rtdata =5;
+      equeuemult_issuemult_rdtag = 1;
       @(posedge clk);
       #0;
-      ready_mult = 0;
+      equeuemult_issuemult_ready = 0;
       @(posedge clk);
       #0;
       @(posedge clk);
@@ -232,34 +259,48 @@ module tb_issue();
    ); */
    end
    issue issue(
-      .clk              (clk),
-      .reset            (reset),
+      .clk              (clk                          ),
+      .reset            (reset                        ),
 
-      .opcode           (opcode),
-      .rsdata           (rsdata),
-      .rtdata           (rtdata),
-      .rdtag            (rdtag),
-      .ld_st_opcode     (ld_st_opcode),
+      .issueint_opcode  (equeueint_issueint_opcode    ),
+      .issueint_rsdata  (equeueint_issueint_rsdata    ),
+      .issueint_rtdata  (equeueint_issueint_rtdata    ),
+      .issueint_rdtag   (equeueint_issueint_rdtag     ),
 
-      .ready_int        (ready_int),
-      .ready_mult       (ready_mult),
-      .ready_div        (ready_div),
-      .ready_ld_buf     (ready_ld_buf),
+      .issuels_opcode   (equeuels_issuels_opcode      ),
+      .issuels_rsdata   (equeuels_issuels_rsdata      ),
+      .issuels_rtdata   (equeuels_issuels_rtdata      ),
+      .issuels_rdtag    (equeuels_issuels_rdtag       ),
 
-      .issue_int        (issue_int),
-      .issue_mult       (issue_mult),
-      .issue_div        (issue_div),
-      .issue_ld_buf     (issue_ld_buf),
-      .issue_carryout   (issue_carryout),
-      .issue_overflow   (issue_overflow),
-      .issue_div_done   (issue_div_done),
+      .issuediv_rsdata  (equeuediv_issuediv_rsdata    ),
+      .issuediv_rtdata  (equeuediv_issuediv_rtdata    ),
+      .issuediv_rdtag   (equeuediv_issuediv_rdtag     ),
 
-      .cdb_out          (cdb_out),
-      .cdb_tagout       (cdb_tagout),
-      .cdb_valid        (cdb_valid),
-      .cdb_branch       (cdb_branch),
-      .cdb_branch_taken (cdb_branch_taken)
+      .issuemult_rsdata (equeuemult_issuemult_rsdata ),
+      .issuemult_rtdata (equeuemult_issuemult_rtdata ),
+      .issuemult_rdtag  (equeuemult_issuemult_rdtag  ),
+
+      .issueint_ready   (equeueint_issueint_ready     ),
+      .issuemult_ready  (equeuemult_issuemult_ready   ),
+      .issuediv_ready   (equeuediv_issuediv_ready     ),
+      .issuels_ready    (equeuels_issuels_ready       ),
+
+      .issueint_carryout(issueint_carryout            ),
+      .issueint_overflow(issueint_overflow            ),
+
+      .issueint_equeueint_done    (issueint_equeueint_done        ),
+      .issuediv_equeuediv_done    (issuediv_equeuediv_done        ),
+      .issuemult_equeuemult_done  (issuemult_equeuemult_done      ),
+      .issuels_equeuels_done      (issuels_equeuels_done          ),
+
+      .cdb_out          (cdb_out                      ),
+      .cdb_tagout       (cdb_tagout                   ),
+      .cdb_valid        (cdb_valid                    ),
+      .cdb_branch       (cdb_branch                   ),
+      .cdb_branch_taken (cdb_branch_taken             )
    );
+
+
 
 endmodule
 

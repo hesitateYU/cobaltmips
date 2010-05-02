@@ -22,7 +22,7 @@ module cpu (
    wire [ 31:0] ifq_dispatch_pcout_plus4;
    wire [ 31:0] ifq_dispatch_inst;
    wire         ifq_dispatch_empty;
-   wire         dispatch_ifq_rd_en;
+   wire         dispatch_ifq_ren;
    wire [ 31:0] dispatch_ifq_branch_addr;
    wire         dispatch_ifq_branch_valid;
 
@@ -105,8 +105,7 @@ module cpu (
 
    icache #(
       .W_DATA         ( 128 ),
-      .W_ADDR         (  32 ),
-      .N_BYTEALIGN    (   4 )
+      .W_ADDR         (  32 )
    ) icache (
       .clk            ( clk                   ),
       .reset          ( reset                 ),

@@ -12,7 +12,6 @@ module tb_rst();
    reg  [ 5:0] dispatch_tag;
    reg         dispatch_valid;
    reg  [ 4:0] dispatch_addr;
-   reg         dispatch_wen;
 
    // Write port 1 (clear port), signaled by CDB.
    reg  [ 5:0] cdb_tag;
@@ -38,21 +37,20 @@ module tb_rst();
       reset_testbench(5);
 
       //-----------------------------------------------------------------------
-      // Case 0: don't take anything.
+      // Case 0: don't take anything, read all addresses.
       //-----------------------------------------------------------------------
       @(posedge clk);
       for (i = 0; i < 32; i = i + 1) begin
+         cb.dispatch_valid <= 0;
+         cb.cdb_valid      <= 0;
          // Write port 0.
-         dispatch_tag       <= i;
-         dispatch_valid     <= 1;
-         dispatch_addr      <= i;
-         dispatch_wen       <= 0;
+         cb.dispatch_tag  <= i;
+         cb.dispatch_addr <= i;
          // Write port 1.
-         cdb_tag            <= 0;
-         cdb_valid          <= 0;
+         cb.cdb_tag <= i;
          // RS and RT read ports.
-         dispatch_rsaddr    <= 0;
-         dispatch_rtaddr    <= 0;
+         cb.dispatch_rsaddr <= i;
+         cb.dispatch_rtaddr <= i;
          @(posedge clk);
       end
       reset_testbench(5);
@@ -65,39 +63,33 @@ module tb_rst();
       //  d. Read, again, all entries.
       //-----------------------------------------------------------------------
       @(posedge clk);
-      cdb_tag            <= 0;
-      cdb_valid          <= 0;
-      dispatch_rsaddr    <= 0;
-      dispatch_rtaddr    <= 0;
       for (i = 0; i < 32; i = i + 1) begin
-         dispatch_tag    <= i;
-         dispatch_valid  <= 1;
-         dispatch_addr   <= i;
-         dispatch_wen    <= 1;
+         cb.dispatch_tag   <= i;
+         cb.dispatch_addr  <= i;
+         cb.dispatch_valid <= 1;
          @(posedge clk);
       end
-      dispatch_tag   <= 0;
-      dispatch_valid <= 0;
-      dispatch_addr  <= 0;
-      dispatch_wen   <= 0;
+      cb.dispatch_tag   <= 0;
+      cb.dispatch_valid <= 0;
+      cb.dispatch_addr  <= 0;
 
       for (i = 0; i < 32; i = i + 1) begin
-         dispatch_rsaddr <= i;
-         dispatch_rtaddr <= i;
+         cb.dispatch_rsaddr <= i;
+         cb.dispatch_rtaddr <= i;
          @(posedge clk);
       end
+
       for (i = 0; i < 32; i = i + 1) begin
-         // Write port 1.
-         cdb_tag            <= i;
-         cdb_valid          <= 1;
+         cb.cdb_tag   <= i;
+         cb.cdb_valid <= 1;
          @(posedge clk);
       end
-      cdb_tag            <= 0;
-      cdb_valid          <= 0;
+      cb.cdb_tag   <= 0;
+      cb.cdb_valid <= 0;
+
       for (i = 0; i < 32; i = i + 1) begin
-         // RS and RT read ports.
-         dispatch_rsaddr <= i;
-         dispatch_rtaddr <= i;
+         cb.dispatch_rsaddr <= i;
+         cb.dispatch_rtaddr <= i;
          @(posedge clk);
       end
 
@@ -109,7 +101,6 @@ module tb_rst();
       cb.dispatch_tag    <= 0;
       cb.dispatch_valid  <= 0;
       cb.dispatch_addr   <= 0;
-      cb.dispatch_wen    <= 0;
       cb.cdb_tag         <= 0;
       cb.cdb_valid       <= 0;
       cb.dispatch_rsaddr <= 0;
@@ -130,7 +121,6 @@ module tb_rst();
       output dispatch_tag;
       output dispatch_valid;
       output dispatch_addr;
-      output dispatch_wen;
       output dispatch_rsaddr;
       output dispatch_rtaddr;
       output cdb_tag;
@@ -149,7 +139,6 @@ module tb_rst();
       .dispatch_tag       ( dispatch_tag        ),
       .dispatch_valid     ( dispatch_valid      ),
       .dispatch_addr      ( dispatch_addr       ),
-      .dispatch_wen       ( dispatch_wen        ),
 
       .cdb_tag            ( cdb_tag             ),
       .cdb_valid          ( cdb_valid           ),

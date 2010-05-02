@@ -4,109 +4,108 @@
 
 `timescale 1ns/1ps
 
-module rst (
+module rst #(
+   parameter integer W_ADDR = 5,
+   parameter integer W_TAG  = 6
+)(
    input             clk,
    input             reset,
 
-   // Write port 0.
-   input      [ 5:0] dispatch_tag,
-   input             dispatch_valid,
-   input      [ 4:0] dispatch_addr,
-   input             dispatch_wen,
+   // Read ports for register RS and RT.
+   input      [W_ADDR-1:0] dispatch_rsaddr,
+   input      [W_ADDR-1:0] dispatch_rtaddr,
+   output reg [ W_TAG-1:0] dispatch_rstag,
+   output reg [ W_TAG-1:0] dispatch_rttag,
+   output reg              dispatch_rsvalid,
+   output reg              dispatch_rtvalid,
 
-   // Write port 1 (clear port), signaled by CDB.
-   input      [ 5:0] cdb_tag,
-   input             cdb_valid,
+   // Write port 0 driven by dispatch unit.
+   input      [W_ADDR-1:0] dispatch_addr,
+   input      [ W_TAG-1:0] dispatch_tag,
+   input                   dispatch_valid,
 
-   // Write enable for Register File which value has
-   // been published by the CDB.
-   output reg [31:0] regfile_wen_onehot,
+   // Write port 1 (clear port) driven by CDB.
+   input      [ W_TAG-1:0] cdb_tag,
+   input                   cdb_valid,
 
-   // Read port RS.
-   output reg [ 5:0] dispatch_rstag,
-   output reg        dispatch_rsvalid,
-   input      [ 4:0] dispatch_rsaddr,
-
-   // Read port RT.
-   output reg [ 5:0] dispatch_rttag,
-   output reg        dispatch_rtvalid,
-   input      [ 4:0] dispatch_rtaddr
+   // Write enable for Register File which value has been published by the CDB.
+   output reg [(2**W_ADDR)-1:0] regfile_wen_onehot
 );
 
-   // Tag comparator: CDB published tag VS tag ready to write from dispatch
-   // unit.
-   reg [31:0] comp_cdb_dispatch_tag;
-   always @(*) begin : rst_comp_proc
+   // Data stored includes TAG plus a valid bit.
+   localparam integer W_DATA  = W_TAG + 1;
+   localparam integer N_ENTRY = 2 ** W_ADDR;
+
+   reg [W_DATA-1:0] mem   [N_ENTRY-1:0];
+   reg [W_DATA-1:0] mem_r [N_ENTRY-1:0];
+
+   reg [W_ADDR-1:0] cdb_tag_addr;
+   reg              cdb_tag_found;
+
+   always @(*) begin : rst_read_proc
+      { dispatch_rsvalid, dispatch_rstag } = mem_r[dispatch_rsaddr];
+      { dispatch_rtvalid, dispatch_rttag } = mem_r[dispatch_rtaddr];
+   end
+
+   always @(*) begin : rst_write_proc
       integer i;
-      for (i = 0; i < 31; i = i + 1) begin
-         comp_cdb_dispatch_tag = (cdb_tag == dispatch_tag);
+      reg is_same_addr;
+
+      for (int i = 0; i < N_ENTRY; i = i + 1) mem[i] = mem_r[i];
+
+      is_same_addr = dispatch_addr == cdb_tag_addr;
+
+      // Writing tags (dispatch unit) has priority over clearing tags (CDB).
+      if (dispatch_valid)
+         mem[dispatch_addr] = { dispatch_valid, dispatch_tag };
+
+      // When clearing a tag it is enough to clear the tag_valid bit. For this
+      // implementation, we are setting the entire value to zeros.
+      if (cdb_valid && cdb_tag_found && !(is_same_addr && dispatch_valid))
+         mem[cdb_tag_addr] = { ~cdb_valid, { W_TAG {1'b0}} };
+
+      if (cdb_valid && ~cdb_tag_found) $display("@%p [RST] FATAL: published tag %p not found", $time, cdb_tag);
+   end
+
+   // CAM: Content Addressable Memory. Lookup memory contents if tag published
+   // by CDB is present, then report its address, if a tag is found but is not
+   // valid, then it will be reported as tag NOT found.
+   always @(*) begin : rst_lookup_proc
+      integer i, n_matches;
+      reg [W_TAG-1:0] tag;
+      reg             tag_valid;
+      // Set defaults to avoid latches.
+      cdb_tag_found = 'h0;
+      cdb_tag_addr  = 'h0;
+      n_matches     = 'h0;
+      for (i = 0; i < N_ENTRY; i = i + 1) begin
+         {tag_valid, tag} = mem_r[i];
+         // If a tag is found but it is invalid then report it as NOT found.
+         if (cdb_tag == tag) begin
+            cdb_tag_found = tag_valid;
+            cdb_tag_addr  = i;
+            n_matches     = (tag_valid) ? n_matches + 1 : n_matches;
+         end
       end
+
+      if (n_matches > 1) $display("@%p [RST] FATAL: same tag found [%p] %p", $time, n_matches, cdb_tag);
    end
 
-   // Signal interface with internal memory register file (which also acts
-   // as a look up table).
-   reg  [6:0] wport0_data, wport1_data;
-   wire [6:0] rport0_data, rport1_data;
-   reg  [4:0] wport0_addr, wport1_addr, rport0_addr, rport1_addr;
-   reg        wport0_wen,  wport1_wen;
-   wire       lookup_found;
-   wire [4:0] lookup_addr;
-   always @(*) begin
-      // Read port for both RS and RT register fields.
-      rport0_addr      = dispatch_rsaddr;
-      dispatch_rstag   = rport1_data[5:0];
-      dispatch_rsvalid = rport1_data[6];
-      rport1_addr      = dispatch_rtaddr;
-      dispatch_rttag   = rport0_data[5:0];
-      dispatch_rtvalid = rport0_data[6];
-
-      // Write data from dispatch unit only if the CDB published tag and
-      // tag for dispatch are different and wen is set.
-      wport0_data = {dispatch_valid, dispatch_tag};
-      wport0_addr = dispatch_addr;
-      wport0_wen  = dispatch_wen && comp_cdb_dispatch_tag[wport0_addr] == 0;
-
-      // Clear data specified by CDB is valid (cdb_valid) and if,
-      // after looking up the tag published by the CDB, it is found
-      // and is valid (inside the rst).
-      wport1_data = 7'h0;
-      wport1_addr = lookup_addr;
-      wport1_wen  = lookup_found && cdb_valid;
-   end
-
-   // One-hot encoder for register file write enable.
+   // When CDB publishes a data, the REGFILE must update its contents. RST
+   // sends a one-hot encoded write enable signal.
    always @(*) begin : rst_onehot_proc
       integer i;
-      for (i = 0; i < 31; i = i + 1) begin
-         regfile_wen_onehot = (lookup_addr == i) && lookup_found;
+      for (i = 0; i < N_ENTRY; i = i + 1) begin
+         regfile_wen_onehot[i] = (cdb_tag_addr == i) && cdb_tag_found && cdb_valid;
       end
    end
 
-   rst_mem rst_mem(
-      .clk         (clk         ),
-      .reset       (reset       ),
-
-      // 2 read ports: RS and RT register fields.
-      .rport0_addr (rport0_addr ),
-      .rport0_data (rport0_data ),
-      .rport1_addr (rport1_addr ),
-      .rport1_data (rport1_data ),
-
-      // 2 write ports: write and clear.
-      .wport0_addr (wport0_addr ),
-      .wport0_data (wport0_data ),
-      .wport0_wen  (wport0_wen  ),
-      .wport1_addr (wport1_addr ),
-      .wport1_data (wport1_data ),
-      .wport1_wen  (wport1_wen  ),
-
-      // Lookup port, set a tag and rst_mem will indicate if it was found and
-      // its index. If tag is found but is not valid, then it will be reported
-      // as tag not found.
-      .lookup_tag  (cdb_tag     ),
-      .lookup_found(lookup_found),
-      .lookup_addr (lookup_addr )
-   );
+   always @(posedge clk) begin : rst_mem_reg
+      integer i;
+      for (i = 0; i < N_ENTRY; i = i + 1) begin
+         mem_r[i] <= (reset) ? 'h0 : mem[i];
+      end
+   end
 
 endmodule
 

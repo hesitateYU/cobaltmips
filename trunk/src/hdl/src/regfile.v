@@ -12,7 +12,7 @@ module regfile #(
    input                   reset,
 
    // Single write port, data comes from CDB and wen and address
-   // is encoded as one-hot from register status table. If one-hot
+   // is encoded as one-hot from Register Status Table. If one-hot
    // vector is all zeros then don't write anything.
    input      [W_DATA-1:0] cdb_wdata,
    input      [W_DATA-1:0] rst_wen_onehot,
@@ -51,8 +51,7 @@ module regfile #(
    always @(posedge clk) begin : reg_file_mem_assign
       integer i;
       for (i = 0; i < N_ENTRY; i = i + 1) begin
-         //mem_r[i] <= (reset) ? 'h0 : mem[i];
-         mem_r[i] <= (reset) ? i : mem[i];
+         mem_r[i] <= (reset) ? 'h0 : mem[i];
       end
    end
 

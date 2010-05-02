@@ -29,33 +29,33 @@ module tb_dcache();
       addr = 0;
       wdata = 0;
 
-      repeat (10) @(posedge clk);
+      repeat (10) @(posedge clk) #0;
       for (i = 0; i < 10; i = i + 1) begin
          wen   = 1;
          addr  = i;
          wdata = i;
-         @(posedge clk);
+         @(posedge clk) #0;
       end
       wen = 0;
       wdata = 0;
 
-      repeat (10) @(posedge clk);
+      repeat (10) @(posedge clk) #0;
       for (i = 0; i < 10; i = i + 1) begin
          wen   = 0;
          addr  = i;
-         @(posedge clk);
+         @(posedge clk) #0;
       end
       wen = 0;
       addr = 0;
 
-      repeat (10) @(posedge clk);
+      repeat (10) @(posedge clk) #0;
       for (i = 0; i < 10; i = i + 1) begin
          wen   = 1;
          addr  = i;
          wdata = i + 100;
-         @(posedge clk);
+         @(posedge clk) #0;
          wen   = 0;
-         @(posedge clk);
+         @(posedge clk) #0;
       end
 
    end

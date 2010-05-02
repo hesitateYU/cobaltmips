@@ -1,7 +1,8 @@
 
-
 `ifndef TB_RST_V
 `define TB_RST_V
+
+`timescale 1ns/1ps
 
 module tb_rst();
 
@@ -39,7 +40,7 @@ module tb_rst();
       //-----------------------------------------------------------------------
       // Case 0: don't take anything.
       //-----------------------------------------------------------------------
-      @(posedge clk);
+      @(posedge clk) #0;
       for (i = 0; i < 32; i = i + 1) begin
          // Write port 0.
          dispatch_tag       = i;
@@ -52,7 +53,7 @@ module tb_rst();
          // RS and RT read ports.
          dispatch_rsaddr    = 0;
          dispatch_rtaddr    = 0;
-         @(posedge clk);
+         @(posedge clk) #0;
       end
       reset_testbench();
 
@@ -63,7 +64,7 @@ module tb_rst();
       //  c. Clear all entries from CDB.
       //  d. Read, again, all entries.
       //-----------------------------------------------------------------------
-      @(posedge clk);
+      @(posedge clk) #0;
       cdb_tag            = 0;
       cdb_valid          = 0;
       dispatch_rsaddr    = 0;
@@ -73,7 +74,7 @@ module tb_rst();
          dispatch_valid  = 1;
          dispatch_addr   = i;
          dispatch_wen    = 1;
-         @(posedge clk);
+         @(posedge clk) #0;
       end
       dispatch_tag   = 0;
       dispatch_valid = 0;
@@ -83,13 +84,13 @@ module tb_rst();
       for (i = 0; i < 32; i = i + 1) begin
          dispatch_rsaddr = i;
          dispatch_rtaddr = i;
-         @(posedge clk);
+         @(posedge clk) #0;
       end
       for (i = 0; i < 32; i = i + 1) begin
          // Write port 1.
          cdb_tag            = i;
          cdb_valid          = 1;
-         @(posedge clk);
+         @(posedge clk) #0;
       end
       cdb_tag            = 0;
       cdb_valid          = 0;
@@ -97,7 +98,7 @@ module tb_rst();
          // RS and RT read ports.
          dispatch_rsaddr = i;
          dispatch_rtaddr = i;
-         @(posedge clk);
+         @(posedge clk) #0;
       end
 
       reset_testbench();
@@ -106,7 +107,7 @@ module tb_rst();
 
    task reset_testbench();
       begin
-         @(posedge clk);
+         @(posedge clk) #0;
          dispatch_tag       = 0;
          dispatch_valid     = 0;
          dispatch_addr      = 0;
@@ -115,8 +116,8 @@ module tb_rst();
          cdb_valid          = 0;
          dispatch_rsaddr    = 0;
          dispatch_rtaddr    = 0;
-         reset = 1'b1; @(posedge clk);
-         reset = 1'b0; @(posedge clk);
+         reset = 1'b1; @(posedge clk) #0;
+         reset = 1'b0; @(posedge clk) #0;
       end
    endtask
 

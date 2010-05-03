@@ -140,15 +140,6 @@
 `define FUNCT_NOOP_3F (6'h3F)
 
 //
-// Reusing some invalid (No operation) FUNCT_* codes for OPCODE_RTYPE
-// instructions in order to support additional instructions in execution unit
-// in integers.
-//
-`define ISSUEINT_BEQ  (6'h3E)
-`define ISSUEINT_BNE  (6'h3F)
-
-
-//
 // Functions used by floating point instructions with:
 //   + OPCODE_FPTYPE
 //

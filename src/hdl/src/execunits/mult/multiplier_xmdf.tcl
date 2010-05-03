@@ -36,8 +36,16 @@ utilities_xmdf::xmdfSetData $instance FileSet $fcount type logical_library
 utilities_xmdf::xmdfSetData $instance FileSet $fcount logical_library unisim
 incr fcount
 
+utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path multiplier.asy
+utilities_xmdf::xmdfSetData $instance FileSet $fcount type asy
+incr fcount
+
 utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path multiplier.ngc
 utilities_xmdf::xmdfSetData $instance FileSet $fcount type ngc
+incr fcount
+
+utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path multiplier.sym
+utilities_xmdf::xmdfSetData $instance FileSet $fcount type symbol
 incr fcount
 
 utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path multiplier.v

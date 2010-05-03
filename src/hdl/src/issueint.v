@@ -21,7 +21,6 @@ module issueint (
          output            issueint_overflow,
          output reg        issueint_alubranch,
          output reg        issueint_alubranch_taken
-
 );
 
    reg  [31:0] rsdata_r, rtdata_r;

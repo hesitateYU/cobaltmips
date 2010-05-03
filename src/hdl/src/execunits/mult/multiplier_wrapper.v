@@ -17,7 +17,7 @@ module multiplier_wrapper(
    );
 
 assign issuemult_rdtag_out = issuemult_rdtag;
-
+/*
 multiplier multiplier (
   //.sclr  (reset),
   //.ce    (issuemult_enable),
@@ -25,7 +25,9 @@ multiplier multiplier (
   .a     (issuemult_rsdata[15:0]),
   .b     (issuemult_rtdata[15:0]),
   .p     (issuemult_out)
-  );
+  );*/
+// This is the name of the coregen module
+ // joel_mult joel_mult(.clk(clk), .a(issuemult_rsdata), .b(issuemult_rtdata), .q(issuemult_out));
 
 endmodule
 

@@ -1,7 +1,7 @@
 ##############################################################
 #
-# Xilinx Core Generator version J.36
-# Date: Thu Apr 29 23:46:53 2010
+# Xilinx Core Generator version 11.1
+# Date: Fri Apr 30 00:13:48 2010
 #
 ##############################################################
 #
@@ -14,51 +14,48 @@
 #
 # BEGIN Project Options
 SET addpads = False
-SET asysymbol = False
+SET asysymbol = True
 SET busformat = BusFormatAngleBracketNotRipped
 SET createndf = False
 SET designentry = Verilog
 SET device = xc3s500e
 SET devicefamily = spartan3e
-SET flowvendor = Other
+SET flowvendor = Foundation_ISE
 SET formalverification = False
 SET foundationsym = False
 SET implementationfiletype = Ngc
 SET package = fg320
 SET removerpms = False
-SET simulationfiles = Structural
-SET speedgrade = -5
+SET simulationfiles = Behavioral
+SET speedgrade = -4
 SET verilogsim = True
 SET vhdlsim = False
 # END Project Options
 # BEGIN Select
-SELECT Multiplier family Xilinx,_Inc. 10.0
+SELECT Multiplier family Xilinx,_Inc. 11.0
 # END Select
 # BEGIN Parameters
 CSET ccmimp=Distributed_Memory
 CSET clockenable=false
 CSET component_name=multiplier
 CSET constvalue=129
-CSET dynamic_constant_reload=false
+CSET internaluser=0
 CSET multiplier_construction=Use_Mults
 CSET multtype=Parallel_Multiplier
 CSET optgoal=Speed
 CSET outputwidthhigh=31
 CSET outputwidthlow=0
 CSET pipestages=3
-CSET portatype=Signed
+CSET portatype=Unsigned
 CSET portawidth=16
-CSET portbtype=Signed
+CSET portbtype=Unsigned
 CSET portbwidth=16
-CSET reloadable=false
 CSET roundpoint=0
 CSET sclrcepriority=SCLR_Overrides_CE
 CSET syncclear=false
 CSET use_custom_output_width=false
-CSET use_load_done=false
 CSET userounding=false
 CSET zerodetect=false
 # END Parameters
 GENERATE
-# CRC: 96594b21
-
+# CRC: e10121d3

@@ -53,7 +53,7 @@ module issue (
 
    reg  [6:0] cdb_slot, cdb_slot_r;
    wire [3:0] mux_cdb_ctrl;
-   reg        int_before_ls;
+   reg        int_before_ls, int_before_ls_r;
    reg  [5:0] div_cdb_ctrl, div_cdb_ctrl_r;
    reg  [2:0] mult_cdb_ctrl, mult_cdb_ctrl_r;
 
@@ -93,10 +93,14 @@ module issue (
    //       That is, priority toggles each time both time of operations
    //       contend.
    //
+   always @(posedge clk) begin : int_before_ls_reg_assign
+      int_before_ls_r <= (reset) ? 0 : int_before_ls;
+   end
+
    always @(*) begin: issue_unit_logic
       int_before_ls ^= (issueint_ready & issuels_ready);
-      issue_int      = (~cdb_slot_r[1] & issueint_ready) & (~issuels_ready  | int_before_ls);
-      issue_ld_buf   = (~cdb_slot_r[1] & issuels_ready ) & (~issueint_ready | ~int_before_ls);
+      issue_int      = (~cdb_slot_r[1] & issueint_ready) & (~issuels_ready  | int_before_ls_r);
+      issue_ld_buf   = (~cdb_slot_r[1] & issuels_ready ) & (~issueint_ready | ~int_before_ls_r);
       issue_div      = ~div_exec_ready & cdb_slot_r[6];
       issue_mult     = ~cdb_slot_r[4] & issuemult_ready;
    end

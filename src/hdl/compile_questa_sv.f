@@ -15,6 +15,7 @@ src/dcache.v
 src/dispatch.v
 src/regfile.v
 src/rst.v
+src/rst_mem.v
 src/tagfifo.v
 
 src/equeueint.v
@@ -41,7 +42,7 @@ tb/tb_top.v
 tb/tb_equeueint.v
 tb/tb_issue.v
 tb/tb_rst.v
-tb/tb_ifq.v
 tb/tb_dcache.v
+tb/tb_regfile.v
+tb/tb_equeue_issue.v
 tb/tb_tagfifo.v
-

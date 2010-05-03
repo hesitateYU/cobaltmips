@@ -88,7 +88,7 @@ module rst #(
          end
       end
 
-      if (n_matches > 1) $display("@%p [RST] FATAL: same tag found [%p] %p", $time, n_matches, cdb_tag);
+      if (n_matches > 1) $display("@%p [RST] FATAL: multiple matching tags found [%p] %p", $time, n_matches, cdb_tag);
    end
 
    // When CDB publishes a data, the REGFILE must update its contents. RST

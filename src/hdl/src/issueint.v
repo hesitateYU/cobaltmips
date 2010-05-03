@@ -38,6 +38,7 @@ module issueint (
    always @(*) begin : alu_opcode
       issueint_alubranch = 1'b0;
       issueint_alubranch_taken = 1'b0;
+      issueint_out =0;
       case (issueint_opcode)
          `FUNCT_ADD, `FUNCT_ADDU: begin
             rsdata_r = issueint_rsdata;

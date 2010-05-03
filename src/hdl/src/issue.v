@@ -4,9 +4,7 @@
 
 `timescale 1ns/1ps
 
-module issue #(
-   parameter INT_BEFORE_LOAD = 1
-)(  
+module issue (
       input                         clk,
       input                         reset,
 
@@ -55,7 +53,7 @@ module issue #(
 
    reg  [6:0] cdb_slot, cdb_slot_r;
    wire [3:0] mux_cdb_ctrl;
-   reg        LRU;
+   reg        int_before_ls;
    reg  [5:0] div_cdb_ctrl, div_cdb_ctrl_r;
    reg  [2:0] mult_cdb_ctrl, mult_cdb_ctrl_r;
 
@@ -96,10 +94,11 @@ module issue #(
    //       contend.
    //
    always @(*) begin: issue_unit_logic
-      issue_int   =  (~cdb_slot_r[1] & issueint_ready)    & (~issuels_ready  |  INT_BEFORE_LOAD);
-      issue_ld_buf = (~cdb_slot_r[1] & issuels_ready ) &    (~issueint_ready | ~INT_BEFORE_LOAD);
-      issue_div    = ~div_exec_ready & cdb_slot_r[6];
-      issue_mult   = ~cdb_slot_r[4] & issuemult_ready;
+      int_before_ls ^= (issueint_ready & issuels_ready);
+      issue_int      = (~cdb_slot_r[1] & issueint_ready) & (~issuels_ready  | int_before_ls);
+      issue_ld_buf   = (~cdb_slot_r[1] & issuels_ready ) & (~issueint_ready | ~int_before_ls);
+      issue_div      = ~div_exec_ready & cdb_slot_r[6];
+      issue_mult     = ~cdb_slot_r[4] & issuemult_ready;
    end
 
    always @(posedge clk) begin: div_reg_assign

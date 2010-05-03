@@ -6,13 +6,33 @@
 `define TRUE  (1)
 
 //
+// BASIC INSTRUCTION FORMATS
+//               +------+-----+-----+-----+-----+------+
+//               |   6  |  5  |  5  |  5  |  5  |   6  |
+//               +------+-----+-----+-----+-----+------+
+//   Register  R |Opcode| Rs  | Rt  | Rd  |Shamt| Func |
+//               +------+-----+-----+-----+-----+------+
+//  Immediate  I |Opcode| Rs  | Rt  |  Immediate (16)  |
+//               +------+-----+-----+------------------+
+//       Jump  J |Opcode|                Address (26)  |
+//               +------+-----+-----+------------------+
+//
+// FLOATING POINT INSTRUCTION FORMATS
+//               +------+-----+-----+-----+-----+------+
+//               |   6  |  5  |  5  |  5  |  5  |   6  |
+//               +------+-----+-----+-----+-----+------+
+//   Register FR |Opcode| Fmt | Ft  | Fs  | Fd  | Func |
+//               +------+-----+-----+-----+-----+------+
+//  Immediate FI |Opcode| Fmt | Ft  |  Immediate (16)  |
+//               +------+-----+-----+------------------+
+//
+
+//
 // Most significant opcodes
 //
 `define OPCODE_RTYPE  (6'h00)
-`define OPCODE_JTYPE  (6'h02)
 `define OPCODE_J      (6'h02)
 `define OPCODE_JAL    (6'h03)
-`define OPCODE_BTYPE  (6'b0001XX)
 `define OPCODE_BEQ    (6'h04)
 `define OPCODE_BNE    (6'h05)
 `define OPCODE_BLEZ   (6'h06)
@@ -52,7 +72,8 @@
 `define OPCODE_SDC2   (6'h3E)
 
 //
-// Functions for OPCODE_RTYPE
+// Functions used by basic instructions with:
+//   + OPCODE_RTYPE
 //
 `define FUNCT_SLL     (6'h00)
 `define FUNCT_SRL     (6'h02)
@@ -93,7 +114,8 @@
 `define FUNCT_TNE     (6'h36)
 
 //
-// Functions for OPCODE_FPTYPE
+// Functions used by floating point instructions with:
+//   + OPCODE_FPTYPE
 //
 `define FUNCT_ADD_F     (6'h00)
 `define FUNCT_SUB_F     (6'h01)
@@ -128,6 +150,10 @@
 `define FUNCT_C_LE_F    (6'h3D)
 `define FUNCT_C_NGT_F   (6'h3F)
 
+
+//
+// Simple alias for registers.
+//
 `define REG_00 (5'h00)
 `define REG_01 (5'h01)
 `define REG_02 (5'h02)
@@ -161,6 +187,9 @@
 `define REG_30 (5'h1E)
 `define REG_31 (5'h1F)
 
+//
+// Shift amounts used in basic instructions of OPCODE_RTYPE.
+//
 `define SHAMT_00 (5'h00)
 `define SHAMT_01 (5'h01)
 `define SHAMT_02 (5'h02)

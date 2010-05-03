@@ -26,23 +26,11 @@ module cpu (
    wire [ 31:0] dispatch_ifq_branch_addr;
    wire         dispatch_ifq_branch_valid;
 
-   reg  [ 31:0] cdb_dispatch_data;
-   reg  [  5:0] cdb_dispatch_tag;
-   reg          cdb_dispatch_valid;
-   reg          cdb_dispatch_branch;
-   reg          cdb_dispatch_taken;
-   reg  [ 31:0] cdb_equeueint_data;
-   reg  [  5:0] cdb_equeueint_tag;
-   reg          cdb_equeueint_valid;
-   reg  [ 31:0] cdb_equeuels_data;
-   reg  [  5:0] cdb_equeuels_tag;
-   reg          cdb_equeuels_valid;
-   reg  [ 31:0] cdb_equeuemult_data;
-   reg  [  5:0] cdb_equeuemult_tag;
-   reg          cdb_equeuemult_valid;
-   reg  [ 31:0] cdb_equeuediv_data;
-   reg  [  5:0] cdb_equeuediv_tag;
-   reg          cdb_equeuediv_valid;
+   reg  [ 31:0] cdb_data;
+   reg  [  5:0] cdb_tag;
+   reg          cdb_valid;
+   reg          cdb_branch;
+   reg          cdb_branch_taken;
 
    wire [ 15:0] dispatch_equeue_imm;
    wire [  5:0] dispatch_equeue_rdtag;
@@ -92,17 +80,6 @@ module cpu (
    wire         issuediv_equeuediv_done;
 
 
-   initial begin
-      //
-      // DEBUG: setting the CDB signals to zero.
-      //
-      cdb_dispatch_data   = 32'h0;
-      cdb_dispatch_tag    =  6'h0;
-      cdb_dispatch_valid  =  1'b0;
-      cdb_dispatch_branch =  1'b0;
-      cdb_dispatch_taken  =  1'b0;
-   end
-
    icache #(
       .W_DATA         ( 128 ),
       .W_ADDR         (  32 )
@@ -141,11 +118,11 @@ module cpu (
       .ifq_ren            ( dispatch_ifq_ren          ),
       .ifq_branch_addr    ( dispatch_ifq_branch_addr  ),
       .ifq_branch_valid   ( dispatch_ifq_branch_valid ),
-      .cdb_tag            ( cdb_dispatch_tag          ),
-      .cdb_valid          ( cdb_dispatch_valid        ),
-      .cdb_data           ( cdb_dispatch_data         ),
-      .cdb_branch         ( cdb_dispatch_branch       ),
-      .cdb_branch_taken   ( cdb_dispatch_taken        ),
+      .cdb_tag            ( cdb_tag                   ),
+      .cdb_valid          ( cdb_valid                 ),
+      .cdb_data           ( cdb_data                  ),
+      .cdb_branch         ( cdb_branch                ),
+      .cdb_branch_taken   ( cdb_taken                 ),
       .equeue_imm         ( dispatch_equeue_imm       ),
       .equeue_rdtag       ( dispatch_equeue_rdtag     ),
       .equeue_rstag       ( dispatch_equeue_rstag     ),
@@ -181,9 +158,9 @@ module cpu (
       .dispatch_rtdata  ( dispatch_equeue_rtdata    ),
       .dispatch_rsvalid ( dispatch_equeue_rsvalid   ),
       .dispatch_rtvalid ( dispatch_equeue_rtvalid   ),
-      .cdb_tag          ( cdb_equeueint_tag         ),
-      .cdb_valid        ( cdb_equeueint_valid       ),
-      .cdb_data         ( cdb_equeueint_data        ),
+      .cdb_tag          ( cdb_tag                   ),
+      .cdb_valid        ( cdb_valid                 ),
+      .cdb_data         ( cdb_data                  ),
       .issueint_opcode  ( equeueint_issueint_opcode ),
       .issueint_rdtag   ( equeueint_issueint_rdtag  ),
       .issueint_rsdata  ( equeueint_issueint_rsdata ),
@@ -206,9 +183,9 @@ module cpu (
       .dispatch_rtdata  ( dispatch_equeue_rtdata   ),
       .dispatch_rsvalid ( dispatch_equeue_rsvalid  ),
       .dispatch_rtvalid ( dispatch_equeue_rtvalid  ),
-      .cdb_tag          ( cdb_equeuels_tag         ),
-      .cdb_valid        ( cdb_equeuels_valid       ),
-      .cdb_data         ( cdb_equeuels_data        ),
+      .cdb_tag          ( cdb_tag                  ),
+      .cdb_valid        ( cdb_valid                ),
+      .cdb_data         ( cdb_data                 ),
       .issuels_opcode   ( equeuels_issuels_opcode  ),
       .issuels_rdtag    ( equeuels_issuels_rdtag   ),
       .issuels_addr     ( equeuels_issuels_addr    ),
@@ -229,9 +206,9 @@ module cpu (
       .dispatch_rtdata  ( dispatch_equeue_rtdata    ),
       .dispatch_rsvalid ( dispatch_equeue_rsvalid   ),
       .dispatch_rtvalid ( dispatch_equeue_rtvalid   ),
-      .cdb_tag          ( cdb_equeuediv_tag         ),
-      .cdb_valid        ( cdb_equeuediv_valid       ),
-      .cdb_data         ( cdb_equeuediv_data        ),
+      .cdb_tag          ( cdb_tag                   ),
+      .cdb_valid        ( cdb_valid                 ),
+      .cdb_data         ( cdb_data                  ),
       .issuediv_rdtag   ( equeuediv_issuediv_rdtag  ),
       .issuediv_rsdata  ( equeuediv_issuediv_rsdata ),
       .issuediv_rtdata  ( equeuediv_issuediv_rtdata ),
@@ -251,9 +228,9 @@ module cpu (
       .dispatch_rtdata  ( dispatch_equeue_rtdata      ),
       .dispatch_rsvalid ( dispatch_equeue_rsvalid     ),
       .dispatch_rtvalid ( dispatch_equeue_rtvalid     ),
-      .cdb_tag          ( cdb_equeuemult_tag          ),
-      .cdb_valid        ( cdb_equeuemult_valid        ),
-      .cdb_data         ( cdb_equeuemult_data         ),
+      .cdb_tag          ( cdb_tag                     ),
+      .cdb_valid        ( cdb_valid                   ),
+      .cdb_data         ( cdb_data                    ),
       .issuemult_rdtag  ( equeuemult_issuemult_rdtag  ),
       .issuemult_rsdata ( equeuemult_issuemult_rsdata ),
       .issuemult_rtdata ( equeuemult_issuemult_rtdata ),
@@ -262,45 +239,37 @@ module cpu (
    );
 
    issue issue(
-      .clk              (clk                          ),
-      .reset            (reset                        ),
-
-      .issueint_opcode  (equeueint_issueint_opcode    ),
-      .issueint_rsdata  (equeueint_issueint_rsdata    ),
-      .issueint_rtdata  (equeueint_issueint_rtdata    ),
-      .issueint_rdtag   (equeueint_issueint_rdtag     ),
-
-      .issuels_opcode   (equeuels_issuels_opcode      ),
-      .issuels_rsdata   (equeuels_issuels_rsdata      ),
-      .issuels_rtdata   (equeuels_issuels_rtdata      ),
-      .issuels_rdtag    (equeuels_issuels_rdtag       ),
-
-      .issuediv_rsdata  (equeuediv_issuediv_rsdata    ),
-      .issuediv_rtdata  (equeuediv_issuediv_rtdata    ),
-      .issuediv_rdtag   (equeuediv_issuediv_rdtag     ),
-
-      .issuemult_rsdata (equeuemult_issuemult_rsdata ),
-      .issuemult_rtdata (equeuemult_issuemult_rtdata ),
-      .issuemult_rdtag  (equeuemult_issuemult_rdtag  ),
-
-      .issueint_ready   (equeueint_issueint_ready     ),
-      .issuemult_ready  (equeuemult_issuemult_ready   ),
-      .issuediv_ready   (equeuediv_issuediv_ready     ),
-      .issuels_ready    (equeuels_issuels_ready       ),
-
-      .issueint_carryout(issueint_carryout            ),
-      .issueint_overflow(issueint_overflow            ),
-
-      .issuediv_equeuediv_done    (issuediv_equeuediv_done        ),
-      .issueint_equeueint_done    (issueint_equeueint_done        ),
-      .issuemult_equeuemult_done  (issuemult_equeuemult_done      ),
-      .issuels_equeuels_done      (issuels_equeuels_done          ),
-
-      .cdb_out          (cdb_out                      ),
-      .cdb_tagout       (cdb_tagout                   ),
-      .cdb_valid        (cdb_valid                    ),
-      .cdb_branch       (cdb_branch                   ),
-      .cdb_branch_taken (cdb_branch_taken             )
+      .clk                       ( clk                          ),
+      .reset                     ( reset                        ),
+      .issueint_opcode           ( equeueint_issueint_opcode    ),
+      .issueint_rsdata           ( equeueint_issueint_rsdata    ),
+      .issueint_rtdata           ( equeueint_issueint_rtdata    ),
+      .issueint_rdtag            ( equeueint_issueint_rdtag     ),
+      .issuels_opcode            ( equeuels_issuels_opcode      ),
+      .issuels_rsdata            ( equeuels_issuels_rsdata      ),
+      .issuels_rtdata            ( equeuels_issuels_rtdata      ),
+      .issuels_rdtag             ( equeuels_issuels_rdtag       ),
+      .issuediv_rsdata           ( equeuediv_issuediv_rsdata    ),
+      .issuediv_rtdata           ( equeuediv_issuediv_rtdata    ),
+      .issuediv_rdtag            ( equeuediv_issuediv_rdtag     ),
+      .issuemult_rsdata          ( equeuemult_issuemult_rsdata  ),
+      .issuemult_rtdata          ( equeuemult_issuemult_rtdata  ),
+      .issuemult_rdtag           ( equeuemult_issuemult_rdtag   ),
+      .issueint_ready            ( equeueint_issueint_ready     ),
+      .issuemult_ready           ( equeuemult_issuemult_ready   ),
+      .issuediv_ready            ( equeuediv_issuediv_ready     ),
+      .issuels_ready             ( equeuels_issuels_ready       ),
+      .issueint_carryout         ( issueint_carryout            ),
+      .issueint_overflow         ( issueint_overflow            ),
+      .issuediv_equeuediv_done   ( issuediv_equeuediv_done      ),
+      .issueint_equeueint_done   ( issueint_equeueint_done      ),
+      .issuemult_equeuemult_done ( issuemult_equeuemult_done    ),
+      .issuels_equeuels_done     ( issuels_equeuels_done        ),
+      .cdb_data                  ( cdb_data                     ),
+      .cdb_tag                   ( cdb_tag                      ),
+      .cdb_valid                 ( cdb_valid                    ),
+      .cdb_branch                ( cdb_branch                   ),
+      .cdb_branch_taken          ( cdb_branch_taken             )
    );
 
 endmodule

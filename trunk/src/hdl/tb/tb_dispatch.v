@@ -1,10 +1,10 @@
 
-`ifndef TB_IFQ_V
-`define TB_IFQ_V
+`ifndef TB_DISPATCH_V
+`define TB_DISPATCH_V
 
 `timescale 1ns/1ps
 
-module tb_ifq();
+module tb_dispatch();
 
    reg  clk;
    reg  reset;
@@ -50,29 +50,7 @@ module tb_ifq();
       reset_testbench(5);
 
       //-----------------------------------------------------------------------
-      // Case 2: the moment it has something to consume, start requesting data,
-      //         and halt the IFQ a few times.
-      //-----------------------------------------------------------------------
-      @(posedge clk);
-      cb.dispatch_ifq_ren          <= 0;
-      cb.dispatch_ifq_branch_addr  <= 0;
-      cb.dispatch_ifq_branch_valid <= 0;
-      wait (~cb.ifq_dispatch_empty);
-      cb.dispatch_ifq_ren <= 1;
-      repeat (3) @(posedge clk);
-      cb.dispatch_ifq_ren <= 0;
-      repeat (1) @(posedge clk);
-      cb.dispatch_ifq_ren <= 1;
-      repeat (3) @(posedge clk);
-      cb.dispatch_ifq_ren <= 0;
-      repeat (2) @(posedge clk);
-      cb.dispatch_ifq_ren <= 1;
-      repeat (3) @(posedge clk);
-      reset_testbench(5);
-
-
-      //-----------------------------------------------------------------------
-      // Case 3: fill queue and branch to a distant address.
+      // Case 2: fill queue and branch to a distant address.
       //-----------------------------------------------------------------------
       @(posedge clk);
       cb.dispatch_ifq_ren          <= 0;
@@ -88,9 +66,8 @@ module tb_ifq();
       repeat (20) @(posedge clk);
       reset_testbench(5);
 
-
       //-----------------------------------------------------------------------
-      // Case 4: branch back and forward between 2 addresses.
+      // Case 3: branch back and forward between 2 addresses.
       //-----------------------------------------------------------------------
       @(posedge clk)
       cb.dispatch_ifq_ren          <= 0;

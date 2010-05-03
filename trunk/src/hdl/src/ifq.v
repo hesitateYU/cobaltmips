@@ -8,17 +8,17 @@ module ifq (
    input              clk,
    input              reset,
    // Interface with instruction cache.
-   output reg  [31:0] icache_pcin,
+   output reg [ 31:0] icache_pcin,
    output reg         icache_ren,
    output reg         icache_abort,
    input      [127:0] icache_dout,
    input              icache_dout_valid,
    // Interface with dispatch unit.
-   output reg  [31:0] dispatch_pcout_plus4,
-   output reg  [31:0] dispatch_inst,
+   output reg [ 31:0] dispatch_pcout_plus4,
+   output reg [ 31:0] dispatch_inst,
    output reg         dispatch_empty,
    input              dispatch_ren,
-   input       [31:0] dispatch_branch_addr,
+   input      [ 31:0] dispatch_branch_addr,
    input              dispatch_branch_valid
 );
 

@@ -5,8 +5,8 @@
 `timescale 1ns/1ps
 
 module regfile #(
-   parameter W_DATA = 32,
-   parameter W_ADDR = 5
+   parameter integer W_ADDR =  5,
+   parameter integer W_DATA = 32
 )(
    input                   clk,
    input                   reset,
@@ -26,7 +26,7 @@ module regfile #(
    output reg [W_DATA-1:0] debug_data
 );
 
-   localparam N_ENTRY = 2 ** W_ADDR;
+   localparam integer N_ENTRY = 2 ** W_ADDR;
 
    reg  [W_DATA-1:0] mem   [N_ENTRY-1:0];
    reg  [W_DATA-1:0] mem_r [N_ENTRY-1:0];
@@ -38,8 +38,9 @@ module regfile #(
       end
 
       // Make sure one-hot vector has one (or zero) active bits.
+      count = 0;
       for (i = 0; i < N_ENTRY; i = i + 1) if (rst_wen_onehot[i]) count = count + 1;
-      if (count > 1) $display("FATAL: More than one write in one-hot vector");
+      if (count > 1) $display("@%p [REGFILE] FATAL: More than one write in one-hot vector 0b%b", $time, rst_wen_onehot);
    end
 
    always @(*) begin : reg_file_read_proc

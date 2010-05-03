@@ -5,20 +5,20 @@
 `timescale 1ns/1ps
 
 module tagfifo #(
-   parameter W_DATA = 6,
-   parameter W_ADDR = 6
+   parameter integer W_ADDR = 6,
+   parameter integer W_DATA = 6
 )(
    input                   clk,
    input                   reset,
    input                   dispatch_ren,
    output reg              dispatch_full,
-   output reg [W_DATA-1:0] dispatch_tag,
    output reg              dispatch_empty,
+   output reg [W_DATA-1:0] dispatch_tag,
    input      [W_DATA-1:0] cdb_tag,
    input                   cdb_valid
 );
 
-   localparam N_ENTRY = 2 ** W_ADDR;
+   localparam integer N_ENTRY = 2 ** W_ADDR;
 
    // Typically, 64 tags of 6b.
    reg [W_DATA-1:0] mem   [N_ENTRY-1:0];
@@ -70,8 +70,8 @@ module tagfifo #(
 
    always @(posedge clk) begin : tagfifo_ptr_reg
       // Initialized as FULL.
-      wptr_r <= (reset) ? 2**W_ADDR : wptr;
-      rptr_r <= (reset) ? 'h0       : rptr;
+      wptr_r <= (reset) ? N_ENTRY : wptr;
+      rptr_r <= (reset) ? 'h0     : rptr;
    end
 
 endmodule

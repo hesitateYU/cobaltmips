@@ -1,0 +1,21 @@
+-- THE GIVEN PROGRAM FINDS MINIMUM NUMBER FROM THE FIRST 10 LOCATION OF DATA MEM
+-- ADD $31, $0, $0  --$31 is set to X?00000000?.
+-- ADD $11, $10, $0 --
+-- ADD $30, $14, $0 --
+-- ADD $10, $0, $0  --
+-- LW $2, 0($31)	  --Content of memory location 0 goes to $2
+-- BEQ $A, $B, GOTO2-- $A is counter to track 10 numbers. -- INSTRUCTION WITH LABEL LOOP
+-- ADD $31, $31, $4 --$31 is incremented by 4 so it can point to the next memory location
+-- LW $3, 0($31)	  --Content of Memory location 2 goes to $3
+-- SLT $5, $3, $2	  --Check if ($3) < ($2)
+-- ADD $10, $10, $1 --Increment counter $10
+-- BEQ $5, $1, GOTO1--	If ($3) < ($2) then 
+-- JMP LOOP	        --If ($3) ? ($2) then 
+-- ADD $2, $3, $0	  --Move ($3)-->($2) IF $3< $2  --INSTRUCTION WITH LABEL GOTO1
+-- JMP LOOP	        --Jump to loop
+-- SW  $2,0($30)	  --Store ($2) at memory location 11. ($30)-->4 --INSTRUCTION WITH LABEL GOTO2
+-- LW $6, 0($16)	  --Content of memory location 12 goes to $6 --> THIS BRANCH IS NEVER TAKEN
+-- BEQ $2, $6, -4 --If ($2) = ($6) then ? this branch is always taken
+-- JMP HERE	        -- LOCATION WITH LABEL HERE
+
+

@@ -8,7 +8,7 @@ module issue (
       input                         clk,
       input                         reset,
 
-      input  [3:0]                  issueint_opcode,
+      input  [ 5:0]                 issueint_opcode,
       input  [31:0]                 issueint_rsdata,
       input  [31:0]                 issueint_rtdata,
       input  [ 5:0]                 issueint_rdtag,

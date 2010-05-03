@@ -6,19 +6,33 @@
 
 module tb_top();
 
-   reg  clk;
-   reg  reset;
-   wire [ 4:0] debug_regfile_addr;
-   wire [31:0] debug_regfile_data;
+   reg        clk;
+   reg        reset;
+   reg [ 4:0] debug_regfile_addr;
+   reg [31:0] debug_regfile_data;
 
    initial begin
-      reset = 1'b1; #10; reset = 1'b0;
+      reset_testbench(5);
    end
+
+   task reset_testbench(integer unsigned cycles);
+      cb.debug_regfile_addr <= 'h0;
+      cb.reset <= 1'b1;
+      repeat (cycles) @(posedge clk);
+      cb.reset <= 1'b0;
+   endtask
 
    initial begin
       clk = 1'b0;
       forever #5 clk <= ~clk;
    end
+
+   clocking cb @(posedge clk);
+      default input #1 output #2;
+      output reset;
+      output debug_regfile_addr;
+      input  debug_regfile_data;
+   endclocking
 
    cpu cpu(
       .clk                (clk               ),

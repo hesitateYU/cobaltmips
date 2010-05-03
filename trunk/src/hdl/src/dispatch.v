@@ -37,7 +37,7 @@ module dispatch (
    output reg        equeuels_en,
    input             equeuels_ready,
 
-   output reg [ 3:0] equeueint_opcode,
+   output reg [ 5:0] equeueint_opcode,
    output reg        equeueint_en,
    input             equeueint_ready,
 
@@ -55,6 +55,13 @@ module dispatch (
    localparam integer S_BRANCHSTALL = 1'b1;
    reg state_r, next_state;
 
+   reg can_dispatch;
+   reg curr_equeue_ready;
+   reg curr_equeue_en;
+   reg do_req_tag;
+   reg do_req_equeue;
+   reg is_branch, is_jump;
+
    // Signal declarations for Register File.
    reg  [ 4:0] dispatch_regfile_rsaddr;
    reg  [ 4:0] dispatch_regfile_rtaddr;
@@ -65,7 +72,6 @@ module dispatch (
    reg  [ 5:0] dispatch_rst_tag;
    reg         dispatch_rst_valid;
    reg  [ 4:0] dispatch_rst_addr;
-   reg         dispatch_rst_wen;
    wire [31:0] rst_regfile_wen_onehot;
    wire [ 5:0] rst_dispatch_rstag;
    wire [ 5:0] rst_dispatch_rttag;
@@ -90,15 +96,16 @@ module dispatch (
    reg  [ 3:0] equeueint_opcode_r;
 
    //
-   // Instructions from IFQ could be assembled in any of its formats.
-   //            |   6  |  5  |  5  |  5  |  5  |   6  |
-   //            +------+-----+-----+-----+-----+------+
-   //   Register |Opcode| Rs  | Rt  | Rd  |Shamt| Func |
-   //            +------+-----+-----+-----+-----+------+
-   //  Immediate |Opcode| Rs  | Rt  |  Immediate (16)  |
-   //            +------+-----+-----+------------------+
-   //       Jump |Opcode|                Address (26)  |
-   //            +------+-----+-----+------------------+
+   // BASIC INSTRUCTION FORMATS
+   //               +------+-----+-----+-----+-----+------+
+   //               |   6  |  5  |  5  |  5  |  5  |   6  |
+   //               +------+-----+-----+-----+-----+------+
+   //   Register  R |Opcode| Rs  | Rt  | Rd  |Shamt| Func |
+   //               +------+-----+-----+-----+-----+------+
+   //  Immediate  I |Opcode| Rs  | Rt  |  Immediate (16)  |
+   //               +------+-----+-----+------------------+
+   //       Jump  J |Opcode|                Address (26)  |
+   //               +------+-----+-----+------------------+
    //
    reg [ 5:0] inst_opcode, inst_func;
    reg [ 4:0] inst_rdaddr, inst_rsaddr, inst_rtaddr, inst_shamt;
@@ -141,73 +148,107 @@ module dispatch (
       equeue_rdtag   = tagfifo_dispatch_tag;
       equeue_rstag   = rst_dispatch_rstag;
       equeue_rttag   = rst_dispatch_rttag;
-      equeue_rsvalid = rst_dispatch_rsvalid;
-      equeue_rtvalid = rst_dispatch_rtvalid;
-      equeue_rsdata  = (cdb_valid & cdb_tag == rst_dispatch_rstag) ? cdb_data : regfile_dispatch_rsdata;
-      equeue_rtdata  = (cdb_valid & cdb_tag == rst_dispatch_rttag) ? cdb_data : regfile_dispatch_rtdata;
+      // If a value is published by CDB, then DATA fields for RS and RT are
+      // solved and ready to be used by execution queues, invalidate the
+      // VALID fields so that execution queues listen to CDB updates.
+      // Values in RST, REGFILE and TAGFIFO will automatically be updated
+      // inside those modules every time CDB publishes anything.
+      equeue_rsvalid = (rst_dispatch_rstag == cdb_tag && cdb_valid) ? cdb_valid : ~rst_dispatch_rsvalid;
+      // Loads don't require RT register. It is used as destination.
+      equeue_rtvalid = (`OPCODE_LW == inst_opcode) ? 1'b1
+                     : ((rst_dispatch_rttag == cdb_tag && cdb_valid) ? cdb_valid : ~rst_dispatch_rtvalid);
+      equeue_rsdata  = (rst_dispatch_rstag == cdb_tag && cdb_valid) ? cdb_data : regfile_dispatch_rsdata;
+      equeue_rtdata  = (rst_dispatch_rttag == cdb_tag && cdb_valid) ? cdb_data : regfile_dispatch_rtdata;
+
+      // After decoding, request a tag to TAGFIFO only if it is needed.
+      dispatch_tagfifo_ren = do_req_tag & ~tagfifo_dispatch_empty;
    end
 
    always @(*) begin : dispatch_fsm_next_state
-      reg curr_equeue_ready, curr_equeue_en;
-
-      // Set defaults.
-      ifq_ren          = 1'b0;
-      ifq_branch_valid = 1'b0;
-      ifq_branch_addr  = inst_addr_branch;
-
-      equeueint_opcode = 4'h0;
-      equeuels_opcode  = 1'b0;
-      equeueint_en     = 1'b0;
-      equeuels_en      = 1'b0;
-      equeuemult_en    = 1'b0;
-      equeuediv_en     = 1'b0;
-
+      can_dispatch = (do_req_equeue & curr_equeue_ready) & (do_req_tag & ~tagfifo_dispatch_empty) & ~ifq_empty;
       case (state_r)
          S_DISPATCH : begin
-            next_state = S_DISPATCH;
-            case (inst_opcode)
-               `OPCODE_RTYPE : begin
-                  curr_equeue_ready    = equeueint_ready;
-                  curr_equeue_en       = equeueint_en;
-                  curr_equeue_en       = 1'b1;
-                  //for every instruction with rd we assign a TAG
-                  dispatch_rst_wen     = (inst_rdaddr);
-                  //dispatch unit does not read a TAG if instruction doesn't have destination register
-                  //or it can't be dispatched;
-                  dispatch_tagfifo_ren = (inst_rdaddr);
-
-               end
-               // Halt IFQ until branch result is published by CDB.
-               `OPCODE_BEQ : begin
-                  curr_equeue_ready = equeueint_ready;
-                  curr_equeue_en    = equeueint_en;
-                  ifq_branch_addr   = inst_addr_branch;
-
-                  // Stall when branches are decoded and integer queue can't process them.
-                  next_state  = (equeueint_ready) ? S_BRANCHSTALL : S_DISPATCH;
-               end
-               `OPCODE_BNE : begin
-               end
-               `OPCODE_J : begin
-                  curr_equeue_ready = equeueint_ready;
-                  curr_equeue_en    = equeueint_en;
-                  ifq_branch_valid  = 1'b1;
-                  ifq_branch_addr   = inst_addr_jump;
-               end
-               `OPCODE_JAL : begin
-               end
-               default : begin
-
-               end
-            endcase
-            curr_equeue_en = ~ifq_empty & ~tagfifo_dispatch_empty & curr_equeue_ready;
-            ifq_ren        = curr_equeue_ready;
+            curr_equeue_en = can_dispatch;
+            ifq_ren        = can_dispatch;
+            next_state = (~can_dispatch) ? S_DISPATCH : ((is_branch) ? S_BRANCHSTALL : S_DISPATCH);
+            ifq_branch_valid = is_jump;
+            ifq_branch_addr  = (is_jump) ? inst_addr_jump : 'h0;
          end
          S_BRANCHSTALL : begin
-            curr_equeue_en = cdb_branch & cdb_branch_taken;
-            ifq_ren        = 1'b0;
-            // Assume all branches are taken
+            curr_equeue_en   = can_dispatch & (cdb_branch & ~cdb_branch_taken);
+            ifq_ren          = can_dispatch & (cdb_branch & ~cdb_branch_taken);;
+            ifq_branch_valid = cdb_branch & cdb_branch_taken;
+            ifq_branch_addr  = (cdb_branch_taken) ? inst_addr_branch_r : 'h0;
             next_state = (cdb_branch) ? S_DISPATCH : S_BRANCHSTALL;
+         end
+      endcase
+   end
+
+   always @(*) begin : dispatch_decode_proc
+      equeueint_opcode = 'h0;
+      equeuels_opcode  = 'h0;
+      equeueint_en     = 'h0;
+      equeuels_en      = 'h0;
+      equeuemult_en    = 'h0;
+      equeuediv_en     = 'h0;
+
+      // Assume that:
+      //  + Instructions must be dispatched to it's execution unit.
+      //  + Every instruction requires a TAG as destination register.
+      //  + It is not a branch instruction.
+      do_req_equeue = 1'b1;
+      do_req_tag    = 1'b1;
+      is_branch     = 1'b0;
+
+      case (inst_opcode)
+         `OPCODE_RTYPE : begin
+            case (inst_func)
+               `FUNCT_MULT : begin
+                  curr_equeue_ready = equeuemult_ready;
+                  equeuemult_en     = curr_equeue_en;
+               end
+               `FUNCT_DIV : begin
+                  curr_equeue_ready = equeuediv_ready;
+                  equeuediv_en      = curr_equeue_en;
+               end
+               default : begin
+                  curr_equeue_ready = equeueint_ready;
+                  equeueint_en      = curr_equeue_en;
+                  equeueint_opcode  = inst_func;
+               end
+            endcase
+         end
+         `OPCODE_BEQ : begin
+            curr_equeue_ready = equeueint_ready;
+            equeueint_en      = curr_equeue_en;
+            equeueint_opcode  = inst_opcode; // `OPCODE_BEQ
+            is_branch         = 1'b1;
+            do_req_tag        = 1'b0;
+         end
+         `OPCODE_BNE : begin
+            curr_equeue_ready = equeueint_ready;
+            equeueint_en      = curr_equeue_en;
+            equeueint_opcode  = inst_opcode; // `OPCODE_BNE
+            is_branch         = 1'b1;
+            do_req_tag        = 1'b0;
+         end
+         `OPCODE_J : begin
+            do_req_equeue = 1'b0;
+            do_req_tag    = 1'b0;
+         end
+         `OPCODE_LW : begin
+            curr_equeue_ready = equeuels_ready;
+            equeuels_en       = curr_equeue_en;
+            equeuels_opcode   = `ISSUELS_FUNC_LW;
+         end
+         `OPCODE_SW : begin
+            curr_equeue_ready = equeuels_ready;
+            equeuels_en       = curr_equeue_en;
+            equeuels_opcode   = `ISSUELS_FUNC_SW;
+         end
+         default : begin
+            do_req_equeue = 1'b0;
+            do_req_tag    = 1'b0;
          end
       endcase
    end
@@ -216,21 +257,13 @@ module dispatch (
       state_r <= (reset) ? S_DISPATCH : next_state;
    end
 
+   // This is the only register required. When doing a branch we decode the
+   // very next instruction and then stall the entire pipeline until branch is
+   // solved, in the meantime, we keep the branch address.
+   // If branch was taken then dispatch the instruction (that came after the
+   // branch and has already been decoded), otherwise, discard it.
    always @(posedge clk) begin : dispatch_inst_branch_addr_reg
       inst_addr_branch_r <= (reset) ? 'h0 : inst_addr_branch;
-   end
-
-   always @(posedge clk) begin : dispatch_equeue_reg
-      equeue_imm_r       <= (reset) ? 'h0 : equeue_imm;
-      equeue_rdtag_r     <= (reset) ? 'h0 : equeue_rdtag;
-      equeue_rstag_r     <= (reset) ? 'h0 : equeue_rstag;
-      equeue_rttag_r     <= (reset) ? 'h0 : equeue_rttag;
-      equeue_rsdata_r    <= (reset) ? 'h0 : equeue_rsdata;
-      equeue_rtdata_r    <= (reset) ? 'h0 : equeue_rtdata;
-      equeue_rsvalid_r   <= (reset) ? 'h0 : equeue_rsvalid;
-      equeue_rtvalid_r   <= (reset) ? 'h0 : equeue_rtvalid;
-      equeuels_opcode_r  <= (reset) ? 'h0 : equeuels_opcode;
-      equeueint_opcode_r <= (reset) ? 'h0 : equeueint_opcode;
    end
 
    regfile #(
@@ -239,10 +272,8 @@ module dispatch (
    ) regfile (
       .clk             ( clk                     ),
       .reset           ( reset                   ),
-
       .cdb_wdata       ( cdb_data                ),
       .rst_wen_onehot  ( rst_regfile_wen_onehot  ),
-
       .dispatch_rsaddr ( dispatch_regfile_rsaddr ),
       .dispatch_rtaddr ( dispatch_regfile_rtaddr ),
       .debug_addr      ( debug_regfile_addr      ),
@@ -257,37 +288,30 @@ module dispatch (
    ) rst (
       .clk                ( clk                    ),
       .reset              ( reset                  ),
-
-      .dispatch_tag       ( dispatch_rst_tag       ),
-      .dispatch_valid     ( dispatch_rst_valid     ),
-      .dispatch_addr      ( dispatch_rst_addr      ),
-      .dispatch_wen       ( dispatch_rst_wen       ),
-
-      .cdb_tag            ( cdb_tag                ),
-      .cdb_valid          ( cdb_valid              ),
-
-      .regfile_wen_onehot ( rst_regfile_wen_onehot ),
-
+      .dispatch_rsaddr    ( dispatch_rst_rsaddr    ),
+      .dispatch_rtaddr    ( dispatch_rst_rtaddr    ),
       .dispatch_rstag     ( rst_dispatch_rstag     ),
       .dispatch_rttag     ( rst_dispatch_rttag     ),
-      .dispatch_rtvalid   ( rst_dispatch_rtvalid   ),
       .dispatch_rsvalid   ( rst_dispatch_rsvalid   ),
-      .dispatch_rsaddr    ( dispatch_rst_rsaddr    ),
-      .dispatch_rtaddr    ( dispatch_rst_rtaddr    )
+      .dispatch_rtvalid   ( rst_dispatch_rtvalid   ),
+      .dispatch_addr      ( dispatch_rst_addr      ),
+      .dispatch_tag       ( dispatch_rst_tag       ),
+      .dispatch_valid     ( dispatch_rst_valid     ),
+      .cdb_tag            ( cdb_tag                ),
+      .cdb_valid          ( cdb_valid              ),
+      .regfile_wen_onehot ( rst_regfile_wen_onehot )
    );
 
    tagfifo #(
-      .W_ADDR (  6 ),
-      .W_DATA ( 32 )
+      .W_ENTRY ( 6 ),
+      .W_TAG   ( 6 )
    ) tagfifo (
       .clk            ( clk                    ),
       .reset          ( reset                  ),
-
-      .dispatch_tag   ( tagfifo_dispatch_tag   ),
       .dispatch_ren   ( dispatch_tagfifo_ren   ),
       .dispatch_full  ( tagfifo_dispatch_full  ),
       .dispatch_empty ( tagfifo_dispatch_empty ),
-
+      .dispatch_tag   ( tagfifo_dispatch_tag   ),
       .cdb_tag        ( cdb_tag                ),
       .cdb_valid      ( cdb_valid              )
    );

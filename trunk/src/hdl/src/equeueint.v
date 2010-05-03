@@ -8,7 +8,7 @@ module equeueint (
    input             clk,
    input             reset,
 
-   input      [ 3:0] dispatch_opcode,
+   input      [ 5:0] dispatch_opcode,
    input      [ 5:0] dispatch_rdtag,
    input      [ 5:0] dispatch_rstag,
    input      [ 5:0] dispatch_rttag,
@@ -23,7 +23,7 @@ module equeueint (
    input      [31:0] cdb_data,
    input             cdb_valid,
 
-   output reg [ 3:0] issueint_opcode,
+   output reg [ 5:0] issueint_opcode,
    output reg [ 5:0] issueint_rdtag,
    output reg [31:0] issueint_rsdata,
    output reg [31:0] issueint_rtdata,
@@ -33,7 +33,7 @@ module equeueint (
 
    localparam N_SREG = 4;
 
-   reg [ 3:0] inst_opcode_r [N_SREG:0], inst_opcode [N_SREG-1:0];
+   reg [ 5:0] inst_opcode_r [N_SREG:0], inst_opcode [N_SREG-1:0];
    reg [ 5:0] inst_rdtag_r  [N_SREG:0], inst_rdtag  [N_SREG-1:0];
    reg [ 5:0] inst_rstag_r  [N_SREG:0], inst_rstag  [N_SREG-1:0];
    reg [ 5:0] inst_rttag_r  [N_SREG:0], inst_rttag  [N_SREG-1:0];

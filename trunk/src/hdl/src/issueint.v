@@ -3,12 +3,13 @@
 `define ISSUEINT_V
 
 `timescale 1ns/1ps
+`include "globals.vh"
 
 module issueint (
          input             clk,
          input             reset,
          input             issueint_ready,
-         input      [ 3:0] issueint_opcode,
+         input      [ 5:0] issueint_opcode,
          input      [31:0] issueint_rsdata,
          input      [31:0] issueint_rtdata,
          input      [ 5:0] issueint_rdtag,
@@ -22,17 +23,6 @@ module issueint (
          output reg        issueint_alubranch_taken
 
 );
-
-parameter [3:0] ADD  = 4'b0000,
-                ADDU = 4'b0001,
-                SUB  = 4'b0010,
-                SUBU = 4'b0011,
-                AND  = 4'b0100,
-                OR   = 4'b0101,
-                NOR  = 4'b0110,
-                SLT  = 4'b0111,
-                SLTU = 4'b1000,
-                BEQ  = 4'b1001;
 
    reg  [31:0] rsdata_r, rtdata_r;
    wire [31:0] sum_out;
@@ -50,28 +40,32 @@ parameter [3:0] ADD  = 4'b0000,
       issueint_alubranch = 1'b0;
       issueint_alubranch_taken = 1'b0;
       case (issueint_opcode)
-         ADD, ADDU: begin
+         `FUNCT_ADD, `FUNCT_ADDU: begin
             rsdata_r = issueint_rsdata;
             rtdata_r = issueint_rtdata;
             issueint_out = sum_out;
          end
-         BEQ: begin
+         `OPCODE_BEQ: begin
             issueint_alubranch = 1'b1;
             issueint_alubranch_taken = (issueint_rsdata == issueint_rtdata) ? 1'b1:  1'b0;
          end
-         SUB, SUBU: begin
+         `OPCODE_BNE: begin
+            issueint_alubranch = 1'b1;
+            issueint_alubranch_taken = (issueint_rsdata != issueint_rtdata) ? 1'b1:  1'b0;
+         end
+         `FUNCT_SUB, `FUNCT_SUBU: begin
             issueint_out = issueint_rsdata - issueint_rtdata;
          end
-         AND: begin
+         `FUNCT_AND: begin
             issueint_out = issueint_rsdata & issueint_rtdata;
          end
-         OR: begin
+         `FUNCT_OR: begin
             issueint_out = issueint_rsdata | issueint_rtdata;
          end
-         NOR: begin
+         `FUNCT_NOR: begin
             issueint_out = ~(issueint_rsdata | issueint_rtdata);
          end
-         SLT,SLTU: begin
+         `FUNCT_SLT,`FUNCT_SLTU: begin
             issueint_out = (issueint_rsdata < issueint_rtdata) ? 1'b1: 1'b0;;
          end
          default: begin

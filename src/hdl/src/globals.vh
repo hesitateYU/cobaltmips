@@ -177,6 +177,9 @@
 `define FUNCT_C_NGT_F   (6'h3F)
 
 
+`define ISSUELS_FUNC_LW (1'h0)
+`define ISSUELS_FUNC_SW (1'h1)
+
 //
 // Simple alias for registers.
 //

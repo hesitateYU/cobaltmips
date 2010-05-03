@@ -8,8 +8,8 @@ module rst #(
    parameter integer W_ADDR = 5,
    parameter integer W_TAG  = 6
 )(
-   input             clk,
-   input             reset,
+   input                   clk,
+   input                   reset,
 
    // Read ports for register RS and RT.
    input      [W_ADDR-1:0] dispatch_rsaddr,

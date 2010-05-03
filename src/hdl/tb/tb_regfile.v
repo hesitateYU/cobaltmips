@@ -33,7 +33,7 @@ module tb_regfile();
    initial begin
       reset = 1'b1; #10; reset = 1'b0;
    end
-   
+
    initial begin : main_proc
       integer i;
       debug_addr      = 0;
@@ -56,7 +56,7 @@ module tb_regfile();
       dispatch_rsaddr = 0;
       @(posedge clk);
       for (i = 0; i < 32; i = i + 1) begin
-         dispatch_rsaddr = i; 
+         dispatch_rsaddr = i;
          @(posedge clk);
          #0;
       end
@@ -66,7 +66,7 @@ module tb_regfile();
       dispatch_rtaddr = 0;
       @(posedge clk);
       for (i = 0; i < 32; i = i + 1) begin
-         dispatch_rtaddr = i; 
+         dispatch_rtaddr = i;
          @(posedge clk);
          #0;
       end

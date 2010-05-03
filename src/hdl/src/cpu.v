@@ -45,13 +45,13 @@ module cpu (
    wire         dispatch_equeuels_en;
    wire         equeuels_dispatch_ready;
    wire         equeuels_issuels_opcode;
-   wire [  5:0] equeuels_issuels_rdtag;
+   wire [  5:0] equeuels_issuels_rttag;
    wire [ 31:0] equeuels_issuels_addr;
    wire [ 31:0] equeuels_issuels_data;
    wire         equeuels_issuels_ready;
    wire         issuels_equeuels_done;
 
-   wire [  3:0] dispatch_equeueint_opcode;
+   wire [  5:0] dispatch_equeueint_opcode;
    wire         dispatch_equeueint_en;
    wire         equeueint_dispatch_ready;
    wire [  5:0] equeueint_issueint_opcode;
@@ -176,7 +176,6 @@ module cpu (
       .dispatch_en      ( dispatch_equeuels_en     ),
       .dispatch_ready   ( equeuels_dispatch_ready  ),
       .dispatch_offset  ( dispatch_equeue_imm      ),
-      .dispatch_rdtag   ( dispatch_equeue_rdtag    ),
       .dispatch_rstag   ( dispatch_equeue_rstag    ),
       .dispatch_rttag   ( dispatch_equeue_rttag    ),
       .dispatch_rsdata  ( dispatch_equeue_rsdata   ),
@@ -187,7 +186,7 @@ module cpu (
       .cdb_valid        ( cdb_valid                ),
       .cdb_data         ( cdb_data                 ),
       .issuels_opcode   ( equeuels_issuels_opcode  ),
-      .issuels_rdtag    ( equeuels_issuels_rdtag   ),
+      .issuels_rttag    ( equeuels_issuels_rttag   ),
       .issuels_addr     ( equeuels_issuels_addr    ),
       .issuels_data     ( equeuels_issuels_data    ),
       .issuels_ready    ( equeuels_issuels_ready   ),
@@ -246,9 +245,9 @@ module cpu (
       .issueint_rtdata           ( equeueint_issueint_rtdata    ),
       .issueint_rdtag            ( equeueint_issueint_rdtag     ),
       .issuels_opcode            ( equeuels_issuels_opcode      ),
-      .issuels_rsdata            ( equeuels_issuels_rsdata      ),
-      .issuels_rtdata            ( equeuels_issuels_rtdata      ),
-      .issuels_rdtag             ( equeuels_issuels_rdtag       ),
+      .issuels_data              ( equeuels_issuels_data        ),
+      .issuels_addr              ( equeuels_issuels_addr        ),
+      .issuels_rttag             ( equeuels_issuels_rttag       ),
       .issuediv_rsdata           ( equeuediv_issuediv_rsdata    ),
       .issuediv_rtdata           ( equeuediv_issuediv_rtdata    ),
       .issuediv_rdtag            ( equeuediv_issuediv_rdtag     ),

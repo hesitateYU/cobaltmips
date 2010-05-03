@@ -14,9 +14,9 @@ module issue (
       input  [ 5:0]                 issueint_rdtag,
 
       input                         issuels_opcode,
-      input  [31:0]                 issuels_rsdata,
-      input  [31:0]                 issuels_rtdata,
-      input  [ 5:0]                 issuels_rdtag,
+      input  [31:0]                 issuels_data,
+      input  [31:0]                 issuels_addr,
+      input  [ 5:0]                 issuels_rttag,
 
       input  [31:0]                 issuediv_rsdata,
       input  [31:0]                 issuediv_rtdata,
@@ -24,7 +24,7 @@ module issue (
 
       input  [31:0]                 issuemult_rsdata,
       input  [31:0]                 issuemult_rtdata,
-      input  [31:0]                 issuemult_rdtag,
+      input  [ 5:0]                 issuemult_rdtag,
 
       input                         issueint_ready,
       input                         issuemult_ready,
@@ -39,8 +39,8 @@ module issue (
       output reg                    issuemult_equeuemult_done,
       output reg                    issuels_equeuels_done,
 
-      output reg [31:0]             cdb_out,
-      output reg [ 5:0]             cdb_tagout,
+      output reg [31:0]             cdb_data,
+      output reg [ 5:0]             cdb_tag,
       output reg                    cdb_valid,
       output reg                    cdb_branch,
       output reg                    cdb_branch_taken
@@ -141,32 +141,32 @@ module issue (
 
       case (mux_cdb_ctrl)
          4'b0001: begin
-           cdb_out   = issuels_out;
-           cdb_tagout= issuels_tagout;
+           cdb_data   = issuels_out;
+           cdb_tag= issuels_tagout;
            cdb_valid  = 1'b1;
          end
          4'b0010: begin
-           //cdb_out    = issuemult_out; 
-           cdb_out    = 32'h0; 
-           cdb_tagout = issuemult_tagout;
+           //cdb_data    = issuemult_out; 
+           cdb_data    = 32'h0; 
+           cdb_tag = issuemult_tagout;
            cdb_valid  = 1'b1;
          end
          4'b0100: begin
-            cdb_out    = issuediv_out;
-            cdb_tagout = issuediv_tagout;
+            cdb_data    = issuediv_out;
+            cdb_tag = issuediv_tagout;
             issuediv_equeuediv_done = 1'b1;
             cdb_valid  = 1'b1;
          end
          4'b1000: begin
-            cdb_out    = issueint_out;
-            cdb_tagout = issueint_tagout;
+            cdb_data    = issueint_out;
+            cdb_tag = issueint_tagout;
             cdb_valid  = 1'b1;
             cdb_branch = issueint_alubranch;
             cdb_branch_taken = issueint_alubranch_taken;
          end
          default: begin
-            cdb_out = cdb_out;
-            cdb_tagout = cdb_tagout;
+            cdb_data = cdb_data;
+            cdb_tag = cdb_tag;
          end
       endcase
    end
@@ -225,10 +225,10 @@ module issue (
       .clk           (clk             ),
       .wen           (issuels_opcode  ), //opcode
 
-      .addr          (issuels_rsdata  ),
-      .wdata         (issuels_rtdata  ),
+      .addr          (issuels_addr    ),
+      .wdata         (issuels_data    ),
       .rdata         (issuels_out     ),
-      .tag_in        (issuels_rdtag   ),
+      .tag_in        (issuels_rttag   ),
       .tag_out       (issuels_tagout  )
    );
 

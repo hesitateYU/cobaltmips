@@ -2,6 +2,8 @@
 `ifndef MULTIPLIER_WRAPPER_V
 `define MULTIPLIER_WRAPPER_V
 
+`timescale 1ns/1ps
+
 module multiplier_wrapper(
          input         clk,
          //input         reset,

@@ -166,7 +166,7 @@ module issue (
          4'b1000: begin
             cdb_data    = issueint_out;
             cdb_tag = issueint_tagout;
-            cdb_valid  = 1'b1;
+            cdb_valid  = (issueint_alubranch)? 1'b0: 1'b1;
             cdb_branch = issueint_alubranch;
             cdb_branch_taken = issueint_alubranch_taken;
          end

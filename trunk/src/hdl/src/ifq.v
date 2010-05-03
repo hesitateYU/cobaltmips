@@ -115,7 +115,9 @@ module ifq (
 
       dispatch_pcout_plus4 = (dispatch_branch_valid) ? pcout : pcout_r;
       dispatch_inst        = bypass_mux_out;
-      dispatch_empty       = is_empty;
+      // Allow Dispatch unit to grab an instruction when bypassing the internal
+      // registers.
+      dispatch_empty       = (do_bypass_mem) ? 1'b0 : is_empty;
    end
 
    always @(*) begin : ifq_mem_proc

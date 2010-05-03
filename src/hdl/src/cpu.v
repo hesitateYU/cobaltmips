@@ -54,7 +54,7 @@ module cpu (
    wire [  3:0] dispatch_equeueint_opcode;
    wire         dispatch_equeueint_en;
    wire         equeueint_dispatch_ready;
-   wire [  3:0] equeueint_issueint_opcode;
+   wire [  5:0] equeueint_issueint_opcode;
    wire [  5:0] equeueint_issueint_rdtag;
    wire [ 31:0] equeueint_issueint_rsdata;
    wire [ 31:0] equeueint_issueint_rtdata;

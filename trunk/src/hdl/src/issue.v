@@ -139,6 +139,8 @@ module issue (
 
    always @(*) begin : mux_cdb_out
       cdb_valid                = 1'b0;
+      cdb_data                 = 0;
+      cdb_tag                  = 0;
       cdb_branch               = 1'b0;
       cdb_branch_taken         = 1'b0;
       issuediv_equeuediv_done  = 1'b0;
@@ -169,8 +171,9 @@ module issue (
             cdb_branch_taken = issueint_alubranch_taken;
          end
          default: begin
-            cdb_data = cdb_data;
-            cdb_tag = cdb_tag;
+            cdb_data  = cdb_data;
+            cdb_tag   = cdb_tag;
+            cdb_valid = cdb_valid;
          end
       endcase
    end

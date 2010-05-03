@@ -76,6 +76,7 @@
 //   + OPCODE_RTYPE
 //
 `define FUNCT_SLL     (6'h00)
+`define FUNCT_NOOP_01 (6'h01)
 `define FUNCT_SRL     (6'h02)
 `define FUNCT_SRA     (6'h03)
 `define FUNCT_SLLV    (6'h04)
@@ -87,15 +88,24 @@
 `define FUNCT_MOVN    (6'h0B)
 `define FUNCT_SYSCALL (6'h0C)
 `define FUNCT_BREAK   (6'h0D)
+`define FUNCT_NOOP_0E (6'h0E)
 `define FUNCT_SYNC    (6'h0F)
 `define FUNCT_MFHI    (6'h10)
 `define FUNCT_MTHI    (6'h11)
 `define FUNCT_MFLO    (6'h12)
 `define FUNCT_MTLO    (6'h13)
+`define FUNCT_NOOP_14 (6'h14)
+`define FUNCT_NOOP_15 (6'h15)
+`define FUNCT_NOOP_16 (6'h16)
+`define FUNCT_NOOP_17 (6'h17)
 `define FUNCT_MULT    (6'h18)
 `define FUNCT_MULTU   (6'h19)
 `define FUNCT_DIV     (6'h1A)
 `define FUNCT_DIVU    (6'h1B)
+`define FUNCT_NOOP_1C (6'h1C)
+`define FUNCT_NOOP_1D (6'h1D)
+`define FUNCT_NOOP_1E (6'h1E)
+`define FUNCT_NOOP_1F (6'h1F)
 `define FUNCT_ADD     (6'h20)
 `define FUNCT_ADDU    (6'h21)
 `define FUNCT_SUB     (6'h22)
@@ -104,14 +114,39 @@
 `define FUNCT_OR      (6'h25)
 `define FUNCT_XOR     (6'h26)
 `define FUNCT_NOR     (6'h27)
+`define FUNCT_NOOP_28 (6'h28)
+`define FUNCT_NOOP_29 (6'h29)
 `define FUNCT_SLT     (6'h2A)
 `define FUNCT_SLTU    (6'h2B)
+`define FUNCT_NOOP_2C (6'h2C)
+`define FUNCT_NOOP_2D (6'h2D)
+`define FUNCT_NOOP_2E (6'h2E)
+`define FUNCT_NOOP_2F (6'h2F)
 `define FUNCT_TGE     (6'h30)
 `define FUNCT_TGEU    (6'h31)
 `define FUNCT_TLT     (6'h32)
 `define FUNCT_TLTU    (6'h33)
 `define FUNCT_TEQ     (6'h34)
+`define FUNCT_NOOP_35 (6'h35)
 `define FUNCT_TNE     (6'h36)
+`define FUNCT_NOOP_37 (6'h37)
+`define FUNCT_NOOP_38 (6'h39)
+`define FUNCT_NOOP_39 (6'h39)
+`define FUNCT_NOOP_3A (6'h3A)
+`define FUNCT_NOOP_3B (6'h3B)
+`define FUNCT_NOOP_3C (6'h3C)
+`define FUNCT_NOOP_3D (6'h3D)
+`define FUNCT_NOOP_3E (6'h3E)
+`define FUNCT_NOOP_3F (6'h3F)
+
+//
+// Reusing some invalid (No operation) FUNCT_* codes for OPCODE_RTYPE
+// instructions in order to support additional instructions in execution unit
+// in integers.
+//
+`define ISSUEINT_BEQ  (6'h3E)
+`define ISSUEINT_BNE  (6'h3F)
+
 
 //
 // Functions used by floating point instructions with:

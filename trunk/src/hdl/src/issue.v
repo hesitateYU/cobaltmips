@@ -167,7 +167,7 @@ module issue (
          4'b0001: begin
            cdb_data   = (issuels_opcode) ? 'h0: issuels_out;
            cdb_tag    = (issuels_opcode) ? 'h0: issuels_tagout;
-           cdb_valid  = ~issuels_opcode)
+           cdb_valid  = ~issuels_opcode;
          end
          //only mult out
          4'b0010: begin

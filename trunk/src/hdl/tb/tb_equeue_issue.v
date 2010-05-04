@@ -122,6 +122,7 @@ module tb_equeue_issue();
       cb.dispatch_equeuediv_en   <= 0;
       // store 
       @(posedge clk);
+      @(posedge clk);
       cb.dispatch_equeuels_en   <= 1;
       cb.dispatch_equeuels_opcode <=1;
       
@@ -148,6 +149,35 @@ module tb_equeue_issue();
       @(posedge clk);
       cb.dispatch_equeuels_en   <= 0;
 
+      @(posedge clk);
+      cb.dispatch_equeuemult_en <=1;
+      cb.dispatch_equeue_rdtag   <= 6'h1;
+      cb.dispatch_equeue_rstag   <= 6'h2;
+      cb.dispatch_equeue_rttag   <= 6'h3;
+      cb.dispatch_equeue_rsdata  <= 32'h2;//data1
+      cb.dispatch_equeue_rtdata  <= 32'h2;//data2
+      cb.dispatch_equeue_rsvalid <= 1;
+      cb.dispatch_equeue_rtvalid <= 1;
+      @(posedge clk);
+      cb.dispatch_equeue_rdtag   <= 6'h1;
+      cb.dispatch_equeue_rstag   <= 6'h2;
+      cb.dispatch_equeue_rttag   <= 6'h3;
+      cb.dispatch_equeue_rsdata  <= 32'h3;//data1
+      cb.dispatch_equeue_rtdata  <= 32'h2;//data2
+      cb.dispatch_equeue_rsvalid <= 1;
+      cb.dispatch_equeue_rtvalid <= 1;
+      @(posedge clk);
+      cb.dispatch_equeue_rdtag   <= 6'h1;
+      cb.dispatch_equeue_rstag   <= 6'h2;
+      cb.dispatch_equeue_rttag   <= 6'h3;
+      cb.dispatch_equeue_rsdata  <= 32'h3;//data1
+      cb.dispatch_equeue_rtdata  <= 32'h3;//data2
+      cb.dispatch_equeue_rsvalid <= 1;
+      cb.dispatch_equeue_rtvalid <= 1;
+      @(posedge clk);
+      
+      cb.dispatch_equeuemult_en <=0;
+      
    end
 
    

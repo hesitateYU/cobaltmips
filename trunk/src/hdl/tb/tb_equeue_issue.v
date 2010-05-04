@@ -125,12 +125,12 @@ module tb_equeue_issue();
       cb.dispatch_equeuels_en   <= 1;
       cb.dispatch_equeuels_opcode <=1;
       
-      @(posedge clk);
+      cb.dispatch_equeuels_en   <= 0;
       cb.dispatch_equeue_rdtag   <= 6'h1;
       cb.dispatch_equeue_rstag   <= 6'h2;
       cb.dispatch_equeue_rttag   <= 6'h3;
-      cb.dispatch_equeue_rsdata  <= 32'h2;
-      cb.dispatch_equeue_rtdata  <= 32'hA;
+      cb.dispatch_equeue_rsdata  <= 32'h2; //address
+      cb.dispatch_equeue_rtdata  <= 32'hA; //data
       cb.dispatch_equeue_rsvalid <= 1;
       cb.dispatch_equeue_rtvalid <= 1;
       //load 
@@ -146,7 +146,7 @@ module tb_equeue_issue();
       cb.dispatch_equeue_rsvalid <= 1;
       cb.dispatch_equeue_rtvalid <= 1;
       @(posedge clk);
-
+      cb.dispatch_equeuels_en   <= 0;
 
    end
 

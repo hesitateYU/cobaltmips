@@ -86,15 +86,6 @@ module dispatch (
    wire        tagfifo_dispatch_full;
    wire        tagfifo_dispatch_empty;
 
-   // Internal registers used to flop decoded instruction to execution queues
-   // but they are not ready to receive.
-   reg  [15:0] equeue_imm_r;
-   reg  [ 5:0] equeue_rdtag_r, equeue_rstag_r, equeue_rttag_r;
-   reg  [31:0] equeue_rsdata_r, equeue_rtdata_r;
-   reg         equeue_rsvalid_r, equeue_rtvalid_r;
-   reg         equeuels_opcode_r;
-   reg  [ 3:0] equeueint_opcode_r;
-
    //
    // BASIC INSTRUCTION FORMATS
    //               +------+-----+-----+-----+-----+------+
@@ -161,7 +152,10 @@ module dispatch (
       equeue_rtdata  = (rst_dispatch_rttag == cdb_tag && cdb_valid) ? cdb_data : regfile_dispatch_rtdata;
 
       // After decoding, request a tag to TAGFIFO only if it is needed.
-      dispatch_tagfifo_ren = do_req_tag & ~tagfifo_dispatch_empty;
+      dispatch_tagfifo_ren = do_req_tag & ~tagfifo_dispatch_empty & ~ifq_empty;
+      dispatch_rst_valid   = do_req_tag & ~tagfifo_dispatch_empty & ~ifq_empty;
+      dispatch_rst_tag     = tagfifo_dispatch_tag;
+      dispatch_rst_addr    = inst_rdaddr;
    end
 
    always @(*) begin : dispatch_fsm_next_state
@@ -195,10 +189,11 @@ module dispatch (
       // Assume that:
       //  + Instructions must be dispatched to it's execution unit.
       //  + Every instruction requires a TAG as destination register.
-      //  + It is not a branch instruction.
-      do_req_equeue = 1'b1;
-      do_req_tag    = 1'b1;
+      //  + It is not a branch instruction nor a jump.
+      do_req_equeue = 1'b0;
+      do_req_tag    = 1'b0;
       is_branch     = 1'b0;
+      is_jump       = 1'b0;
 
       case (inst_opcode)
          `OPCODE_RTYPE : begin
@@ -206,15 +201,21 @@ module dispatch (
                `FUNCT_MULT : begin
                   curr_equeue_ready = equeuemult_ready;
                   equeuemult_en     = curr_equeue_en;
+                  do_req_equeue     = 1'b1;
+                  do_req_tag        = 1'b1;
                end
                `FUNCT_DIV : begin
                   curr_equeue_ready = equeuediv_ready;
                   equeuediv_en      = curr_equeue_en;
+                  do_req_equeue     = 1'b1;
+                  do_req_tag        = 1'b1;
                end
                default : begin
                   curr_equeue_ready = equeueint_ready;
                   equeueint_en      = curr_equeue_en;
                   equeueint_opcode  = inst_func;
+                  do_req_equeue     = 1'b1;
+                  do_req_tag        = 1'b1;
                end
             endcase
          end
@@ -222,19 +223,22 @@ module dispatch (
             curr_equeue_ready = equeueint_ready;
             equeueint_en      = curr_equeue_en;
             equeueint_opcode  = inst_opcode; // `OPCODE_BEQ
-            is_branch         = 1'b1;
+            do_req_equeue     = 1'b1;
             do_req_tag        = 1'b0;
+            is_branch         = 1'b1;
          end
          `OPCODE_BNE : begin
             curr_equeue_ready = equeueint_ready;
             equeueint_en      = curr_equeue_en;
             equeueint_opcode  = inst_opcode; // `OPCODE_BNE
-            is_branch         = 1'b1;
+            do_req_equeue     = 1'b1;
             do_req_tag        = 1'b0;
+            is_branch         = 1'b1;
          end
          `OPCODE_J : begin
             do_req_equeue = 1'b0;
             do_req_tag    = 1'b0;
+            is_jump       = 1'b1;
          end
          `OPCODE_LW : begin
             curr_equeue_ready = equeuels_ready;

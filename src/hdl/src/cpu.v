@@ -122,7 +122,7 @@ module cpu (
       .cdb_valid          ( cdb_valid                 ),
       .cdb_data           ( cdb_data                  ),
       .cdb_branch         ( cdb_branch                ),
-      .cdb_branch_taken   ( cdb_taken                 ),
+      .cdb_branch_taken   ( cdb_branch_taken          ),
       .equeue_imm         ( dispatch_equeue_imm       ),
       .equeue_rdtag       ( dispatch_equeue_rdtag     ),
       .equeue_rstag       ( dispatch_equeue_rstag     ),

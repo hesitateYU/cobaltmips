@@ -13,9 +13,13 @@ module divider_wrapper(
          input [ 5:0]  issuediv_rdtag,
 
          output        issuediv_busy,
-         output [31:0] issuediv_out,
-         output [ 5:0] issuediv_rdtag_out
+         output reg [31:0] issuediv_out,
+         output reg [ 5:0] issuediv_rdtag_out
    );
+   reg         waiting, waiting_r;
+   wire [31:0] div_res;
+   wire [5:0] tag_out;
+
 
    divider divider (
       .clk_div          (clk),

@@ -46,6 +46,7 @@ module issue (
       output reg                    cdb_branch_taken
 
 );
+   reg   issuemult_equeuemult_done_r;
    reg   issue_int;
    reg   issue_mult;
    reg   issue_div;
@@ -105,7 +106,7 @@ module issue (
       issue_int      = (~cdb_slot_r[1] & issueint_ready) & (~issuels_ready  | ~int_before_ls_r);
       issue_ld_buf   = (~cdb_slot_r[1] & issuels_ready ) & (~issueint_ready |  int_before_ls_r);
       issue_div      = (cdb_slot_r[6]==1);
-      issue_mult     = ~cdb_slot_r[4] & issuemult_ready;
+      issue_mult     = ~cdb_slot_r[4] & issuemult_ready ;
    end
 
    always @(posedge clk) begin: div_reg_assign
@@ -151,10 +152,18 @@ module issue (
       issue_ld_buf = issue_ld_buf_r;
    end
 
-   assign mux_cdb_ctrl = {issue_int, div_cdb_ctrl_r[0], mult_cdb_ctrl_r[0], issue_ld_buf_r};
-   wire [31:0] div_temp;
+   assign mux_cdb_ctrl = {issue_int, div_cdb_ctrl_r[0], issuemult_equeuemult_done_r, issue_ld_buf_r};
 
-   
+   reg [31:0] mult_temp, mult_temp_r;
+
+
+   always @(posedge clk) begin : mult_temp_reg_assign
+      mult_temp_r <= (reset) ? 0: issuemult_rsdata * issuemult_rtdata;
+   end
+   always @(*) begin: mult_temp_proc
+      mult_temp = mult_temp_r;
+   end
+
    always @(*) begin : mux_cdb_out
       cdb_valid                = 1'b0;
       cdb_data                 = 0;
@@ -167,12 +176,12 @@ module issue (
          4'b0001: begin
            cdb_data   = (issuels_opcode) ? 'h0: issuels_out;
            cdb_tag    = (issuels_opcode) ? 'h0: issuels_tagout;
-           cdb_valid  = ~issuels_opcode;
+           cdb_valid  = 1'b1;;
          end
          //only mult out
          4'b0010: begin
            //cdb_data    = issuemult_out; 
-           cdb_data    = 32'h0; 
+           cdb_data    = (issuemult_equeuemult_done_r) ? mult_temp_r: cdb_data; 
            cdb_tag = issuemult_tagout;
            cdb_valid  = 1'b1;
          end
@@ -200,8 +209,16 @@ module issue (
    end
    always @(*) begin: int_mult_done
       issueint_equeueint_done   = issue_int;
-      issuemult_equeuemult_done = (cdb_slot_r[1]==1);
+      issuemult_equeuemult_done = (cdb_slot_r[1]==1 && issuemult_ready);
       issuels_equeuels_done     = (cdb_slot_r[0]==1);
+   end
+
+   always @(posedge clk) begin : mult_done
+      issuemult_equeuemult_done_r <= (reset) ? 0 : issuemult_equeuemult_done;
+   end
+
+   always @(*) begin: mult_done_proc
+      issuemult_equeuemult_done = issuemult_equeuemult_done_r;
    end
 
    // Module instantiations

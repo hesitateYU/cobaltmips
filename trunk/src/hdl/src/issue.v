@@ -49,7 +49,7 @@ module issue (
    reg   issue_int;
    reg   issue_mult;
    reg   issue_div;
-   reg   issue_ld_buf;
+   reg   issue_ld_buf,  issue_ld_buf_r;
 
    reg        issuediv_equeuediv_done_r;
    reg  [6:0] cdb_slot, cdb_slot_r;
@@ -100,8 +100,10 @@ module issue (
 
    always @(*) begin: issue_unit_logic
       int_before_ls  = int_before_ls_r ^ (issueint_ready & issuels_ready);
-      issue_int      = (~cdb_slot_r[1] & issueint_ready) & (~issuels_ready  | int_before_ls_r);
-      issue_ld_buf   = (~cdb_slot_r[1] & issuels_ready ) & (~issueint_ready | ~int_before_ls_r);
+     // issue_int      = (~cdb_slot_r[1] & issueint_ready) & (~issuels_ready  | int_before_ls_r);
+     // issue_ld_buf   = (~cdb_slot_r[1] & issuels_ready ) & (~issueint_ready | ~int_before_ls_r);
+      issue_int      = (~cdb_slot_r[1] & issueint_ready) & (~issuels_ready  | ~int_before_ls_r);
+      issue_ld_buf   = (~cdb_slot_r[1] & issuels_ready ) & (~issueint_ready |  int_before_ls_r);
       issue_div      = (cdb_slot_r[6]==1);
       issue_mult     = ~cdb_slot_r[4] & issuemult_ready;
    end
@@ -142,7 +144,14 @@ module issue (
       issuediv_equeuediv_done = (div_cdb_ctrl[0]) ? 1'b1: 1'b0;
    end
 
-   assign mux_cdb_ctrl = {issue_int, div_cdb_ctrl_r[0], mult_cdb_ctrl_r[0], issue_ld_buf};
+   always @(posedge clk) begin: issue_ld_buf_reg_assign
+      issue_ld_buf_r <= (reset) ? 0: issue_ld_buf;
+   end
+   always @(*)  begin: issue_ld_buf_process
+      issue_ld_buf = issue_ld_buf_r;
+   end
+
+   assign mux_cdb_ctrl = {issue_int, div_cdb_ctrl_r[0], mult_cdb_ctrl_r[0], issue_ld_buf_r};
    wire [31:0] div_temp;
 
    
@@ -158,7 +167,7 @@ module issue (
          4'b0001: begin
            cdb_data   = (issuels_opcode) ? 'h0: issuels_out;
            cdb_tag    = (issuels_opcode) ? 'h0: issuels_tagout;
-           cdb_valid  = (issuels_opcode) ? 'h0: 1'b1;
+           cdb_valid  = ~issuels_opcode)
          end
          //only mult out
          4'b0010: begin

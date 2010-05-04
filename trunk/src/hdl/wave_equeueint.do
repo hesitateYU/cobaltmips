@@ -32,22 +32,22 @@ add wave -noupdate -format Literal -radix unsigned /tb_equeueint/equeueint/inst_
 add wave -noupdate -format Literal -radix unsigned /tb_equeueint/equeueint/inst_rdtag
 add wave -noupdate -format Literal -radix unsigned /tb_equeueint/equeueint/inst_rdtag_r
 add wave -noupdate -format Literal -radix unsigned /tb_equeueint/equeueint/do_rs_update
-add wave -noupdate -format Literal /tb_equeueint/equeueint/do_rt_update
+add wave -noupdate -format Literal -expand /tb_equeueint/equeueint/do_rt_update
 add wave -noupdate -format Literal -radix unsigned /tb_equeueint/equeueint/inst_rstag
 add wave -noupdate -format Literal -radix unsigned /tb_equeueint/equeueint/inst_rstag_r
 add wave -noupdate -format Literal -radix unsigned /tb_equeueint/equeueint/inst_rsdata
 add wave -noupdate -color {Orange Red} -format Literal -radix unsigned /tb_equeueint/equeueint/inst_rsdata_r
-add wave -noupdate -format Literal -radix unsigned /tb_equeueint/equeueint/inst_rtdata
+add wave -noupdate -format Literal -radix unsigned -expand /tb_equeueint/equeueint/inst_rtdata
 add wave -noupdate -format Literal -radix unsigned -expand /tb_equeueint/equeueint/inst_rtdata_r
-add wave -noupdate -format Literal -radix unsigned /tb_equeueint/equeueint/inst_rttag
-add wave -noupdate -format Literal -radix unsigned -expand /tb_equeueint/equeueint/inst_rttag_r
+add wave -noupdate -format Literal -radix unsigned -expand /tb_equeueint/equeueint/inst_rttag
+add wave -noupdate -format Literal -radix unsigned /tb_equeueint/equeueint/inst_rttag_r
 add wave -noupdate -format Literal -radix unsigned /tb_equeueint/equeueint/inst_rtvalid
 add wave -noupdate -format Literal -radix unsigned -expand /tb_equeueint/equeueint/inst_rtvalid_r
 add wave -noupdate -format Literal -radix unsigned /tb_equeueint/equeueint/inst_rsvalid
 add wave -noupdate -format Literal -radix unsigned -expand /tb_equeueint/equeueint/inst_rsvalid_r
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {951923 ps} 0}
-configure wave -namecolwidth 231
+WaveRestoreCursors {{Cursor 1} {1457063 ps} 0}
+configure wave -namecolwidth 225
 configure wave -valuecolwidth 100
 configure wave -justifyvalue left
 configure wave -signalnamewidth 1
@@ -61,4 +61,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ps
 update
-WaveRestoreZoom {1050625 ps} {1313125 ps}
+WaveRestoreZoom {1302580 ps} {1566287 ps}

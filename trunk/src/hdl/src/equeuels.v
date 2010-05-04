@@ -44,9 +44,11 @@ module equeuels (
    reg        inst_rtvalid_r[N_SREG:0], inst_rtvalid[N_SREG-1:0];
    reg        inst_valid_r  [N_SREG:0], inst_valid  [N_SREG-1:0];
 
+   // RS and RT update require an extra register to ease shifting
+   // and updating at the same time. MSB is always zero.
+   reg do_rs_update [N_SREG:0];
+   reg do_rt_update [N_SREG:0];
    reg do_shift     [N_SREG-1:0];
-   reg do_rs_update [N_SREG-1:0];
-   reg do_rt_update [N_SREG-1:0];
    reg inst_selected[N_SREG-1:0];
    reg inst_ready   [N_SREG-1:0];
 
@@ -54,7 +56,8 @@ module equeuels (
       // The top register is fake, it just stores (no flops) the input from
       // dispatch unit. Used to simplify register shifting and updating.
       // Offset sent by dispatch unit must be sign extended.
-      inst_addr_r   [N_SREG] = dispatch_rsdata + { {16 {dispatch_offset[15]} }, dispatch_offset};
+      //inst_addr_r   [N_SREG] = dispatch_rsdata + { {16 {dispatch_offset[15]} }, dispatch_offset};
+      inst_addr_r   [N_SREG] = dispatch_rsdata;
       inst_offset_r [N_SREG] = dispatch_offset;
       inst_opcode_r [N_SREG] = dispatch_opcode;
       inst_rstag_r  [N_SREG] = dispatch_rstag;
@@ -192,16 +195,27 @@ module equeuels (
          // Select if data is taken from CDB (update) or the previous register
          // (shift).
          case ({do_shift[i], do_rs_update[i]})
-            2'b00:        begin inst_rsdata[i] = inst_rsdata_r[i];   inst_rsvalid[i] = inst_rsvalid_r[i];   end
-            2'b01, 2'b11: begin inst_rsdata[i] = cdb_data;           inst_rsvalid[i] = 1'b1;                end
-            2'b10:        begin inst_rsdata[i] = inst_rsdata_r[i+1]; inst_rsvalid[i] = inst_rsvalid_r[i+1]; end
+            2'b00: begin inst_rsdata[i] = inst_rsdata_r[i];   inst_rsvalid[i] = inst_rsvalid_r[i];   end
+            2'b01: begin inst_rsdata[i] = cdb_data;           inst_rsvalid[i] = 1'b1;                end
+            2'b11: begin
+               inst_rsdata[i]  = (do_rs_update[i+1]) ? cdb_data : inst_rsdata_r[i+1];
+               inst_rsvalid[i] = (do_rs_update[i+1]) ? cdb_data : inst_rsvalid_r[i+1]; end
+            2'b10: begin
+               inst_rsdata[i]  = (do_rs_update[i+1]) ? cdb_data : inst_rsdata_r[i+1];
+               inst_rsvalid[i] = (do_rs_update[i+1]) ? 1'b1     : inst_rsvalid_r[i+1];
+            end
          endcase
          case ({do_shift[i], do_rt_update[i]})
-            2'b00:        begin inst_rtdata[i] = inst_rtdata_r[i];   inst_rtvalid[i] = inst_rtvalid_r[i];   end
-            2'b01, 2'b11: begin inst_rtdata[i] = cdb_data;           inst_rtvalid[i] = 1'b1;                end
-            2'b10:        begin inst_rtdata[i] = inst_rtdata_r[i+1]; inst_rtvalid[i] = inst_rtvalid_r[i+1]; end
-         endcase
-      end
+            2'b00: begin inst_rtdata[i] = inst_rtdata_r[i];   inst_rtvalid[i] = inst_rtvalid_r[i];   end
+            2'b01: begin inst_rtdata[i] = cdb_data;           inst_rtvalid[i] = 1'b1;                end
+            2'b11: begin
+               inst_rtdata[i]  = (do_rt_update[i+1]) ? cdb_data : inst_rtdata_r[i+1];
+               inst_rtvalid[i] = (do_rt_update[i+1]) ? cdb_data : inst_rtvalid_r[i+1]; end
+            2'b10: begin
+               inst_rtdata[i]  = (do_rt_update[i+1]) ? cdb_data : inst_rtdata_r[i+1];
+               inst_rtvalid[i] = (do_rt_update[i+1]) ? 1'b1     : inst_rtvalid_r[i+1];
+            end
+         endcase      end
    end
 
    always @(posedge clk) begin : equeuels_inst_reg

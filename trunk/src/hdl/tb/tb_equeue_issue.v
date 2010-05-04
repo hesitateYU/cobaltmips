@@ -105,32 +105,57 @@ module tb_equeue_issue();
       cb.dispatch_equeue_rtvalid <= 1;
 
       @(posedge clk); //
-      cb.dispatch_equeueint_en      <= 0;
+      cb.dispatch_equeueint_en    <= 0;
       @(posedge clk);//DIV
       cb.dispatch_equeuediv_en   <= 1;
       cb.dispatch_equeue_rdtag   <= 6'h9;
       cb.dispatch_equeue_rstag   <= 6'h6;
       cb.dispatch_equeue_rttag   <= 6'h3;
-      cb.dispatch_equeue_rsdata  <= 32'hE;
-      cb.dispatch_equeue_rtdata  <= 32'h7;
+      cb.dispatch_equeue_rsdata  <= 32'hf;
+      cb.dispatch_equeue_rtdata  <= 32'h3;
       cb.dispatch_equeue_rsvalid <= 1;
       cb.dispatch_equeue_rtvalid <= 1;
-      @(posedge clk);
-      cb.dispatch_equeuediv_en   <= 0;
-      
       @(posedge clk);
       cb.dispatch_equeuediv_en   <= 0;
 
       @(posedge clk);
-      //cb.dispatch_equeuels_en   <= 1;
-      cb.dispatch_equeue_rdtag   <= 6'h9;
-      cb.dispatch_equeue_rstag   <= 6'h6;
+      cb.dispatch_equeuediv_en   <= 0;
+      // store 
+      @(posedge clk);
+      cb.dispatch_equeuels_en   <= 1;
+      cb.dispatch_equeuels_opcode <=1;
+      
+      @(posedge clk);
+      cb.dispatch_equeue_rdtag   <= 6'h1;
+      cb.dispatch_equeue_rstag   <= 6'h2;
       cb.dispatch_equeue_rttag   <= 6'h3;
-      cb.dispatch_equeue_rsdata  <= 32'hE;
-      cb.dispatch_equeue_rtdata  <= 32'h2;
+      cb.dispatch_equeue_rsdata  <= 32'h2;
+      cb.dispatch_equeue_rtdata  <= 32'hA;
       cb.dispatch_equeue_rsvalid <= 1;
       cb.dispatch_equeue_rtvalid <= 1;
+      //load 
+      @(posedge clk);
+      cb.dispatch_equeuels_en   <= 0;
+      cb.dispatch_equeuels_opcode <=0;
+      @(posedge clk);
+      cb.dispatch_equeuels_en   <= 1;
+      cb.dispatch_equeue_rdtag   <= 6'h1;
+      cb.dispatch_equeue_rstag   <= 6'h2;
+      cb.dispatch_equeue_rttag   <= 6'h3;
+      cb.dispatch_equeue_rsdata  <= 32'h2;
+      cb.dispatch_equeue_rsvalid <= 1;
+      cb.dispatch_equeue_rtvalid <= 1;
+      @(posedge clk);
+
+
    end
+
+   
+
+
+   ////////////////////
+   //tasks
+   ////////////////////
 
    task reset_tb_signals;
       begin
@@ -156,7 +181,7 @@ module tb_equeue_issue();
 
    clocking cb @(posedge clk);
       default input #1 output #2;
-      output                  reset;
+      output reset;
 
       output dispatch_equeue_rdtag;
       output dispatch_equeue_rstag;

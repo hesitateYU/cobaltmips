@@ -95,11 +95,11 @@ module issue (
    //       contend.
    //
    always @(posedge clk) begin : int_before_ls_reg_assign
-      int_before_ls_r <= (reset) ? 0 : int_before_ls;
+      int_before_ls_r <= (reset) ? 1'b0 : int_before_ls;
    end
 
    always @(*) begin: issue_unit_logic
-      int_before_ls ^= (issueint_ready & issuels_ready);
+      int_before_ls  = int_before_ls_r ^ (issueint_ready & issuels_ready);
       issue_int      = (~cdb_slot_r[1] & issueint_ready) & (~issuels_ready  | int_before_ls_r);
       issue_ld_buf   = (~cdb_slot_r[1] & issuels_ready ) & (~issueint_ready | ~int_before_ls_r);
       issue_div      = (cdb_slot_r[6]==1);
@@ -154,22 +154,27 @@ module issue (
       cdb_branch_taken         = 1'b0;
 
       case (mux_cdb_ctrl)
+         // only ls out
          4'b0001: begin
-           cdb_data   = issuels_out;
-           cdb_tag= issuels_tagout;
-           cdb_valid  = 1'b1;
+           cdb_data   = (issuels_opcode) ? 'h0: issuels_out;
+           cdb_tag    = (issuels_opcode) ? 'h0: issuels_tagout;
+           cdb_valid  = (issuels_opcode) ? 'h0: 1'b1;
          end
+         //only mult out
          4'b0010: begin
            //cdb_data    = issuemult_out; 
            cdb_data    = 32'h0; 
            cdb_tag = issuemult_tagout;
            cdb_valid  = 1'b1;
          end
+         //only div out
+
          4'b0100: begin
             cdb_data    = issuediv_out;
             cdb_tag     = issuediv_tagout;
             cdb_valid   = (issuediv_equeuediv_done_r) ? 1'b1: 1'b0;
          end
+         //only int out
          4'b1000: begin
             cdb_data    = issueint_out;
             cdb_tag = issueint_tagout;

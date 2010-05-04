@@ -73,8 +73,6 @@ module equeueint (
          inst_ready[i] = inst_rsvalid_r[i] & inst_rtvalid_r[i];
       end
 
-      //do_rs_update[N_SREG] = 'h0;
-      //do_rt_update[N_SREG] = 'h0;
       for (i = 0; i < N_SREG + 1; i = i + 1) begin
          // Check if published data from CDB matches a tag in any of the
          // pending instructions.
@@ -178,8 +176,13 @@ module equeueint (
          case ({do_shift[i], do_rs_update[i]})
             2'b00: begin inst_rsdata[i] = inst_rsdata_r[i];   inst_rsvalid[i] = inst_rsvalid_r[i];   end
             2'b01: begin inst_rsdata[i] = cdb_data;           inst_rsvalid[i] = 1'b1;                end
-            2'b11: begin inst_rsdata[i] = cdb_data;           inst_rsvalid[i] = 1'b1;                end
-            2'b10: begin inst_rsdata[i] = inst_rsdata_r[i+1]; inst_rsvalid[i] = inst_rsvalid_r[i+1]; end
+            2'b11: begin
+               inst_rsdata[i]  = (do_rs_update[i+1]) ? cdb_data : inst_rsdata_r[i+1];
+               inst_rsvalid[i] = (do_rs_update[i+1]) ? cdb_data : inst_rsvalid_r[i+1]; end
+            2'b10: begin
+               inst_rsdata[i]  = (do_rs_update[i+1]) ? cdb_data : inst_rsdata_r[i+1];
+               inst_rsvalid[i] = (do_rs_update[i+1]) ? 1'b1     : inst_rsvalid_r[i+1];
+            end
          endcase
          case ({do_shift[i], do_rt_update[i]})
             2'b00: begin inst_rtdata[i] = inst_rtdata_r[i];   inst_rtvalid[i] = inst_rtvalid_r[i];   end

@@ -9,7 +9,7 @@ module tb_equeueint();
    reg  clk;
    reg  reset;
 
-   reg  [  3:0] dispatch_equeueint_opcode;
+   reg  [  5:0] dispatch_equeueint_opcode;
    reg          dispatch_equeueint_en;
    wire         equeueint_dispatch_ready;
 
@@ -25,7 +25,7 @@ module tb_equeueint();
    reg  [  5:0] cdb_equeueint_tag;
    reg          cdb_equeueint_valid;
 
-   wire [  3:0] equeueint_issueint_opcode;
+   wire [  5:0] equeueint_issueint_opcode;
    wire [  5:0] equeueint_issueint_rdtag;
    wire [ 31:0] equeueint_issueint_rsdata;
    wire [ 31:0] equeueint_issueint_rtdata;
@@ -164,6 +164,62 @@ module tb_equeueint();
       repeat (10) @(posedge clk) #0;
 
       reset_testbench();
+
+
+      //-----------------------------------------------------------------------
+      // Case 6: fill instructions not yet ready and publish them in the CDB
+      //         at the same time
+      //-----------------------------------------------------------------------
+      @(posedge clk) #0;
+      for (i = 5; i < 15; i = i + 1) begin
+         dispatch_equeueint_en     = 1'b1;
+         issueint_equeueint_done   = 1'b0;
+         dispatch_equeueint_opcode = i;
+         dispatch_equeue_rdtag     = i;
+         dispatch_equeue_rstag     = i;
+         dispatch_equeue_rttag     = i;
+         dispatch_equeue_rsdata    = i;
+         dispatch_equeue_rtdata    = i;
+         dispatch_equeue_rsvalid   = 1'b0;
+         dispatch_equeue_rtvalid   = 1'b0;
+
+         cdb_equeueint_data  = i * 1000;
+         cdb_equeueint_tag   = i;
+         cdb_equeueint_valid = 1'b1;
+         @(posedge clk) #0;
+      end
+      dispatch_equeueint_en = 1'b0;
+      repeat (10) @(posedge clk) #0;
+
+      reset_testbench();
+
+      //-----------------------------------------------------------------------
+      // Case 7: fill instructions not yet ready and publish them in the CDB
+      //         at the same time, just like case 6 togglint cdb_valid
+      //-----------------------------------------------------------------------
+      @(posedge clk) #0;
+      for (i = 5; i < 15; i = i + 1) begin
+         dispatch_equeueint_en     = 1'b1;
+         issueint_equeueint_done   = 1'b0;
+         dispatch_equeueint_opcode = i;
+         dispatch_equeue_rdtag     = i;
+         dispatch_equeue_rstag     = i;
+         dispatch_equeue_rttag     = i;
+         dispatch_equeue_rsdata    = i;
+         dispatch_equeue_rtdata    = i;
+         dispatch_equeue_rsvalid   = 1'b0;
+         dispatch_equeue_rtvalid   = 1'b0;
+
+         cdb_equeueint_data  = i * 1000;
+         cdb_equeueint_tag   = i;
+         cdb_equeueint_valid = i % 2;
+         @(posedge clk) #0;
+      end
+      dispatch_equeueint_en = 1'b0;
+      repeat (10) @(posedge clk) #0;
+
+      reset_testbench();
+
 
    end
 

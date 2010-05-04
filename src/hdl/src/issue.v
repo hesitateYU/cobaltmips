@@ -51,6 +51,7 @@ module issue (
    reg   issue_div;
    reg   issue_ld_buf;
 
+   reg        issuediv_equeuediv_done_r;
    reg  [6:0] cdb_slot, cdb_slot_r;
    wire [3:0] mux_cdb_ctrl;
    reg        int_before_ls, int_before_ls_r;
@@ -101,7 +102,7 @@ module issue (
       int_before_ls ^= (issueint_ready & issuels_ready);
       issue_int      = (~cdb_slot_r[1] & issueint_ready) & (~issuels_ready  | int_before_ls_r);
       issue_ld_buf   = (~cdb_slot_r[1] & issuels_ready ) & (~issueint_ready | ~int_before_ls_r);
-      issue_div      = ~div_exec_ready & cdb_slot_r[6];
+      issue_div      = (cdb_slot_r[6]==1);
       issue_mult     = ~cdb_slot_r[4] & issuemult_ready;
    end
 
@@ -134,16 +135,23 @@ module issue (
          mult_cdb_ctrl [1] = mult_cdb_ctrl_r [2];
          mult_cdb_ctrl [0] = mult_cdb_ctrl_r [1];
    end
+   always @(posedge clk) begin: div_done_reg_assign
+      issuediv_equeuediv_done_r <= (reset) ? 0 :issuediv_equeuediv_done;
+   end
+   always @(*) begin : div_done
+      issuediv_equeuediv_done = (div_cdb_ctrl[0]) ? 1'b1: 1'b0;
+   end
 
    assign mux_cdb_ctrl = {issue_int, div_cdb_ctrl_r[0], mult_cdb_ctrl_r[0], issue_ld_buf};
+   wire [31:0] div_temp;
 
+   
    always @(*) begin : mux_cdb_out
       cdb_valid                = 1'b0;
       cdb_data                 = 0;
       cdb_tag                  = 0;
       cdb_branch               = 1'b0;
       cdb_branch_taken         = 1'b0;
-      issuediv_equeuediv_done  = 1'b0;
 
       case (mux_cdb_ctrl)
          4'b0001: begin
@@ -159,9 +167,8 @@ module issue (
          end
          4'b0100: begin
             cdb_data    = issuediv_out;
-            cdb_tag = issuediv_tagout;
-            issuediv_equeuediv_done = 1'b1;
-            cdb_valid  = 1'b1;
+            cdb_tag     = issuediv_tagout;
+            cdb_valid   = (issuediv_equeuediv_done_r) ? 1'b1: 1'b0;
          end
          4'b1000: begin
             cdb_data    = issueint_out;
@@ -177,7 +184,6 @@ module issue (
          end
       endcase
    end
-
    always @(*) begin: int_mult_done
       issueint_equeueint_done   = issue_int;
       issuemult_equeuemult_done = (cdb_slot_r[1]==1);
@@ -203,17 +209,28 @@ module issue (
       .issueint_alubranch        (issueint_alubranch      ),
       .issueint_alubranch_taken  (issueint_alubranch_taken)
    );
-   // divider exec unitt
+   // divider exec unit assign issuediv_out = div_res;
+   /*divider issuediv (
+      .clk_div          (clk),
+      .reset_div        (~reset),
+      .issueque_div_a   (issuediv_rsdata),
+      .issueque_div_b   (issuediv_rtdata),
+      .issueque_div_tag (issuediv_rdtag),
+      .issue_div        (1'b1),
+      .div_tag_out      (issuediv_tagout),
+      .div_res          (issuediv_out),
+      .div_rfd          (div_exec_ready)
+   ); */
    divider_wrapper divider_wrapper(
          .clk                 (clk              ),
          .reset               (reset            ),
-         .issuediv_enable     (issuediv_ready   ),
+         .issuediv_enable     (issue_div),
          .issuediv_rsdata     (issuediv_rsdata  ),
          .issuediv_rtdata     (issuediv_rtdata  ),
          .issuediv_rdtag      (issuediv_rdtag   ),
 
          .issuediv_busy       (div_exec_ready   ),
-         .issuediv_out        (issuediv_out     ),
+         .issuediv_out        (issuediv_out),
          .issuediv_rdtag_out  (issuediv_tagout  )
    );
    //multiplier exec unit

@@ -63,13 +63,12 @@ module rst #(
       // implementation, we are setting the entire value to zeros.
       if (cdb_valid && cdb_tag_found && !(is_same_addr && dispatch_valid))
          mem[cdb_tag_addr] = { ~cdb_valid, { W_TAG {1'b0}} };
-
-      if (cdb_valid && ~cdb_tag_found) $display("@%p [RST] FATAL: published tag %p not found", $time, cdb_tag);
    end
 
    // CAM: Content Addressable Memory. Lookup memory contents if tag published
    // by CDB is present, then report its address, if a tag is found but is not
    // valid, then it will be reported as tag NOT found.
+   integer n_matches;
    always @(*) begin : rst_lookup_proc
       integer i, n_matches;
       reg [W_TAG-1:0] tag;
@@ -81,14 +80,21 @@ module rst #(
       for (i = 0; i < N_ENTRY; i = i + 1) begin
          {tag_valid, tag} = mem_r[i];
          // If a tag is found but it is invalid then report it as NOT found.
-         if (cdb_tag == tag) begin
-            cdb_tag_found = tag_valid;
+         if (cdb_tag == tag & tag_valid) begin
+            cdb_tag_found = 1'b1;
             cdb_tag_addr  = i;
-            n_matches     = (tag_valid) ? n_matches + 1 : n_matches;
+            n_matches     = n_matches + 1;
          end
       end
 
-      if (n_matches > 1) $display("@%p [RST] FATAL: multiple matching tags found [%p] %p", $time, n_matches, cdb_tag);
+   end
+
+   always @(posedge clk) begin : rst_checkers_proc
+      if (n_matches > 1)
+         $display("@%p [RST] FATAL: multiple matching tags found [%p] %p", $time, n_matches, cdb_tag);
+
+      if (cdb_valid && ~cdb_tag_found)
+         $display("@%p [RST] FATAL: published tag %p not found", $time, cdb_tag);
    end
 
    // When CDB publishes a data, the REGFILE must update its contents. RST

@@ -52,7 +52,8 @@ module regfile #(
    always @(posedge clk) begin : reg_file_mem_assign
       integer i;
       for (i = 0; i < N_ENTRY; i = i + 1) begin
-         mem_r[i] <= (reset) ? 'h0 : mem[i];
+         //mem_r[i] <= (reset) ? 'h0 : mem[i];
+         mem_r[i] <= (reset) ? i : mem[i];
       end
    end
 

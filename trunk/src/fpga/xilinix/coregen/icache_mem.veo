@@ -33,8 +33,9 @@
 //----------- Begin Cut here for INSTANTIATION Template ---// INST_TAG
 icache_mem YourInstanceName (
 	.clka(clka),
-	.ena(ena),
+	.wea(wea), // Bus [0 : 0] 
 	.addra(addra), // Bus [5 : 0] 
+	.dina(dina), // Bus [127 : 0] 
 	.douta(douta)); // Bus [127 : 0] 
 
 // INST_TAG_END ------ End INSTANTIATION Template ---------

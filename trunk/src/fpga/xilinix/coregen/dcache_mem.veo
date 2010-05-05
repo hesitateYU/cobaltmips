@@ -33,7 +33,6 @@
 //----------- Begin Cut here for INSTANTIATION Template ---// INST_TAG
 dcache_mem YourInstanceName (
 	.clka(clka),
-	.ena(ena),
 	.wea(wea), // Bus [0 : 0] 
 	.addra(addra), // Bus [6 : 0] 
 	.dina(dina), // Bus [31 : 0] 

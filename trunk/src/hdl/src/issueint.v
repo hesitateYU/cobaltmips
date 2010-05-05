@@ -66,7 +66,7 @@ module issueint (
             issueint_out = ~(issueint_rsdata | issueint_rtdata);
          end
          `FUNCT_SLT,`FUNCT_SLTU: begin
-            issueint_out = (issueint_rsdata < issueint_rtdata) ? 1'b1: 1'b0;;
+            issueint_out = (issueint_rsdata < issueint_rtdata) ? 1'b1: 1'b0;
          end
          default: begin
             issueint_out = issueint_out;

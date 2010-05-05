@@ -39,14 +39,16 @@
 
 module icache_mem(
 	clka,
-	ena,
+	wea,
 	addra,
+	dina,
 	douta);
 
 
 input clka;
-input ena;
+input [0 : 0] wea;
 input [5 : 0] addra;
+input [127 : 0] dina;
 output [127 : 0] douta;
 
 // synthesis translate_off
@@ -61,7 +63,7 @@ output [127 : 0] douta;
 		.C_DISABLE_WARN_BHV_COLL(0),
 		.C_DISABLE_WARN_BHV_RANGE(0),
 		.C_FAMILY("spartan3"),
-		.C_HAS_ENA(1),
+		.C_HAS_ENA(0),
 		.C_HAS_ENB(0),
 		.C_HAS_INJECTERR(0),
 		.C_HAS_MEM_OUTPUT_REGS_A(0),
@@ -76,7 +78,7 @@ output [127 : 0] douta;
 		.C_INITB_VAL("0"),
 		.C_INIT_FILE_NAME("icache_mem.mif"),
 		.C_LOAD_INIT_FILE(1),
-		.C_MEM_TYPE(3),
+		.C_MEM_TYPE(0),
 		.C_MUX_PIPELINE_STAGES(0),
 		.C_PRIM_TYPE(1),
 		.C_READ_DEPTH_A(64),
@@ -91,7 +93,7 @@ output [127 : 0] douta;
 		.C_SIM_COLLISION_CHECK("ALL"),
 		.C_USE_BYTE_WEA(0),
 		.C_USE_BYTE_WEB(0),
-		.C_USE_DEFAULT_DATA(1),
+		.C_USE_DEFAULT_DATA(0),
 		.C_USE_ECC(0),
 		.C_WEA_WIDTH(1),
 		.C_WEB_WIDTH(1),
@@ -104,13 +106,13 @@ output [127 : 0] douta;
 		.C_XDEVICEFAMILY("spartan3e"))
 	inst (
 		.CLKA(clka),
-		.ENA(ena),
+		.WEA(wea),
 		.ADDRA(addra),
+		.DINA(dina),
 		.DOUTA(douta),
 		.RSTA(),
+		.ENA(),
 		.REGCEA(),
-		.WEA(),
-		.DINA(),
 		.CLKB(),
 		.RSTB(),
 		.ENB(),

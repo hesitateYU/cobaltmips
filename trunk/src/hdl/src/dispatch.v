@@ -55,9 +55,16 @@ module dispatch (
    localparam integer S_BRANCHSTALL = 1'b1;
    reg state_r, next_state;
 
+   // All queues are grouped in a packed array indexed by these parameters.
+   localparam integer EQ_INT  = 2'h0;
+   localparam integer EQ_LS   = 2'h1;
+   localparam integer EQ_MULT = 2'h2;
+   localparam integer EQ_DIV  = 2'h3;
+   localparam integer EQ_NONE = 4'b0000;
+   reg [1:0] curr_equeue_idx;
+   reg [3:0] equeue_ready, equeue_en;
+
    reg can_dispatch;
-   reg curr_equeue_ready;
-   reg curr_equeue_en;
    reg do_req_tag;
    reg do_req_equeue;
    reg is_branch, is_jump;
@@ -118,7 +125,7 @@ module dispatch (
 
    always @(*) begin : dispatch_internal_assign_proc
       // Get contents and status of RS and RT registers from REGFILE and RST
-      // which will be used later as parameters to EQUEUE*.
+      // which will be used later as parameters to EQ_*.
       dispatch_regfile_rsaddr = inst_rsaddr;
       dispatch_regfile_rtaddr = inst_rtaddr;
       dispatch_rst_rsaddr     = inst_rsaddr;
@@ -158,19 +165,32 @@ module dispatch (
       dispatch_rst_addr    = inst_rdaddr;
    end
 
+   always @(*) begin : dispatch_curr_equeue_proc
+      equeue_ready[EQ_INT ] = equeueint_ready;
+      equeue_ready[EQ_LS  ] = equeuels_ready;
+      equeue_ready[EQ_MULT] = equeuemult_ready;
+      equeue_ready[EQ_DIV ] = equeuediv_ready;
+
+      equeueint_en  = equeue_en[EQ_INT ];
+      equeuels_en   = equeue_en[EQ_LS  ];
+      equeuemult_en = equeue_en[EQ_MULT];
+      equeuediv_en  = equeue_en[EQ_DIV ];
+   end
+
    always @(*) begin : dispatch_fsm_next_state
-      can_dispatch = (do_req_equeue & curr_equeue_ready) & (do_req_tag & ~tagfifo_dispatch_empty) & ~ifq_empty;
+      equeue_en = EQ_NONE;
+      can_dispatch = (do_req_equeue & equeue_ready[curr_equeue_idx]) & (do_req_tag & ~tagfifo_dispatch_empty) & ~ifq_empty;
       case (state_r)
          S_DISPATCH : begin
-            curr_equeue_en = can_dispatch;
-            ifq_ren        = can_dispatch;
+            equeue_en = (do_req_equeue) ? curr_equeue_idx : EQ_NONE;
+            ifq_ren   = can_dispatch;
             next_state = (~can_dispatch) ? S_DISPATCH : ((is_branch) ? S_BRANCHSTALL : S_DISPATCH);
             ifq_branch_valid = is_jump;
             ifq_branch_addr  = (is_jump) ? inst_addr_jump : 'h0;
          end
          S_BRANCHSTALL : begin
-            curr_equeue_en   = can_dispatch & (cdb_branch & ~cdb_branch_taken);
-            ifq_ren          = can_dispatch & (cdb_branch & ~cdb_branch_taken);;
+            equeue_en = (do_req_equeue) ? curr_equeue_idx : EQ_NONE;
+            ifq_ren   = can_dispatch & (cdb_branch & ~cdb_branch_taken);
             ifq_branch_valid = cdb_branch & cdb_branch_taken;
             ifq_branch_addr  = (cdb_branch_taken) ? inst_addr_branch_r : 'h0;
             next_state = (cdb_branch) ? S_DISPATCH : S_BRANCHSTALL;
@@ -181,59 +201,51 @@ module dispatch (
    always @(*) begin : dispatch_decode_proc
       equeueint_opcode = 'h0;
       equeuels_opcode  = 'h0;
-      equeueint_en     = 'h0;
-      equeuels_en      = 'h0;
-      equeuemult_en    = 'h0;
-      equeuediv_en     = 'h0;
 
       // Assume that:
       //  + Instructions must be dispatched to it's execution unit.
       //  + Every instruction requires a TAG as destination register.
       //  + It is not a branch instruction nor a jump.
-      do_req_equeue = 1'b0;
-      do_req_tag    = 1'b0;
-      is_branch     = 1'b0;
-      is_jump       = 1'b0;
+      curr_equeue_idx = EQ_NONE;
+      do_req_equeue   = 1'b0;
+      do_req_tag      = 1'b0;
+      is_branch       = 1'b0;
+      is_jump         = 1'b0;
 
       case (inst_opcode)
          `OPCODE_RTYPE : begin
             case (inst_func)
-               `FUNCT_MULT : begin
-                  curr_equeue_ready = equeuemult_ready;
-                  equeuemult_en     = curr_equeue_en;
-                  do_req_equeue     = 1'b1;
-                  do_req_tag        = 1'b1;
+               `FUNCT_MULTU, `FUNCT_MULT : begin
+                  curr_equeue_idx = EQ_MULT;
+                  do_req_equeue   = 1'b1;
+                  do_req_tag      = 1'b1;
                end
-               `FUNCT_DIV : begin
-                  curr_equeue_ready = equeuediv_ready;
-                  equeuediv_en      = curr_equeue_en;
-                  do_req_equeue     = 1'b1;
-                  do_req_tag        = 1'b1;
+               `FUNCT_DIVU, `FUNCT_DIV : begin
+                  curr_equeue_idx = EQ_DIV;
+                  do_req_equeue   = 1'b1;
+                  do_req_tag      = 1'b1;
                end
                default : begin
-                  curr_equeue_ready = equeueint_ready;
-                  equeueint_en      = curr_equeue_en;
-                  equeueint_opcode  = inst_func;
-                  do_req_equeue     = 1'b1;
-                  do_req_tag        = 1'b1;
+                  curr_equeue_idx  = EQ_INT;
+                  equeueint_opcode = inst_func;
+                  do_req_equeue    = 1'b1;
+                  do_req_tag       = 1'b1;
                end
             endcase
          end
          `OPCODE_BEQ : begin
-            curr_equeue_ready = equeueint_ready;
-            equeueint_en      = curr_equeue_en;
-            equeueint_opcode  = inst_opcode; // `OPCODE_BEQ
-            do_req_equeue     = 1'b1;
-            do_req_tag        = 1'b0;
-            is_branch         = 1'b1;
+            curr_equeue_idx  = EQ_INT;
+            equeueint_opcode = inst_opcode; // `OPCODE_BEQ
+            do_req_equeue    = 1'b1;
+            do_req_tag       = 1'b0;
+            is_branch        = 1'b1;
          end
          `OPCODE_BNE : begin
-            curr_equeue_ready = equeueint_ready;
-            equeueint_en      = curr_equeue_en;
-            equeueint_opcode  = inst_opcode; // `OPCODE_BNE
-            do_req_equeue     = 1'b1;
-            do_req_tag        = 1'b0;
-            is_branch         = 1'b1;
+            curr_equeue_idx  = EQ_INT;
+            equeueint_opcode = inst_opcode; // `OPCODE_BNE
+            do_req_equeue    = 1'b1;
+            do_req_tag       = 1'b0;
+            is_branch        = 1'b1;
          end
          `OPCODE_J : begin
             do_req_equeue = 1'b0;
@@ -241,14 +253,12 @@ module dispatch (
             is_jump       = 1'b1;
          end
          `OPCODE_LW : begin
-            curr_equeue_ready = equeuels_ready;
-            equeuels_en       = curr_equeue_en;
-            equeuels_opcode   = `ISSUELS_FUNC_LW;
+            curr_equeue_idx = EQ_LS;
+            equeuels_opcode = `ISSUELS_FUNC_LW;
          end
          `OPCODE_SW : begin
-            curr_equeue_ready = equeuels_ready;
-            equeuels_en       = curr_equeue_en;
-            equeuels_opcode   = `ISSUELS_FUNC_SW;
+            curr_equeue_idx = EQ_LS;
+            equeuels_opcode = `ISSUELS_FUNC_SW;
          end
          default : begin
             do_req_equeue = 1'b0;

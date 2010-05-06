@@ -93,8 +93,8 @@ module issue (
 
    // CDB reservation registers
    always @(*) begin : issue_cdb_reservation_proc
-      can_issue_div  = issuediv_ready;
-      can_issue_mult =  ~cdb_slot_r[4] & issuemult_ready & div_exec_ready;
+      can_issue_div  = issuediv_ready  & div_exec_ready;
+      can_issue_mult =  ~cdb_slot_r[4] & issuemult_ready;
       can_issue_int  = (~cdb_slot_r[1] & issueint_ready) & (~issuels_ready  | ~int_before_ls_r);
       can_issue_ls   = (~cdb_slot_r[1] & issuels_ready ) & (~issueint_ready |  int_before_ls_r);
 
@@ -149,6 +149,12 @@ module issue (
    end
 
    always @(*) begin : issue_cdb_mux_sel_proc
+      cdb_valid_oreg        = 'h0;
+      cdb_data_oreg         = 'h0;
+      cdb_tag_oreg          = 'h0;
+      cdb_branch_oreg       = 'h0;
+      cdb_branch_taken_oreg = 'h0;
+
       cdb_mux_sel = {can_issue_int, div_cdb_ctrl_r[0], mult_cdb_ctrl_r[0], can_issue_ls};
       case (cdb_mux_sel)
          SEL_LS : begin
@@ -256,7 +262,7 @@ module issue (
    divider_wrapper divider_wrapper(
       .clk                 (clk              ),
       .reset               (reset            ),
-      .issuediv_enable     (issue_div),
+      .issuediv_enable     (can_issue_div    ),
       .issuediv_rsdata     (issuediv_rsdata  ),
       .issuediv_rtdata     (issuediv_rtdata  ),
       .issuediv_rdtag      (issuediv_rdtag   ),

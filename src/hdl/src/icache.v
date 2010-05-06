@@ -16,7 +16,7 @@ module icache #(
    input      [W_ADDR-1:0] ifq_pcin,
    input                   ifq_ren,
    input                   ifq_abort,
-   output reg [W_DATA-1:0] ifq_dout,
+   output     [W_DATA-1:0] ifq_dout,
    output reg              ifq_dout_valid
 );
 

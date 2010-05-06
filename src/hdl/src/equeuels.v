@@ -4,6 +4,8 @@
 
 `timescale 1ns/1ps
 
+`include "globals.vh"
+
 module equeuels (
    input             clk,
    input             reset,
@@ -71,15 +73,17 @@ module equeuels (
 
    always @(*) begin : equeuels_update_flags_proc
       integer i;
-      for (i = 0; i < N_SREG ; i = i + 1) begin
+      for (i = 0; i < N_SREG; i = i + 1) begin
          // Check if both operands have been solved. For LOAD operations, RT
          // register is not required.
-         inst_ready[i] = inst_rsvalid_r[i] & (inst_rtvalid_r[i] | inst_opcode_r[i]);
+         inst_ready[i] = inst_rsvalid_r[i] & (inst_rtvalid_r[i] | (inst_opcode_r[i] == `ISSUELS_FUNC_SW));
+      end
 
+      for (i = 0; i < N_SREG + 1; i = i + 1) begin
          // Check if published data from CDB matches a tag in any of the
          // pending instructions.
-         do_rs_update[i] = cdb_valid & cdb_tag == inst_rstag_r[i];
-         do_rt_update[i] = cdb_valid & cdb_tag == inst_rttag_r[i];
+         do_rs_update[i] = cdb_valid & ~inst_rsvalid_r[i] & cdb_tag == inst_rstag_r[i];
+         do_rt_update[i] = cdb_valid & ~inst_rtvalid_r[i] & cdb_tag == inst_rttag_r[i];
       end
 
       // One hot instruction selector, set to one if instruction is valid and
@@ -123,10 +127,10 @@ module equeuels (
       //          | Upper reg  |  There is some space available. Some registers are either | Upper register is not
       //          | is valid.  |  disabled or are already being dispatched.                | being dispatched.
       //          +------------+-----------------------------------------------------------+--------------------------------
-      do_shift[3] = valid_r[4] & ( (issuels_done & (|selected[3:0])) | ~(&valid_r[3:0]) );
-      do_shift[2] = valid_r[3] & ( (issuels_done & (|selected[2:0])) | ~(&valid_r[2:0]) ) & ~(issuels_done & selected[3]);
-      do_shift[1] = valid_r[2] & ( (issuels_done & (|selected[1:0])) | ~(&valid_r[1:0]) ) & ~(issuels_done & selected[2]);
-      do_shift[0] = valid_r[1] & ( (issuels_done & (|selected[0:0])) | ~(&valid_r[0:0]) ) & ~(issuels_done & selected[1]);
+      do_shift[3] = valid_r[4] & ( /*(issuels_done & (|selected[3:0])) |*/ ~(&valid_r[3:0]) );
+      do_shift[2] = valid_r[3] & ( /*(issuels_done & (|selected[2:0])) |*/ ~(&valid_r[2:0]) ) /*& ~(issuels_done & selected[3])*/;
+      do_shift[1] = valid_r[2] & ( /*(issuels_done & (|selected[1:0])) |*/ ~(&valid_r[1:0]) ) /*& ~(issuels_done & selected[2])*/;
+      do_shift[0] = valid_r[1] & ( (issuels_done & (|selected[0:0])) | ~(&valid_r[0:0]) ) /*& ~(issuels_done & selected[1])*/;
       // Registers are valid when:
       //            +-------------+----------------------------------------------+---------------
       //            | If we shift | Register is not currently being dispatched.  | Lower reg
@@ -135,9 +139,9 @@ module equeuels (
       //            | must be     |                                              |
       //            | valid       |                                              |
       //            +-------------+----------------------------------------------+---------------
-      inst_valid[3] = do_shift[3] | ( valid_r[3] & ~(issuels_done & selected[3]) & ~do_shift[2] );
-      inst_valid[2] = do_shift[2] | ( valid_r[2] & ~(issuels_done & selected[2]) & ~do_shift[1] );
-      inst_valid[1] = do_shift[1] | ( valid_r[1] & ~(issuels_done & selected[1]) & ~do_shift[0] );
+      inst_valid[3] = do_shift[3] | ( valid_r[3] /*& ~(issuels_done & selected[3])*/ & ~do_shift[2] );
+      inst_valid[2] = do_shift[2] | ( valid_r[2] /*& ~(issuels_done & selected[2])*/ & ~do_shift[1] );
+      inst_valid[1] = do_shift[1] | ( valid_r[1] /*& ~(issuels_done & selected[1])*/ & ~do_shift[0] );
       inst_valid[0] = do_shift[0] | ( valid_r[0] & ~(issuels_done & selected[0])                );
    end
 
@@ -150,7 +154,10 @@ module equeuels (
       // If at least one instruction is ready, then signal the issue unit to
       // continue.
       for (i = 0; i < N_SREG; i = i + 1) valid_and_ready[i] = inst_valid_r[i] & inst_ready[i];
-      issuels_ready  = |valid_and_ready;
+      //
+      // Queue only when last instruction is valid and ready.
+      //issuels_ready  = |valid_and_ready;
+      issuels_ready  = valid_and_ready[0];
       // The oldest and valid register is sent to the issue unit. Priority
       // encoder inferred. If no instruction is ready, then assign the
       // register at the bottom.

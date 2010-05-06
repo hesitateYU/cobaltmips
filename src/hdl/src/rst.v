@@ -51,7 +51,7 @@ module rst #(
       integer i;
       reg is_same_addr;
 
-      for (int i = 0; i < N_ENTRY; i = i + 1) mem[i] = mem_r[i];
+      for (i = 0; i < N_ENTRY; i = i + 1) mem[i] = mem_r[i];
 
       is_same_addr = dispatch_addr == cdb_tag_addr;
 
@@ -90,11 +90,11 @@ module rst #(
    end
 
    always @(posedge clk) begin : rst_checkers_proc
-      if (n_matches > 1)
-         $display("@%p [RST] FATAL: multiple matching tags found [%p] %p", $time, n_matches, cdb_tag);
+      //if (n_matches > 1)
+      //   $display("@%p [RST] FATAL: multiple matching tags found [%p] %p", $time, n_matches, cdb_tag);
 
-      if (cdb_valid && ~cdb_tag_found)
-         $display("@%p [RST] FATAL: published tag %p not found", $time, cdb_tag);
+      //if (cdb_valid && ~cdb_tag_found)
+      //   $display("@%p [RST] FATAL: published tag %p not found", $time, cdb_tag);
    end
 
    // When CDB publishes a data, the REGFILE must update its contents. RST

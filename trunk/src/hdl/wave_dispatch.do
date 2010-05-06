@@ -3,6 +3,8 @@ quietly WaveActivateNextPane {} 0
 add wave -noupdate -format Logic -radix unsigned /tb_top/cpu/dispatch/clk
 add wave -noupdate -format Logic -radix unsigned /tb_top/cpu/dispatch/reset
 add wave -noupdate -divider {internal flags}
+add wave -noupdate -color Magenta -format Literal -radix ascii /tb_top/cpu/dispatch/inst_opcode_string
+add wave -noupdate -color Magenta -format Literal -radix ascii /tb_top/cpu/dispatch/inst_func_string
 add wave -noupdate -color Magenta -format Literal -radix hexadecimal /tb_top/cpu/dispatch/inst_opcode
 add wave -noupdate -color Magenta -format Literal -radix hexadecimal /tb_top/cpu/dispatch/inst_func
 add wave -noupdate -color Orange -format Literal -radix unsigned /tb_top/cpu/dispatch/inst_rsaddr
@@ -134,7 +136,7 @@ add wave -noupdate -format Literal /tb_top/cpu/equeuels/do_rt_update
 add wave -noupdate -format Literal /tb_top/cpu/equeuels/inst_rtvalid_r
 add wave -noupdate -format Literal /tb_top/cpu/equeuels/inst_rsvalid_r
 add wave -noupdate -format Literal -radix unsigned /tb_top/cpu/equeuels/inst_rsdata_r
-add wave -noupdate -format Literal -radix unsigned /tb_top/cpu/equeuels/inst_rtdata_r
+add wave -noupdate -format Literal -radix unsigned -expand /tb_top/cpu/equeuels/inst_rtdata_r
 add wave -noupdate -format Literal -radix unsigned /tb_top/cpu/equeuels/inst_rstag_r
 add wave -noupdate -format Literal -radix unsigned /tb_top/cpu/equeuels/inst_rttag_r
 add wave -noupdate -format Logic /tb_top/cpu/issue/dcache/wen
@@ -164,7 +166,7 @@ add wave -noupdate -format Literal -radix unsigned /tb_top/cpu/issue/divider_wra
 add wave -noupdate -format Logic -radix unsigned /tb_top/cpu/issue/divider_wrapper/divider/div_rfd
 add wave -noupdate -format Literal -radix hexadecimal /tb_top/cpu/issue/divider_wrapper/divider/div_res
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {318521 ps} 0} {{Cursor 2} {180219 ps} 0}
+WaveRestoreCursors {{Cursor 1} {348490 ps} 0} {{Cursor 2} {58300 ps} 0}
 configure wave -namecolwidth 178
 configure wave -valuecolwidth 104
 configure wave -justifyvalue left
@@ -179,4 +181,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ps
 update
-WaveRestoreZoom {0 ps} {144503 ps}
+WaveRestoreZoom {5636 ps} {150139 ps}

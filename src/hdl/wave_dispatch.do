@@ -96,6 +96,17 @@ add wave -noupdate -color Cyan -format Literal -radix unsigned /tb_top/cpu/equeu
 add wave -noupdate -color Cyan -format Literal -radix unsigned /tb_top/cpu/equeueint/inst_rtdata_r
 add wave -noupdate -color Cyan -format Literal -radix unsigned /tb_top/cpu/equeueint/inst_rtvalid_r
 add wave -noupdate -format Literal -radix unsigned /tb_top/cpu/equeueint/inst_valid_r
+add wave -noupdate -divider issue
+add wave -noupdate -format Logic /tb_top/cpu/issue/can_issue_div
+add wave -noupdate -format Logic /tb_top/cpu/issue/can_issue_int
+add wave -noupdate -format Logic /tb_top/cpu/issue/can_issue_ls
+add wave -noupdate -format Logic /tb_top/cpu/issue/can_issue_mult
+add wave -noupdate -format Logic /tb_top/cpu/issue/int_before_ls_r
+add wave -noupdate -format Literal -radix binary /tb_top/cpu/issue/cdb_slot_r
+add wave -noupdate -format Literal -radix binary /tb_top/cpu/issue/cdb_mux_sel
+add wave -noupdate -format Literal -radix binary /tb_top/cpu/issue/mult_cdb_ctrl_r
+add wave -noupdate -format Literal -radix binary /tb_top/cpu/issue/div_cdb_ctrl_r
+add wave -noupdate -format Literal -radix unsigned /tb_top/cpu/issue/cdb_data_oreg_r
 add wave -noupdate -divider {equeuels interface}
 add wave -noupdate -color {Medium Slate Blue} -format Logic -radix unsigned /tb_top/cpu/dispatch/equeuels_ready
 add wave -noupdate -color Coral -format Logic -radix unsigned /tb_top/cpu/dispatch/equeuels_en
@@ -107,7 +118,7 @@ add wave -noupdate -divider {equeuediv interface}
 add wave -noupdate -color {Medium Slate Blue} -format Logic -radix unsigned /tb_top/cpu/dispatch/equeuediv_ready
 add wave -noupdate -color Coral -format Logic -radix unsigned /tb_top/cpu/dispatch/equeuediv_en
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {129029 ps} 0}
+WaveRestoreCursors {{Cursor 1} {117806 ps} 0}
 configure wave -namecolwidth 178
 configure wave -valuecolwidth 104
 configure wave -justifyvalue left
@@ -122,4 +133,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ps
 update
-WaveRestoreZoom {30917 ps} {175420 ps}
+WaveRestoreZoom {62723 ps} {207226 ps}

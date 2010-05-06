@@ -102,11 +102,13 @@ add wave -noupdate -format Logic /tb_top/cpu/issue/can_issue_int
 add wave -noupdate -format Logic /tb_top/cpu/issue/can_issue_ls
 add wave -noupdate -format Logic /tb_top/cpu/issue/can_issue_mult
 add wave -noupdate -format Logic /tb_top/cpu/issue/int_before_ls_r
+add wave -noupdate -format Logic /tb_top/cpu/issue/issuemult_ready
 add wave -noupdate -format Literal -radix binary /tb_top/cpu/issue/cdb_slot_r
 add wave -noupdate -format Literal -radix binary /tb_top/cpu/issue/cdb_mux_sel
 add wave -noupdate -format Literal -radix binary /tb_top/cpu/issue/mult_cdb_ctrl_r
 add wave -noupdate -format Literal -radix binary /tb_top/cpu/issue/div_cdb_ctrl_r
-add wave -noupdate -format Literal -radix unsigned /tb_top/cpu/issue/cdb_data_oreg_r
+add wave -noupdate -format Logic /tb_top/cpu/issue/div_exec_ready
+add wave -noupdate -color {Dark Orchid} -format Literal -radix unsigned /tb_top/cpu/issue/cdb_data_oreg_r
 add wave -noupdate -divider {equeuels interface}
 add wave -noupdate -color {Medium Slate Blue} -format Logic -radix unsigned /tb_top/cpu/dispatch/equeuels_ready
 add wave -noupdate -color Coral -format Logic -radix unsigned /tb_top/cpu/dispatch/equeuels_en
@@ -114,11 +116,25 @@ add wave -noupdate -color Magenta -format Logic -radix unsigned /tb_top/cpu/disp
 add wave -noupdate -divider {equeuemult interface}
 add wave -noupdate -color {Medium Slate Blue} -format Logic -radix unsigned /tb_top/cpu/dispatch/equeuemult_ready
 add wave -noupdate -color Coral -format Logic -radix unsigned /tb_top/cpu/dispatch/equeuemult_en
+add wave -noupdate -format Literal /tb_top/cpu/equeuemult/inst_ready
+add wave -noupdate -format Literal /tb_top/cpu/equeuemult/inst_valid_r
+add wave -noupdate -format Literal /tb_top/cpu/equeuemult/inst_rsvalid_r
+add wave -noupdate -format Literal /tb_top/cpu/equeuemult/inst_rtvalid_r
 add wave -noupdate -divider {equeuediv interface}
 add wave -noupdate -color {Medium Slate Blue} -format Logic -radix unsigned /tb_top/cpu/dispatch/equeuediv_ready
 add wave -noupdate -color Coral -format Logic -radix unsigned /tb_top/cpu/dispatch/equeuediv_en
+add wave -noupdate -format Literal -radix unsigned -expand /tb_top/cpu/equeuediv/inst_ready
+add wave -noupdate -format Literal -radix unsigned -expand /tb_top/cpu/equeuediv/inst_valid_r
+add wave -noupdate -format Literal -radix unsigned /tb_top/cpu/issue/divider_wrapper/divider/issueque_div_tag
+add wave -noupdate -format Literal -radix unsigned /tb_top/cpu/issue/divider_wrapper/divider/issueque_div_a
+add wave -noupdate -format Literal -radix unsigned /tb_top/cpu/issue/divider_wrapper/divider/issueque_div_b
+add wave -noupdate -format Logic -radix unsigned /tb_top/cpu/issue/divider_wrapper/divider/issue_div
+add wave -noupdate -format Literal -radix unsigned /tb_top/cpu/issue/divider_wrapper/divider/tag_width
+add wave -noupdate -format Literal -radix unsigned /tb_top/cpu/issue/divider_wrapper/divider/div_tag_out
+add wave -noupdate -format Logic -radix unsigned /tb_top/cpu/issue/divider_wrapper/divider/div_rfd
+add wave -noupdate -format Literal -radix hexadecimal /tb_top/cpu/issue/divider_wrapper/divider/div_res
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {117806 ps} 0}
+WaveRestoreCursors {{Cursor 1} {155000 ps} 0}
 configure wave -namecolwidth 178
 configure wave -valuecolwidth 104
 configure wave -justifyvalue left

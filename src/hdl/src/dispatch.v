@@ -335,6 +335,122 @@ module dispatch (
       .cdb_valid      ( cdb_valid              )
    );
 
+   reg [10*8:0] inst_opcode_string, inst_func_string;
+   always @(*) begin : dispatch_opcode_str_proc
+      inst_opcode_string = "";
+      inst_func_string   = "";
+
+      case (inst_opcode)
+         `OPCODE_RTYPE  : inst_opcode_string = "RTYPE ";
+         `OPCODE_J      : inst_opcode_string = "J     ";
+         `OPCODE_JAL    : inst_opcode_string = "JAL   ";
+         `OPCODE_BEQ    : inst_opcode_string = "BEQ   ";
+         `OPCODE_BNE    : inst_opcode_string = "BNE   ";
+         `OPCODE_BLEZ   : inst_opcode_string = "BLEZ  ";
+         `OPCODE_BGTZ   : inst_opcode_string = "BGTZ  ";
+         `OPCODE_ADDI   : inst_opcode_string = "ADDI  ";
+         `OPCODE_ADDIU  : inst_opcode_string = "ADDIU ";
+         `OPCODE_SLTI   : inst_opcode_string = "SLTI  ";
+         `OPCODE_SLTIU  : inst_opcode_string = "SLTIU ";
+         `OPCODE_ANDI   : inst_opcode_string = "ANDI  ";
+         `OPCODE_ORI    : inst_opcode_string = "ORI   ";
+         `OPCODE_XORI   : inst_opcode_string = "XORI  ";
+         `OPCODE_LUI    : inst_opcode_string = "LUI   ";
+         `OPCODE_FPTYPE : inst_opcode_string = "FPTYPE";
+         `OPCODE_LB     : inst_opcode_string = "LB    ";
+         `OPCODE_LH     : inst_opcode_string = "LH    ";
+         `OPCODE_LWL    : inst_opcode_string = "LWL   ";
+         `OPCODE_LW     : inst_opcode_string = "LW    ";
+         `OPCODE_LBU    : inst_opcode_string = "LBU   ";
+         `OPCODE_LHU    : inst_opcode_string = "LHU   ";
+         `OPCODE_LWR    : inst_opcode_string = "LWR   ";
+         `OPCODE_SB     : inst_opcode_string = "SB    ";
+         `OPCODE_SH     : inst_opcode_string = "SH    ";
+         `OPCODE_SWL    : inst_opcode_string = "SWL   ";
+         `OPCODE_SW     : inst_opcode_string = "SW    ";
+         `OPCODE_SWR    : inst_opcode_string = "SWR   ";
+         `OPCODE_CACHE  : inst_opcode_string = "CACHE ";
+         `OPCODE_LL     : inst_opcode_string = "LL    ";
+         `OPCODE_LWC1   : inst_opcode_string = "LWC1  ";
+         `OPCODE_LWC2   : inst_opcode_string = "LWC2  ";
+         `OPCODE_PREF   : inst_opcode_string = "PREF  ";
+         `OPCODE_LDC1   : inst_opcode_string = "LDC1  ";
+         `OPCODE_LDC2   : inst_opcode_string = "LDC2  ";
+         `OPCODE_SC     : inst_opcode_string = "SC    ";
+         `OPCODE_SWC1   : inst_opcode_string = "SWC1  ";
+         `OPCODE_SWC2   : inst_opcode_string = "SWC2  ";
+         `OPCODE_SDC1   : inst_opcode_string = "SDC1  ";
+         `OPCODE_SDC2   : inst_opcode_string = "SDC2  ";
+      endcase
+
+      if (inst_opcode == `OPCODE_RTYPE) begin
+         case (inst_func)
+            `FUNCT_SLL     : inst_func_string = "SLL    ";
+            `FUNCT_NOOP_01 : inst_func_string = "NOOP_01";
+            `FUNCT_SRL     : inst_func_string = "SRL    ";
+            `FUNCT_SRA     : inst_func_string = "SRA    ";
+            `FUNCT_SLLV    : inst_func_string = "SLLV   ";
+            `FUNCT_SRLV    : inst_func_string = "SRLV   ";
+            `FUNCT_SRAV    : inst_func_string = "SRAV   ";
+            `FUNCT_JR      : inst_func_string = "JR     ";
+            `FUNCT_JALR    : inst_func_string = "JALR   ";
+            `FUNCT_MOVZ    : inst_func_string = "MOVZ   ";
+            `FUNCT_MOVN    : inst_func_string = "MOVN   ";
+            `FUNCT_SYSCALL : inst_func_string = "SYSCALL";
+            `FUNCT_BREAK   : inst_func_string = "BREAK  ";
+            `FUNCT_NOOP_0E : inst_func_string = "NOOP_0E";
+            `FUNCT_SYNC    : inst_func_string = "SYNC   ";
+            `FUNCT_MFHI    : inst_func_string = "MFHI   ";
+            `FUNCT_MTHI    : inst_func_string = "MTHI   ";
+            `FUNCT_MFLO    : inst_func_string = "MFLO   ";
+            `FUNCT_MTLO    : inst_func_string = "MTLO   ";
+            `FUNCT_NOOP_14 : inst_func_string = "NOOP_14";
+            `FUNCT_NOOP_15 : inst_func_string = "NOOP_15";
+            `FUNCT_NOOP_16 : inst_func_string = "NOOP_16";
+            `FUNCT_NOOP_17 : inst_func_string = "NOOP_17";
+            `FUNCT_MULT    : inst_func_string = "MULT   ";
+            `FUNCT_MULTU   : inst_func_string = "MULTU  ";
+            `FUNCT_DIV     : inst_func_string = "DIV    ";
+            `FUNCT_DIVU    : inst_func_string = "DIVU   ";
+            `FUNCT_NOOP_1C : inst_func_string = "NOOP_1C";
+            `FUNCT_NOOP_1D : inst_func_string = "NOOP_1D";
+            `FUNCT_NOOP_1E : inst_func_string = "NOOP_1E";
+            `FUNCT_NOOP_1F : inst_func_string = "NOOP_1F";
+            `FUNCT_ADD     : inst_func_string = "ADD    ";
+            `FUNCT_ADDU    : inst_func_string = "ADDU   ";
+            `FUNCT_SUB     : inst_func_string = "SUB    ";
+            `FUNCT_SUBU    : inst_func_string = "SUBU   ";
+            `FUNCT_AND     : inst_func_string = "AND    ";
+            `FUNCT_OR      : inst_func_string = "OR     ";
+            `FUNCT_XOR     : inst_func_string = "XOR    ";
+            `FUNCT_NOR     : inst_func_string = "NOR    ";
+            `FUNCT_NOOP_28 : inst_func_string = "NOOP_28";
+            `FUNCT_NOOP_29 : inst_func_string = "NOOP_29";
+            `FUNCT_SLT     : inst_func_string = "SLT    ";
+            `FUNCT_SLTU    : inst_func_string = "SLTU   ";
+            `FUNCT_NOOP_2C : inst_func_string = "NOOP_2C";
+            `FUNCT_NOOP_2D : inst_func_string = "NOOP_2D";
+            `FUNCT_NOOP_2E : inst_func_string = "NOOP_2E";
+            `FUNCT_NOOP_2F : inst_func_string = "NOOP_2F";
+            `FUNCT_TGE     : inst_func_string = "TGE    ";
+            `FUNCT_TGEU    : inst_func_string = "TGEU   ";
+            `FUNCT_TLT     : inst_func_string = "TLT    ";
+            `FUNCT_TLTU    : inst_func_string = "TLTU   ";
+            `FUNCT_TEQ     : inst_func_string = "TEQ    ";
+            `FUNCT_NOOP_35 : inst_func_string = "NOOP_35";
+            `FUNCT_TNE     : inst_func_string = "TNE    ";
+            `FUNCT_NOOP_37 : inst_func_string = "NOOP_37";
+            `FUNCT_NOOP_38 : inst_func_string = "NOOP_38";
+            `FUNCT_NOOP_39 : inst_func_string = "NOOP_39";
+            `FUNCT_NOOP_3A : inst_func_string = "NOOP_3A";
+            `FUNCT_NOOP_3B : inst_func_string = "NOOP_3B";
+            `FUNCT_NOOP_3C : inst_func_string = "NOOP_3C";
+            `FUNCT_NOOP_3D : inst_func_string = "NOOP_3D";
+            `FUNCT_NOOP_3E : inst_func_string = "NOOP_3E";
+            `FUNCT_NOOP_3F : inst_func_string = "NOOP_3F";
+         endcase
+      end
+   end
 endmodule
 
 `endif

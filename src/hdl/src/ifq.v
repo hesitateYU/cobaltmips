@@ -22,7 +22,7 @@ module ifq (
    input              dispatch_branch_valid
 );
 
-	localparam integer N_ENTRY = 4;
+   localparam integer N_ENTRY = 4;
 
    // Internal FIFO memory, 128x4.
    reg  [127:0] mem   [N_ENTRY-1:0];

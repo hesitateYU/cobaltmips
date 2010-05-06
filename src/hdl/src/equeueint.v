@@ -178,7 +178,7 @@ module equeueint (
             2'b01: begin inst_rsdata[i] = cdb_data;           inst_rsvalid[i] = 1'b1;                end
             2'b11: begin
                inst_rsdata[i]  = (do_rs_update[i+1]) ? cdb_data : inst_rsdata_r[i+1];
-               inst_rsvalid[i] = (do_rs_update[i+1]) ? cdb_data : inst_rsvalid_r[i+1]; end
+               inst_rsvalid[i] = (do_rs_update[i+1]) ? 1'b1     : inst_rsvalid_r[i+1]; end
             2'b10: begin
                inst_rsdata[i]  = (do_rs_update[i+1]) ? cdb_data : inst_rsdata_r[i+1];
                inst_rsvalid[i] = (do_rs_update[i+1]) ? 1'b1     : inst_rsvalid_r[i+1];

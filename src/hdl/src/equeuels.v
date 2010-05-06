@@ -127,10 +127,17 @@ module equeuels (
       //          | Upper reg  |  There is some space available. Some registers are either | Upper register is not
       //          | is valid.  |  disabled or are already being dispatched.                | being dispatched.
       //          +------------+-----------------------------------------------------------+--------------------------------
-      do_shift[3] = valid_r[4] & ( /*(issuels_done & (|selected[3:0])) |*/ ~(&valid_r[3:0]) );
-      do_shift[2] = valid_r[3] & ( /*(issuels_done & (|selected[2:0])) |*/ ~(&valid_r[2:0]) ) /*& ~(issuels_done & selected[3])*/;
-      do_shift[1] = valid_r[2] & ( /*(issuels_done & (|selected[1:0])) |*/ ~(&valid_r[1:0]) ) /*& ~(issuels_done & selected[2])*/;
-      do_shift[0] = valid_r[1] & ( (issuels_done & (|selected[0:0])) | ~(&valid_r[0:0]) ) /*& ~(issuels_done & selected[1])*/;
+      //do_shift[3] = valid_r[4] & ( /*(issuels_done & (|selected[3:0])) |*/ ~(&valid_r[3:0]) );
+      //do_shift[2] = valid_r[3] & ( /*(issuels_done & (|selected[2:0])) |*/ ~(&valid_r[2:0]) ) /*& ~(issuels_done & selected[3])*/;
+      //do_shift[1] = valid_r[2] & ( /*(issuels_done & (|selected[1:0])) |*/ ~(&valid_r[1:0]) ) /*& ~(issuels_done & selected[2])*/;
+      //do_shift[0] = valid_r[1] & ( (issuels_done & (|selected[0:0])) | ~(&valid_r[0:0]) ) /*& ~(issuels_done & selected[1])*/;
+      //
+      // WARNING: Do not change order statement.
+      //
+      do_shift[3] = valid_r[4] & ~(&valid_r[3:0]);
+      do_shift[2] = valid_r[3] & ~(&valid_r[2:0]);
+      do_shift[1] = valid_r[2] & ~(&valid_r[1:0]);
+      do_shift[0] = valid_r[1] & ( /*(issuels_done & (|selected[0:0])) |*/ ~(&valid_r[0:0]) );
       // Registers are valid when:
       //            +-------------+----------------------------------------------+---------------
       //            | If we shift | Register is not currently being dispatched.  | Lower reg
@@ -139,10 +146,17 @@ module equeuels (
       //            | must be     |                                              |
       //            | valid       |                                              |
       //            +-------------+----------------------------------------------+---------------
-      inst_valid[3] = do_shift[3] | ( valid_r[3] /*& ~(issuels_done & selected[3])*/ & ~do_shift[2] );
-      inst_valid[2] = do_shift[2] | ( valid_r[2] /*& ~(issuels_done & selected[2])*/ & ~do_shift[1] );
-      inst_valid[1] = do_shift[1] | ( valid_r[1] /*& ~(issuels_done & selected[1])*/ & ~do_shift[0] );
+      //inst_valid[0] = do_shift[0] | ( valid_r[0] & ~(issuels_done & selected[0])                );
+      //inst_valid[1] = do_shift[1] | ( valid_r[1] & /*& ~(issuels_done & selected[1]) &*/ ~do_shift[0] );
+      //inst_valid[2] = do_shift[2] | ( valid_r[2] & /*& ~(issuels_done & selected[2]) &*/ ~do_shift[1] );
+      //inst_valid[3] = do_shift[3] | ( valid_r[3] & /*& ~(issuels_done & selected[3]) &*/ ~do_shift[2] );
+      //
+      // WARNING: Do not change order statement.
+      //
       inst_valid[0] = do_shift[0] | ( valid_r[0] & ~(issuels_done & selected[0])                );
+      inst_valid[1] = do_shift[1] | ( valid_r[1] & ~do_shift[0] );
+      inst_valid[2] = do_shift[2] | ( valid_r[2] & ~do_shift[1] );
+      inst_valid[3] = do_shift[3] | ( valid_r[3] & ~do_shift[2] );
    end
 
 
@@ -157,7 +171,10 @@ module equeuels (
       //
       // Queue only when last instruction is valid and ready.
       //issuels_ready  = |valid_and_ready;
-      issuels_ready  = valid_and_ready[0];
+      //
+      // TODO
+      //
+      issuels_ready  = inst_valid_r[0] & inst_ready[0];
       // The oldest and valid register is sent to the issue unit. Priority
       // encoder inferred. If no instruction is ready, then assign the
       // register at the bottom.
@@ -191,7 +208,6 @@ module equeuels (
          inst_opcode[i] = (do_shift[i]) ? inst_opcode_r[i + 1] : inst_opcode_r[i];
          inst_rstag [i] = (do_shift[i]) ? inst_rstag_r [i + 1] : inst_rstag_r [i];
          inst_rttag [i] = (do_shift[i]) ? inst_rttag_r [i + 1] : inst_rttag_r [i];
-         inst_valid [i] = (do_shift[i]) ? inst_valid_r [i + 1] : inst_valid_r [i];
 
          case ({do_shift[i], do_rs_update[i]})
             2'b00:        begin inst_addr[i] = inst_addr_r[i];                                               end

@@ -110,13 +110,10 @@ module equeueint (
       //          | Upper reg  |  There is some space available. Some registers are either | Upper register is not
       //          | is valid.  |  disabled or are already being dispatched.                | being dispatched.
       //          +------------+-----------------------------------------------------------+--------------------------------
-      //
-      // WARNING: Do not change order statement.
-      //
-      do_shift[0] = valid_r[1] & ( (issueint_done & (|selected[0:0])) | ~(&valid_r[0:0]) ) & ~(issueint_done & selected[1]);
-      do_shift[1] = valid_r[2] & ( (issueint_done & (|selected[1:0])) | ~(&valid_r[1:0]) ) & ~(issueint_done & selected[2]);
-      do_shift[2] = valid_r[3] & ( (issueint_done & (|selected[2:0])) | ~(&valid_r[2:0]) ) & ~(issueint_done & selected[3]);
       do_shift[3] = valid_r[4] & ( (issueint_done & (|selected[3:0])) | ~(&valid_r[3:0]) );
+      do_shift[2] = valid_r[3] & ( (issueint_done & (|selected[2:0])) | ~(&valid_r[2:0]) ) & ~(issueint_done & selected[3]);
+      do_shift[1] = valid_r[2] & ( (issueint_done & (|selected[1:0])) | ~(&valid_r[1:0]) ) & ~(issueint_done & selected[2]);
+      do_shift[0] = valid_r[1] & ( (issueint_done & (|selected[0:0])) | ~(&valid_r[0:0]) ) & ~(issueint_done & selected[1]);
       // Registers are valid when:
       //            +-------------+----------------------------------------------+---------------
       //            | If we shift | Register is not currently being dispatched.  | Lower reg
@@ -125,13 +122,10 @@ module equeueint (
       //            | must be     |                                              |
       //            | valid       |                                              |
       //            +-------------+----------------------------------------------+---------------
-      //
-      // WARNING: Do not change order statement.
-      //
-      inst_valid[0] = do_shift[0] | ( valid_r[0] & ~(issueint_done & selected[0])                );
-      inst_valid[1] = do_shift[1] | ( valid_r[1] & ~(issueint_done & selected[1]) & ~do_shift[0] );
-      inst_valid[2] = do_shift[2] | ( valid_r[2] & ~(issueint_done & selected[2]) & ~do_shift[1] );
       inst_valid[3] = do_shift[3] | ( valid_r[3] & ~(issueint_done & selected[3]) & ~do_shift[2] );
+      inst_valid[2] = do_shift[2] | ( valid_r[2] & ~(issueint_done & selected[2]) & ~do_shift[1] );
+      inst_valid[1] = do_shift[1] | ( valid_r[1] & ~(issueint_done & selected[1]) & ~do_shift[0] );
+      inst_valid[0] = do_shift[0] | ( valid_r[0] & ~(issueint_done & selected[0])                );
    end
 
    always @(*) begin : equeueint_oreg_assign
@@ -195,7 +189,7 @@ module equeueint (
             2'b01: begin inst_rtdata[i] = cdb_data;           inst_rtvalid[i] = 1'b1;                end
             2'b11: begin
                inst_rtdata[i]  = (do_rt_update[i+1]) ? cdb_data : inst_rtdata_r[i+1];
-               inst_rtvalid[i] = (do_rt_update[i+1]) ? cdb_data : inst_rtvalid_r[i+1]; end
+               inst_rtvalid[i] = (do_rt_update[i+1]) ? 1'b1     : inst_rtvalid_r[i+1]; end
             2'b10: begin
                inst_rtdata[i]  = (do_rt_update[i+1]) ? cdb_data : inst_rtdata_r[i+1];
                inst_rtvalid[i] = (do_rt_update[i+1]) ? 1'b1     : inst_rtvalid_r[i+1];

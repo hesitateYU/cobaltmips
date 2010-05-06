@@ -182,7 +182,7 @@ module equeuediv (
             2'b01: begin inst_rtdata[i] = cdb_data;           inst_rtvalid[i] = 1'b1;                end
             2'b11: begin
                inst_rtdata[i]  = (do_rt_update[i+1]) ? cdb_data : inst_rtdata_r[i+1];
-               inst_rtvalid[i] = (do_rt_update[i+1]) ? cdb_data : inst_rtvalid_r[i+1]; end
+               inst_rtvalid[i] = (do_rt_update[i+1]) ? 1'b1     : inst_rtvalid_r[i+1]; end
             2'b10: begin
                inst_rtdata[i]  = (do_rt_update[i+1]) ? cdb_data : inst_rtdata_r[i+1];
                inst_rtvalid[i] = (do_rt_update[i+1]) ? 1'b1     : inst_rtvalid_r[i+1];

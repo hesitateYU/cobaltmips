@@ -176,7 +176,11 @@ module issue (
          end
          //only int out
          SEL_INT : begin
-            cdb_valid_oreg        = 1'b1;
+            //
+            // TODO: Valid and branch can't be set at the same time. When
+            //       branching, set valid to 0.
+            //cdb_valid_oreg        = 1'b1;
+            cdb_valid_oreg        = ~issueint_alubranch;
             cdb_data_oreg         = issueint_out;
             cdb_tag_oreg          = issueint_tagout;
             cdb_branch_oreg       = issueint_alubranch;

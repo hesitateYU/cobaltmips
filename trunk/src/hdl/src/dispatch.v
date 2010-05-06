@@ -67,7 +67,7 @@ module dispatch (
    reg can_dispatch;
    reg do_req_tag;
    reg do_req_equeue;
-   reg is_branch, is_jump;
+   reg is_branch, is_jump, is_store, is_load;
 
    // Signal declarations for Register File.
    reg  [ 4:0] dispatch_regfile_rsaddr;
@@ -145,7 +145,7 @@ module dispatch (
       equeue_imm     = inst_imm;
       equeue_rdtag   = tagfifo_dispatch_tag;
       equeue_rstag   = rst_dispatch_rstag;
-      equeue_rttag   = rst_dispatch_rttag;
+      equeue_rttag   = (is_load) ? tagfifo_dispatch_tag : rst_dispatch_rttag;
       // If a value is published by CDB, then DATA fields for RS and RT are
       // solved and ready to be used by execution queues, invalidate the
       // VALID fields so that execution queues listen to CDB updates.
@@ -153,7 +153,7 @@ module dispatch (
       // inside those modules every time CDB publishes anything.
       equeue_rsvalid = (rst_dispatch_rstag == cdb_tag && cdb_valid) ? cdb_valid : ~rst_dispatch_rsvalid;
       // Loads don't require RT register. It is used as destination.
-      equeue_rtvalid = (`OPCODE_LW == inst_opcode) ? 1'b1
+      equeue_rtvalid = (is_store) ? 1'b1
                      : ((rst_dispatch_rttag == cdb_tag && cdb_valid) ? cdb_valid : ~rst_dispatch_rtvalid);
       equeue_rsdata  = (rst_dispatch_rstag == cdb_tag && cdb_valid && rst_dispatch_rsvalid) ? cdb_data : regfile_dispatch_rsdata;
       equeue_rtdata  = (rst_dispatch_rttag == cdb_tag && cdb_valid && rst_dispatch_rtvalid) ? cdb_data : regfile_dispatch_rtdata;
@@ -182,7 +182,7 @@ module dispatch (
       case (state_r)
          S_DISPATCH : begin
             can_dispatch = (do_req_equeue & equeue_ready[curr_equeueidx])
-                         & (is_branch | (do_req_tag & ~tagfifo_dispatch_empty))
+                         & (is_branch | (do_req_tag & ~tagfifo_dispatch_empty) | is_store)
                          & (~ifq_empty);
             equeue_en[curr_equeueidx] = can_dispatch;
             ifq_ren = can_dispatch;
@@ -192,7 +192,7 @@ module dispatch (
          end
          S_BRANCHSTALL : begin
             can_dispatch = (do_req_equeue & equeue_ready[curr_equeueidx])
-                         & (is_branch | (do_req_tag & ~tagfifo_dispatch_empty))
+                         & (is_branch | (do_req_tag & ~tagfifo_dispatch_empty) | is_store)
                          & (~ifq_empty)
                          & (cdb_branch & ~cdb_branch_taken);
             equeue_en[curr_equeueidx] = can_dispatch;
@@ -215,6 +215,8 @@ module dispatch (
       do_req_tag     = 1'b0;
       is_branch      = 1'b0;
       is_jump        = 1'b0;
+      is_store       = 1'b0;
+      is_load        = 1'b0;
 
       equeueint_opcode = 'h0;
       equeuels_opcode  = 'h0;
@@ -257,11 +259,13 @@ module dispatch (
             curr_equeueidx  = EQ_LS;
             do_req_equeue   = 1'b1;
             do_req_tag      = 1'b1;
+            is_load         = 1'b1;
          end
          `OPCODE_SW : begin
             equeuels_opcode = `ISSUELS_FUNC_SW;
             curr_equeueidx  = EQ_LS;
             do_req_equeue   = 1'b1;
+            is_store        = 1'b1;
          end
          default : begin
          end

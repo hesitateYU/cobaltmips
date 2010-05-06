@@ -159,8 +159,8 @@ module dispatch (
       equeue_rtdata  = (rst_dispatch_rttag == cdb_tag && cdb_valid && rst_dispatch_rtvalid) ? cdb_data : regfile_dispatch_rtdata;
 
       // After decoding, request a tag to TAGFIFO only if it is needed.
-      dispatch_tagfifo_ren = do_req_tag & ~tagfifo_dispatch_empty & ~ifq_empty;
-      dispatch_rst_valid   = do_req_tag & ~tagfifo_dispatch_empty & ~ifq_empty;
+      dispatch_tagfifo_ren = do_req_tag & ~tagfifo_dispatch_empty & ~ifq_empty & ((S_DISPATCH == state_r) || (S_BRANCHSTALL == state_r && S_DISPATCH == next_state));
+      dispatch_rst_valid   = do_req_tag & ~tagfifo_dispatch_empty & ~ifq_empty & ((S_DISPATCH == state_r) || (S_BRANCHSTALL == state_r && S_DISPATCH == next_state));
       dispatch_rst_tag     = tagfifo_dispatch_tag;
       dispatch_rst_addr    = inst_rdaddr;
    end

@@ -166,19 +166,19 @@ module equeuels (
       // register at the bottom.
       issuels_opcode = inst_opcode_r[0];
       issuels_rttag  = inst_rttag_r [0];
-      issuels_addr   = inst_addr_r  [0];
+      issuels_addr   = inst_addr_r  [0] + inst_offset_r[0];
       issuels_data   = inst_rtdata_r[0];
-      begin : equeuels_regdata_mux
-         for (i = 0; i < N_SREG; i = i + 1) begin
-            if (inst_ready[i]) begin
-               issuels_opcode = inst_opcode_r[i];
-               issuels_rttag  = inst_rttag_r [i];
-               issuels_addr   = inst_addr_r  [i];
-               issuels_data   = inst_rtdata_r[i];
-               disable equeuels_regdata_mux;
-            end
-         end
-      end
+      //begin : equeuels_regdata_mux
+      //   for (i = 0; i < N_SREG; i = i + 1) begin
+      //      if (inst_ready[i]) begin
+      //         issuels_opcode = inst_opcode_r[i];
+      //         issuels_rttag  = inst_rttag_r [i];
+      //         issuels_addr   = inst_addr_r  [i] + inst_offset_r[i];
+      //         issuels_data   = inst_rtdata_r[i];
+      //         disable equeuels_regdata_mux;
+      //      end
+      //   end
+      //end
 
       // Unless all registers are occupied and issue unit is not ready to
       // process then queue is not considered full because a shift is

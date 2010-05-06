@@ -158,7 +158,7 @@ module equeuels (
       // Queue only when last instruction is valid and ready.
       //issuels_ready  = |valid_and_ready;
       //
-      // TODO
+      // TODO : If instruction at the bottom is ready then we can issue it.
       //
       issuels_ready  = inst_valid_r[0] & inst_ready[0];
       // The oldest and valid register is sent to the issue unit. Priority

@@ -108,15 +108,15 @@ add wave -noupdate -color Brown -format Literal -radix unsigned /tb_top/cpu/eque
 add wave -noupdate -color Orange -format Literal -radix unsigned /tb_top/cpu/equeueint/inst_rstag_r
 add wave -noupdate -color Orange -format Literal -radix unsigned /tb_top/cpu/equeueint/inst_rsdata_r
 add wave -noupdate -format Literal /tb_top/cpu/equeueint/do_rs_update
-add wave -noupdate -format Literal -expand /tb_top/cpu/equeueint/do_rt_update
+add wave -noupdate -format Literal /tb_top/cpu/equeueint/do_rt_update
 add wave -noupdate -color Orange -format Literal -radix unsigned /tb_top/cpu/equeueint/inst_rsvalid_r
 add wave -noupdate -color Cyan -format Literal -radix unsigned /tb_top/cpu/equeueint/inst_rttag_r
-add wave -noupdate -color Cyan -format Literal -radix unsigned -expand /tb_top/cpu/equeueint/inst_rtdata_r
-add wave -noupdate -color Cyan -format Literal -radix unsigned -expand /tb_top/cpu/equeueint/inst_rtvalid_r
-add wave -noupdate -format Literal -radix unsigned -expand /tb_top/cpu/equeueint/inst_valid_r
-add wave -noupdate -format Literal -expand /tb_top/cpu/equeueint/inst_ready
-add wave -noupdate -format Literal -expand /tb_top/cpu/equeueint/inst_selected
-add wave -noupdate -format Literal -expand /tb_top/cpu/equeueint/do_shift
+add wave -noupdate -color Cyan -format Literal -radix unsigned /tb_top/cpu/equeueint/inst_rtdata_r
+add wave -noupdate -color Cyan -format Literal -radix unsigned /tb_top/cpu/equeueint/inst_rtvalid_r
+add wave -noupdate -format Literal -radix unsigned /tb_top/cpu/equeueint/inst_valid_r
+add wave -noupdate -format Literal /tb_top/cpu/equeueint/inst_ready
+add wave -noupdate -format Literal /tb_top/cpu/equeueint/inst_selected
+add wave -noupdate -format Literal /tb_top/cpu/equeueint/do_shift
 add wave -noupdate -divider {equeuels interface}
 add wave -noupdate -color {Medium Slate Blue} -format Logic -radix unsigned /tb_top/cpu/dispatch/equeuels_ready
 add wave -noupdate -color Coral -format Logic -radix unsigned /tb_top/cpu/dispatch/equeuels_en
@@ -164,7 +164,7 @@ add wave -noupdate -format Literal -radix unsigned /tb_top/cpu/issue/divider_wra
 add wave -noupdate -format Logic -radix unsigned /tb_top/cpu/issue/divider_wrapper/divider/div_rfd
 add wave -noupdate -format Literal -radix hexadecimal /tb_top/cpu/issue/divider_wrapper/divider/div_res
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {249070 ps} 0}
+WaveRestoreCursors {{Cursor 1} {318521 ps} 0} {{Cursor 2} {180219 ps} 0}
 configure wave -namecolwidth 178
 configure wave -valuecolwidth 104
 configure wave -justifyvalue left
@@ -179,4 +179,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ps
 update
-WaveRestoreZoom {118518 ps} {263021 ps}
+WaveRestoreZoom {0 ps} {144503 ps}

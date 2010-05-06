@@ -33,8 +33,8 @@ module issue (
       input                         issuediv_ready,
       input                         issuels_ready,
 
-      output reg                    issueint_carryout,
-      output reg                    issueint_overflow,
+      output                        issueint_carryout,
+      output                        issueint_overflow,
 
       output reg                    issueint_equeueint_done,
       output reg                    issuediv_equeuediv_done,

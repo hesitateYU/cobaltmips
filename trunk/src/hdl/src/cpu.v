@@ -26,11 +26,11 @@ module cpu (
    wire [ 31:0] dispatch_ifq_branch_addr;
    wire         dispatch_ifq_branch_valid;
 
-   reg  [ 31:0] cdb_data;
-   reg  [  5:0] cdb_tag;
-   reg          cdb_valid;
-   reg          cdb_branch;
-   reg          cdb_branch_taken;
+   wire [ 31:0] cdb_data;
+   wire [  5:0] cdb_tag;
+   wire         cdb_valid;
+   wire         cdb_branch;
+   wire         cdb_branch_taken;
 
    wire [ 15:0] dispatch_equeue_imm;
    wire [  5:0] dispatch_equeue_rdtag;

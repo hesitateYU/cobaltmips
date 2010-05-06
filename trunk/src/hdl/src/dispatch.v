@@ -182,7 +182,7 @@ module dispatch (
       case (state_r)
          S_DISPATCH : begin
             can_dispatch = (do_req_equeue & equeue_ready[curr_equeueidx])
-                         & (do_req_tag & ~tagfifo_dispatch_empty)
+                         & (is_branch | (do_req_tag & ~tagfifo_dispatch_empty))
                          & (~ifq_empty);
             equeue_en[curr_equeueidx] = can_dispatch;
             ifq_ren = can_dispatch;
@@ -192,7 +192,7 @@ module dispatch (
          end
          S_BRANCHSTALL : begin
             can_dispatch = (do_req_equeue & equeue_ready[curr_equeueidx])
-                         & (do_req_tag & ~tagfifo_dispatch_empty)
+                         & (is_branch | (do_req_tag & ~tagfifo_dispatch_empty))
                          & (~ifq_empty)
                          & (cdb_branch & ~cdb_branch_taken);
             equeue_en[curr_equeueidx] = can_dispatch;
@@ -211,10 +211,10 @@ module dispatch (
       //  + Every instruction does not requires a TAG as destination register.
       //  + It is not a branch instruction nor a jump.
       curr_equeueidx = EQ_INT;
-      do_req_equeue   = 1'b0;
-      do_req_tag      = 1'b0;
-      is_branch       = 1'b0;
-      is_jump         = 1'b0;
+      do_req_equeue  = 1'b0;
+      do_req_tag     = 1'b0;
+      is_branch      = 1'b0;
+      is_jump        = 1'b0;
 
       equeueint_opcode = 'h0;
       equeuels_opcode  = 'h0;
@@ -242,32 +242,28 @@ module dispatch (
          `OPCODE_BEQ : begin
             equeueint_opcode = inst_opcode;
             do_req_equeue    = 1'b1;
-            do_req_tag       = 1'b0;
             is_branch        = 1'b1;
          end
          `OPCODE_BNE : begin
-            curr_equeueidx   = EQ_INT;
             equeueint_opcode = inst_opcode;
             do_req_equeue    = 1'b1;
-            do_req_tag       = 1'b0;
             is_branch        = 1'b1;
          end
          `OPCODE_J : begin
-            do_req_equeue = 1'b0;
-            do_req_tag    = 1'b0;
-            is_jump       = 1'b1;
+            is_jump = 1'b1;
          end
          `OPCODE_LW : begin
-            curr_equeueidx  = EQ_LS;
             equeuels_opcode = `ISSUELS_FUNC_LW;
+            curr_equeueidx  = EQ_LS;
+            do_req_equeue   = 1'b1;
+            do_req_tag      = 1'b1;
          end
          `OPCODE_SW : begin
-            curr_equeueidx  = EQ_LS;
             equeuels_opcode = `ISSUELS_FUNC_SW;
+            curr_equeueidx  = EQ_LS;
+            do_req_equeue   = 1'b1;
          end
          default : begin
-            do_req_equeue = 1'b0;
-            do_req_tag    = 1'b0;
          end
       endcase
    end

@@ -22,9 +22,11 @@ module ifq (
    input              dispatch_branch_valid
 );
 
+	localparam integer N_ENTRY = 4;
+
    // Internal FIFO memory, 128x4.
-   reg  [127:0] mem   [3:0];
-   reg  [127:0] mem_r [3:0];
+   reg  [127:0] mem   [N_ENTRY-1:0];
+   reg  [127:0] mem_r [N_ENTRY-1:0];
 
    // Read and write pointers.
    reg  [  4:0] wptr, wptr_r;
@@ -122,7 +124,7 @@ module ifq (
 
    always @(*) begin : ifq_mem_proc
       integer i;
-      for(i = 0; i < 4; i = i + 1) mem[i] = mem_r[i];
+      for(i = 0; i < N_ENTRY; i = i + 1) mem[i] = mem_r[i];
 
       mem[wptr_r[3:2]] = (icache_dout_valid & icache_req_r) ? icache_dout : mem_r[wptr_r[3:2]];
    end
@@ -143,7 +145,7 @@ module ifq (
 
    always @(posedge clk) begin : ifq_mem_reg
       integer i;
-      for(i = 0; i < 4; i = i + 1) begin
+      for(i = 0; i < N_ENTRY; i = i + 1) begin
          mem_r[i] <= (reset) ? 'h0 : mem[i];
       end
    end

@@ -291,7 +291,7 @@ module issue (
    //
    dcache dcache (
       .clk           (clk             ),
-      .wen           (issuels_opcode & issuels_ready),
+      .wen           (issuels_opcode & can_issue_ls),
 
       .addr          (issuels_addr    ),
       .wdata         (issuels_data    ),

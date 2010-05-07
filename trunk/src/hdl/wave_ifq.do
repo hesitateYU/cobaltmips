@@ -41,10 +41,11 @@ add wave -noupdate -format Literal -radix hexadecimal /tb_ifq/ifq/line_from_mem
 add wave -noupdate -format Literal -radix hexadecimal /tb_ifq/ifq/line_from_input
 add wave -noupdate -format Literal -radix unsigned /tb_ifq/ifq/inst_from_mem_mux_out
 add wave -noupdate -format Literal -radix unsigned /tb_ifq/ifq/inst_from_input_mux_out
+add wave -noupdate -format Literal -radix hexadecimal /tb_ifq/icache/icache_mem/inst/memory
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {561096 ps} 0}
+WaveRestoreCursors {{Cursor 1} {743053 ps} 0}
 configure wave -namecolwidth 193
-configure wave -valuecolwidth 236
+configure wave -valuecolwidth 251
 configure wave -justifyvalue left
 configure wave -signalnamewidth 1
 configure wave -snapdistance 10
@@ -57,4 +58,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ps
 update
-WaveRestoreZoom {516438 ps} {647690 ps}
+WaveRestoreZoom {691666 ps} {790104 ps}

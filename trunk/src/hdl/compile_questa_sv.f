@@ -46,3 +46,5 @@ tb/tb_dcache.v
 tb/tb_regfile.v
 tb/tb_equeue_issue.v
 tb/tb_tagfifo.v
+tb/tb_ifq.v
+

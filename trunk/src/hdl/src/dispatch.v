@@ -67,7 +67,7 @@ module dispatch (
    reg can_dispatch;
    reg do_req_tag;
    reg do_req_equeue;
-   reg is_branch, is_jump, is_store, is_load;
+   reg is_branch, is_jump, is_store, is_load, do_dispatch;
 
    // Signal declarations for Register File.
    reg  [ 4:0] dispatch_regfile_rsaddr;
@@ -158,9 +158,12 @@ module dispatch (
       equeue_rsdata  = (rst_dispatch_rstag == cdb_tag && cdb_valid && rst_dispatch_rsvalid) ? cdb_data : regfile_dispatch_rsdata;
       equeue_rtdata  = (rst_dispatch_rttag == cdb_tag && cdb_valid && rst_dispatch_rtvalid) ? cdb_data : regfile_dispatch_rtdata;
 
-      // After decoding, request a tag to TAGFIFO only if it is needed.
-      dispatch_tagfifo_ren = do_req_tag & ~tagfifo_dispatch_empty & ~ifq_empty & ((S_DISPATCH == state_r) || (S_BRANCHSTALL == state_r && S_DISPATCH == next_state));
-      dispatch_rst_valid   = do_req_tag & ~tagfifo_dispatch_empty & ~ifq_empty & ((S_DISPATCH == state_r) || (S_BRANCHSTALL == state_r && S_DISPATCH == next_state));
+      // After decoding, request a tag to TAGFIFO and write back results to
+      // register file only if it is needed.
+      do_dispatch = do_req_tag & ~tagfifo_dispatch_empty & ~ifq_empty
+                  & ((S_DISPATCH == state_r) || (S_BRANCHSTALL == state_r && S_DISPATCH == next_state & cdb_branch & ~cdb_branch_taken));
+      dispatch_tagfifo_ren = do_dispatch;
+      dispatch_rst_valid   = do_dispatch;
       dispatch_rst_tag     = tagfifo_dispatch_tag;
       dispatch_rst_addr    = inst_rdaddr;
    end
@@ -282,7 +285,7 @@ module dispatch (
    // If branch was taken then dispatch the instruction (that came after the
    // branch and has already been decoded), otherwise, discard it.
    always @(posedge clk) begin : dispatch_inst_branch_addr_reg
-      inst_addr_branch_r <= (reset) ? 'h0 : inst_addr_branch;
+      inst_addr_branch_r <= (reset) ? 'h0 : (is_branch) ? inst_addr_branch : inst_addr_branch_r;
    end
 
    regfile #(

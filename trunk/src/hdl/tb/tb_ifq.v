@@ -81,7 +81,7 @@ module tb_ifq();
       wait (~cb.ifq_dispatch_empty);
       cb.dispatch_ifq_ren <= 1;
       repeat (5) @(posedge clk);
-      cb.dispatch_ifq_branch_addr  <= 4 * 10;
+      cb.dispatch_ifq_branch_addr  <= 4 * 4;
       cb.dispatch_ifq_branch_valid <= 1;
       @(posedge clk);
       cb.dispatch_ifq_branch_valid <= 0;

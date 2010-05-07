@@ -62,7 +62,7 @@ module ifq (
       // both write/read pointers must point to the same address (0).
       // Read from icache 4 instructions at a time, and write to dispatch unit
       // only one instruction at a time.
-      rptr_branch = {3'h0, dispatch_branch_addr[1:0]};
+      rptr_branch = {3'h0, dispatch_branch_addr[3:2]};
       wptr_branch = {5'h0};
       rptr = (dispatch_branch_valid) ? rptr_branch : ( (do_inc_rptr) ? rptr_r + 1 : rptr_r );
       wptr = (dispatch_branch_valid) ? wptr_branch : ( (do_inc_wptr) ? wptr_r + 4 : wptr_r );
@@ -112,10 +112,10 @@ module ifq (
       //       For now, we never set icache_abort.
       //
       icache_abort = dispatch_branch_valid & icache_req_r;
-      icache_pcin  = (dispatch_branch_valid) ? dispatch_branch_addr : pcin_r;
+      icache_pcin  = (dispatch_branch_valid) ? {dispatch_branch_addr[31:4], 4'h0} : pcin_r;
       icache_ren   = icache_req;
 
-      dispatch_pcout_plus4 = (dispatch_branch_valid) ? pcout : pcout_r;
+      dispatch_pcout_plus4 = (dispatch_branch_valid) ? pcout : pcout_r + 4;
       dispatch_inst        = bypass_mux_out;
       // Allow Dispatch unit to grab an instruction when bypassing the internal
       // registers.

@@ -158,7 +158,7 @@ module issue (
       cdb_mux_sel = {can_issue_int, div_cdb_ctrl_r[0], mult_cdb_ctrl_r[0], can_issue_ls};
       case (cdb_mux_sel)
          SEL_LS : begin
-           cdb_valid_oreg  = 1'b1;
+           cdb_valid_oreg  = (`ISSUELS_FUNC_SW == issuels_opcode) ? 'h0 : 1'b1;
            cdb_data_oreg   = (`ISSUELS_FUNC_SW == issuels_opcode) ? 'h0 : issuels_out;
            cdb_tag_oreg    = (`ISSUELS_FUNC_SW == issuels_opcode) ? 'h0 : issuels_tagout;
          end

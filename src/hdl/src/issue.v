@@ -16,9 +16,10 @@ module issue (
       input  [ 5:0]                 issueint_rdtag,
 
       input                         issuels_opcode,
-      input  [31:0]                 issuels_data,
-      input  [31:0]                 issuels_addr,
       input  [ 5:0]                 issuels_rttag,
+      input  [31:0]                 issuels_rtdata,
+      input  [31:0]                 issuels_rsdata,
+      input  [31:0]                 issuels_imm,
 
       input  [31:0]                 issuediv_rsdata,
       input  [31:0]                 issuediv_rtdata,
@@ -75,6 +76,9 @@ module issue (
    wire        div_exec_ready, issueint_alubranch, issueint_alubranch_taken ;
    wire [ 5:0] issuels_tagout, issueint_tagout, issuediv_tagout, issuemult_tagout;
 
+   reg         is_load, is_load_r;
+   wire        issuels_opcode_r;
+
    // Temp register used for behavioral multiplication instead of its execution
    // unit. Since multiplication takes 3 cycles and it is pipelined, we need to
    // store all results.
@@ -88,7 +92,7 @@ module issue (
    // to load/store operation. That is, priority toggles each time both time of
    // operations contend.
    always @(*) begin: issue_int_before_load_proc
-      int_before_ls = int_before_ls_r ^ (issueint_ready & issuels_ready);
+      int_before_ls = int_before_ls_r ^ (issueint_ready & issuels_ready & issuels_opcode == `ISSUELS_FUNC_LW);
    end
 
    // CDB reservation registers
@@ -142,7 +146,7 @@ module issue (
       issuels_equeuels_done     = can_issue_ls;
 
       cdb_valid        = cdb_valid_oreg_r;
-      cdb_data         = cdb_data_oreg_r;
+      cdb_data         = (is_load_r && issuels_opcode_r == `ISSUELS_FUNC_LW) ? issuels_out : cdb_data_oreg_r;
       cdb_tag          = cdb_tag_oreg_r;
       cdb_branch       = cdb_branch_oreg_r;
       cdb_branch_taken = cdb_branch_taken_oreg_r;
@@ -154,13 +158,15 @@ module issue (
       cdb_tag_oreg          = 'h0;
       cdb_branch_oreg       = 'h0;
       cdb_branch_taken_oreg = 'h0;
+      is_load               = 'b0;
 
       cdb_mux_sel = {can_issue_int, div_cdb_ctrl_r[0], mult_cdb_ctrl_r[0], can_issue_ls};
       case (cdb_mux_sel)
          SEL_LS : begin
            cdb_valid_oreg  = (`ISSUELS_FUNC_SW == issuels_opcode) ? 'h0 : 1'b1;
-           cdb_data_oreg   = (`ISSUELS_FUNC_SW == issuels_opcode) ? 'h0 : issuels_out;
-           cdb_tag_oreg    = (`ISSUELS_FUNC_SW == issuels_opcode) ? 'h0 : issuels_tagout;
+           cdb_data_oreg   = 'h0;
+           cdb_tag_oreg    = issuels_rttag;
+           is_load         = 1'b1;
          end
          SEL_MULT : begin
            cdb_valid_oreg = 1'b1;
@@ -218,6 +224,7 @@ module issue (
       cdb_tag_oreg_r          <= (reset) ? 'h0 : cdb_tag_oreg;
       cdb_branch_oreg_r       <= (reset) ? 'h0 : cdb_branch_oreg;
       cdb_branch_taken_oreg_r <= (reset) ? 'h0 : cdb_branch_taken_oreg;
+      is_load_r               <= (reset) ? 'h0 : is_load;
    end
 
    always @(posedge clk) begin : cdb_slots_reg_assign
@@ -290,14 +297,15 @@ module issue (
    // Opcode is translated as write enable.
    //
    dcache dcache (
-      .clk           (clk             ),
-      .wen           (issuels_opcode & can_issue_ls),
+      .clk      ( clk                           ),
+      .wen      ( issuels_opcode & can_issue_ls ),
+      .wen_r    ( issuels_opcode_r              ),
 
-      .addr          (issuels_addr    ),
-      .wdata         (issuels_data    ),
-      .rdata         (issuels_out     ),
-      .tag_in        (issuels_rttag   ),
-      .tag_out       (issuels_tagout  )
+      .addr     ( issuels_rsdata + issuels_imm  ),
+      .wdata    ( issuels_rtdata                ),
+      .rdata    ( issuels_out                   ),
+      .tag_in   ( issuels_rttag                 ),
+      .tag_out  ( issuels_tagout                )
    );
 
 endmodule

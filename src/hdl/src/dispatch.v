@@ -24,7 +24,7 @@ module dispatch (
    input             cdb_branch_taken,
 
    // Common interface to all queues, including their handshake signals.
-   output reg [15:0] equeue_imm,
+   output reg [31:0] equeue_imm,
    output reg [ 5:0] equeue_rdtag,
    output reg [ 5:0] equeue_rstag,
    output reg [ 5:0] equeue_rttag,
@@ -68,6 +68,7 @@ module dispatch (
    reg do_req_tag;
    reg do_req_equeue;
    reg is_branch, is_jump, is_store, is_load, do_dispatch;
+   reg do_zeroext;
 
    // Signal declarations for Register File.
    reg  [ 4:0] dispatch_regfile_rsaddr;
@@ -142,7 +143,7 @@ module dispatch (
       inst_imm_zeroext = { {16{        1'b0}}, inst_imm };
       inst_imm_signext = { {16{inst_imm[15]}}, inst_imm };
 
-      equeue_imm     = inst_imm;
+      equeue_imm     = (do_zeroext) ? inst_imm_zeroext : inst_imm_signext;
       equeue_rdtag   = tagfifo_dispatch_tag;
       equeue_rstag   = rst_dispatch_rstag;
       equeue_rttag   = (is_load) ? tagfifo_dispatch_tag : rst_dispatch_rttag;
@@ -220,6 +221,7 @@ module dispatch (
       is_jump        = 1'b0;
       is_store       = 1'b0;
       is_load        = 1'b0;
+      do_zeroext     = 1'b0;
 
       equeueint_opcode = 'h0;
       equeuels_opcode  = 'h0;
@@ -338,10 +340,13 @@ module dispatch (
       .cdb_valid      ( cdb_valid              )
    );
 
-   reg [10*8:0] inst_opcode_string, inst_func_string;
    always @(*) begin : dispatch_opcode_str_proc
+      reg [10*8:0] inst_opcode_string, inst_func_string, dispatch_state_string;
       inst_opcode_string = "";
       inst_func_string   = "";
+      dispatch_state_string  = "";
+
+      dispatch_state_string = (state_r == S_DISPATCH) ? "DISPATCH" : "BR STALL";
 
       case (inst_opcode)
          `OPCODE_RTYPE  : inst_opcode_string = "RTYPE ";

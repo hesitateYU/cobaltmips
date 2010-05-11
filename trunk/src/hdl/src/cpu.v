@@ -32,7 +32,7 @@ module cpu (
    wire         cdb_branch;
    wire         cdb_branch_taken;
 
-   wire [ 15:0] dispatch_equeue_imm;
+   wire [ 31:0] dispatch_equeue_imm;
    wire [  5:0] dispatch_equeue_rdtag;
    wire [  5:0] dispatch_equeue_rstag;
    wire [  5:0] dispatch_equeue_rttag;
@@ -46,8 +46,9 @@ module cpu (
    wire         equeuels_dispatch_ready;
    wire         equeuels_issuels_opcode;
    wire [  5:0] equeuels_issuels_rttag;
-   wire [ 31:0] equeuels_issuels_addr;
-   wire [ 31:0] equeuels_issuels_data;
+   wire [ 31:0] equeuels_issuels_rtdata;
+   wire [ 31:0] equeuels_issuels_rsdata;
+   wire [ 31:0] equeuels_issuels_imm;
    wire         equeuels_issuels_ready;
    wire         issuels_equeuels_done;
 
@@ -175,7 +176,7 @@ module cpu (
       .dispatch_opcode  ( dispatch_equeuels_opcode ),
       .dispatch_en      ( dispatch_equeuels_en     ),
       .dispatch_ready   ( equeuels_dispatch_ready  ),
-      .dispatch_offset  ( dispatch_equeue_imm      ),
+      .dispatch_imm     ( dispatch_equeue_imm      ),
       .dispatch_rstag   ( dispatch_equeue_rstag    ),
       .dispatch_rttag   ( dispatch_equeue_rttag    ),
       .dispatch_rsdata  ( dispatch_equeue_rsdata   ),
@@ -187,8 +188,9 @@ module cpu (
       .cdb_data         ( cdb_data                 ),
       .issuels_opcode   ( equeuels_issuels_opcode  ),
       .issuels_rttag    ( equeuels_issuels_rttag   ),
-      .issuels_addr     ( equeuels_issuels_addr    ),
-      .issuels_data     ( equeuels_issuels_data    ),
+      .issuels_rtdata   ( equeuels_issuels_rtdata  ),
+      .issuels_rsdata   ( equeuels_issuels_rsdata  ),
+      .issuels_imm      ( equeuels_issuels_imm     ),
       .issuels_ready    ( equeuels_issuels_ready   ),
       .issuels_done     ( issuels_equeuels_done    )
    );
@@ -240,30 +242,36 @@ module cpu (
    issue issue(
       .clk                       ( clk                          ),
       .reset                     ( reset                        ),
+
       .issueint_opcode           ( equeueint_issueint_opcode    ),
       .issueint_rsdata           ( equeueint_issueint_rsdata    ),
       .issueint_rtdata           ( equeueint_issueint_rtdata    ),
       .issueint_rdtag            ( equeueint_issueint_rdtag     ),
+      .issueint_carryout         ( issueint_carryout            ),
+      .issueint_overflow         ( issueint_overflow            ),
+      .issueint_ready            ( equeueint_issueint_ready     ),
+      .issueint_equeueint_done   ( issueint_equeueint_done      ),
+
       .issuels_opcode            ( equeuels_issuels_opcode      ),
-      .issuels_data              ( equeuels_issuels_data        ),
-      .issuels_addr              ( equeuels_issuels_addr        ),
       .issuels_rttag             ( equeuels_issuels_rttag       ),
+      .issuels_rtdata            ( equeuels_issuels_rtdata      ),
+      .issuels_rsdata            ( equeuels_issuels_rsdata      ),
+      .issuels_imm               ( equeuels_issuels_imm         ),
+      .issuels_ready             ( equeuels_issuels_ready       ),
+      .issuels_equeuels_done     ( issuels_equeuels_done        ),
+
       .issuediv_rsdata           ( equeuediv_issuediv_rsdata    ),
       .issuediv_rtdata           ( equeuediv_issuediv_rtdata    ),
       .issuediv_rdtag            ( equeuediv_issuediv_rdtag     ),
+      .issuediv_ready            ( equeuediv_issuediv_ready     ),
+      .issuediv_equeuediv_done   ( issuediv_equeuediv_done      ),
+
       .issuemult_rsdata          ( equeuemult_issuemult_rsdata  ),
       .issuemult_rtdata          ( equeuemult_issuemult_rtdata  ),
       .issuemult_rdtag           ( equeuemult_issuemult_rdtag   ),
-      .issueint_ready            ( equeueint_issueint_ready     ),
       .issuemult_ready           ( equeuemult_issuemult_ready   ),
-      .issuediv_ready            ( equeuediv_issuediv_ready     ),
-      .issuels_ready             ( equeuels_issuels_ready       ),
-      .issueint_carryout         ( issueint_carryout            ),
-      .issueint_overflow         ( issueint_overflow            ),
-      .issuediv_equeuediv_done   ( issuediv_equeuediv_done      ),
-      .issueint_equeueint_done   ( issueint_equeueint_done      ),
       .issuemult_equeuemult_done ( issuemult_equeuemult_done    ),
-      .issuels_equeuels_done     ( issuels_equeuels_done        ),
+
       .cdb_data                  ( cdb_data                     ),
       .cdb_tag                   ( cdb_tag                      ),
       .cdb_valid                 ( cdb_valid                    ),

@@ -11,7 +11,7 @@ module equeuels (
    input             reset,
 
    input             dispatch_opcode,
-   input      [15:0] dispatch_offset,
+   input      [31:0] dispatch_imm,
    input      [ 5:0] dispatch_rstag,
    input      [ 5:0] dispatch_rttag,
    input      [31:0] dispatch_rsdata,
@@ -27,16 +27,16 @@ module equeuels (
 
    output reg        issuels_opcode,
    output reg [ 5:0] issuels_rttag,
-   output reg [31:0] issuels_addr,
-   output reg [31:0] issuels_data,
+   output reg [31:0] issuels_rtdata,
+   output reg [31:0] issuels_rsdata,
+   output reg [31:0] issuels_imm,
    output reg        issuels_ready,
    input             issuels_done
 );
 
    localparam N_SREG = 4;
 
-   reg [31:0] inst_addr_r   [N_SREG:0], inst_addr   [N_SREG-1:0];
-   reg [15:0] inst_offset_r [N_SREG:0], inst_offset [N_SREG-1:0];
+   reg [31:0] inst_imm_r    [N_SREG:0], inst_imm    [N_SREG-1:0];
    reg        inst_opcode_r [N_SREG:0], inst_opcode [N_SREG-1:0];
    reg [ 5:0] inst_rstag_r  [N_SREG:0], inst_rstag  [N_SREG-1:0];
    reg [ 5:0] inst_rttag_r  [N_SREG:0], inst_rttag  [N_SREG-1:0];
@@ -58,9 +58,7 @@ module equeuels (
       // The top register is fake, it just stores (no flops) the input from
       // dispatch unit. Used to simplify register shifting and updating.
       // Offset sent by dispatch unit must be sign extended.
-      //inst_addr_r   [N_SREG] = dispatch_rsdata + { {16 {dispatch_offset[15]} }, dispatch_offset};
-      inst_addr_r   [N_SREG] = dispatch_rsdata;
-      inst_offset_r [N_SREG] = dispatch_offset;
+      inst_imm_r    [N_SREG] = dispatch_imm;
       inst_opcode_r [N_SREG] = dispatch_opcode;
       inst_rstag_r  [N_SREG] = dispatch_rstag;
       inst_rttag_r  [N_SREG] = dispatch_rttag;
@@ -166,14 +164,15 @@ module equeuels (
       // register at the bottom.
       issuels_opcode = inst_opcode_r[0];
       issuels_rttag  = inst_rttag_r [0];
-      issuels_addr   = inst_addr_r  [0] + inst_offset_r[0];
-      issuels_data   = inst_rtdata_r[0];
+      issuels_rtdata = inst_rtdata_r[0];
+      issuels_imm    = inst_imm_r   [0];
+      issuels_rsdata = inst_rsdata_r[0];
       //begin : equeuels_regdata_mux
       //   for (i = 0; i < N_SREG; i = i + 1) begin
       //      if (inst_ready[i]) begin
       //         issuels_opcode = inst_opcode_r[i];
       //         issuels_rttag  = inst_rttag_r [i];
-      //         issuels_addr   = inst_addr_r  [i] + inst_offset_r[i];
+      //         issuels_addr   = inst_addr_r  [i] + inst_imm_r[i];
       //         issuels_data   = inst_rtdata_r[i];
       //         disable equeuels_regdata_mux;
       //      end
@@ -190,15 +189,16 @@ module equeuels (
    always @(*) begin : equeuels_shift_proc
       integer i;
       for (i = 0; i < N_SREG; i = i + 1) begin
-         inst_offset[i] = (do_shift[i]) ? inst_offset_r[i + 1] : inst_offset_r[i];
+         inst_imm   [i] = (do_shift[i]) ? inst_imm_r   [i + 1] : inst_imm_r   [i];
          inst_opcode[i] = (do_shift[i]) ? inst_opcode_r[i + 1] : inst_opcode_r[i];
          inst_rstag [i] = (do_shift[i]) ? inst_rstag_r [i + 1] : inst_rstag_r [i];
          inst_rttag [i] = (do_shift[i]) ? inst_rttag_r [i + 1] : inst_rttag_r [i];
+         inst_imm   [i] = (do_shift[i]) ? inst_imm_r   [i + 1] : inst_imm_r   [i];
 
          case ({do_shift[i], do_rs_update[i]})
-            2'b00:        begin inst_addr[i] = inst_addr_r[i];                                               end
-            2'b01, 2'b11: begin inst_addr[i] = cdb_data + { {16 {inst_offset_r[i][15]} }, inst_offset_r[i]}; end
-            2'b10:        begin inst_addr[i] = inst_addr_r[i+1];                                             end
+            2'b00:        begin inst_rtdata[i] = inst_rtdata_r[i];                                               end
+            2'b01, 2'b11: begin inst_rtdata[i] = cdb_data; end
+            2'b10:        begin inst_rtdata[i] = inst_rtdata_r[i+1];                                             end
          endcase
 
          // Select if data is taken from CDB (update) or the previous register
@@ -230,8 +230,7 @@ module equeuels (
    always @(posedge clk) begin : equeuels_inst_reg
       integer i;
       for (i = 0; i < N_SREG; i = i + 1) begin
-         inst_addr_r   [i] <= (reset) ? 'h0 : inst_addr   [i];
-         inst_offset_r [i] <= (reset) ? 'h0 : inst_offset [i];
+         inst_imm_r    [i] <= (reset) ? 'h0 : inst_imm    [i];
          inst_opcode_r [i] <= (reset) ? 'h0 : inst_opcode [i];
          inst_rstag_r  [i] <= (reset) ? 'h0 : inst_rstag  [i];
          inst_rttag_r  [i] <= (reset) ? 'h0 : inst_rttag  [i];

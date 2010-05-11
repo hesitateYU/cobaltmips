@@ -9,6 +9,7 @@ module dcache (
    input  wire        wen, //opcode
    input  wire [31:0] addr,
    input  wire [31:0] wdata,
+   output reg         wen_r,
    input  wire [ 5:0] tag_in,
    output reg  [ 5:0] tag_out,
    output wire [31:0] rdata
@@ -18,8 +19,12 @@ module dcache (
    reg [W_ADDR-1:0] line_sel;
 
    always @(*) begin: ls_ready_proc
-      tag_out  = tag_in;
       line_sel = addr[W_ADDR-1:0];
+   end
+
+   always @(posedge clk) begin : dcache_wen_reg
+      wen_r   <= wen;
+      tag_out <= tag_in;
    end
 
    dcache_mem dcache_mem (

@@ -135,7 +135,7 @@ module dispatch (
       // Calculate branch address and jump address using the sign-extended
       // address provided in the instruction. Embedded jump address is 26 bits,
       // unlike embedded branch address which is only 16 bits.
-      inst_addr_branch = { {14{inst_imm[15]}}, inst_imm, 2'b00} + ifq_pcout_plus4;
+      inst_addr_branch = { {14{inst_imm[15]}},     inst_imm,  2'b00} + ifq_pcout_plus4;
       inst_addr_jump   = { ifq_pcout_plus4[31:28], inst_addr, 2'b00};
 
       // Sign extension used in arithmetic operations and Zero extension used
@@ -166,7 +166,7 @@ module dispatch (
       dispatch_tagfifo_ren = do_dispatch;
       dispatch_rst_valid   = do_dispatch;
       dispatch_rst_tag     = tagfifo_dispatch_tag;
-      dispatch_rst_addr    = inst_rdaddr;
+      dispatch_rst_addr    = (is_load) ? inst_rtaddr : inst_rdaddr;
    end
 
    always @(*) begin : dispatch_curr_equeue_proc
@@ -186,7 +186,7 @@ module dispatch (
       case (state_r)
          S_DISPATCH : begin
             can_dispatch = (do_req_equeue & equeue_ready[curr_equeueidx])
-                         & (is_branch | (do_req_tag & ~tagfifo_dispatch_empty) | is_store)
+                         & (is_branch | is_store | (do_req_tag & ~tagfifo_dispatch_empty))
                          & (~ifq_empty);
             equeue_en[curr_equeueidx] = can_dispatch;
             ifq_ren = can_dispatch;
@@ -196,7 +196,7 @@ module dispatch (
          end
          S_BRANCHSTALL : begin
             can_dispatch = (do_req_equeue & equeue_ready[curr_equeueidx])
-                         & (is_branch | (do_req_tag & ~tagfifo_dispatch_empty) | is_store)
+                         & (is_branch | is_store | (do_req_tag & ~tagfifo_dispatch_empty))
                          & (~ifq_empty)
                          & (cdb_branch & ~cdb_branch_taken);
             equeue_en[curr_equeueidx] = can_dispatch;
@@ -340,8 +340,28 @@ module dispatch (
       .cdb_valid      ( cdb_valid              )
    );
 
+   reg [10*8:0] inst_opcode_string, inst_func_string, dispatch_state_string;
+   always @(posedge clk) begin
+      if (is_jump) begin
+         $display("@%6d JUMP to addr:0x%x", $time, ifq_branch_addr);
+      end
+
+      if (cdb_branch) begin
+         $display("@%6d CDB branch %s to addr:0x%x", $time, (cdb_branch_taken) ? "taken" : "not taken" , ifq_branch_addr);
+      end
+
+      if (cdb_valid) begin
+         $display("@%6d CDB published tag:%2p data:%x", $time, cdb_tag, cdb_data);
+      end
+
+      if (can_dispatch) begin
+         $display("@%6d [%x] %s %s %2p, %2p, %2p imm:0x%x addr:0x%x tag:%2p",
+            $time, ifq_pcout_plus4 - 4, inst_opcode_string, inst_func_string,
+            inst_rsaddr, inst_rtaddr, inst_rdaddr, inst_imm, inst_addr, tagfifo_dispatch_tag);
+      end
+   end
+
    always @(*) begin : dispatch_opcode_str_proc
-      reg [10*8:0] inst_opcode_string, inst_func_string, dispatch_state_string;
       inst_opcode_string = "";
       inst_func_string   = "";
       dispatch_state_string  = "";

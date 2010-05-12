@@ -190,13 +190,13 @@ module dispatch (
                          & (~ifq_empty);
             equeue_en[curr_equeueidx] = can_dispatch;
             ifq_ren = can_dispatch;
-            next_state = (~can_dispatch) ? S_DISPATCH : ((is_branch) ? S_BRANCHSTALL : S_DISPATCH);
             ifq_branch_valid = is_jump;
             ifq_branch_addr  = (is_jump) ? inst_addr_jump : 'h0;
+            next_state = (~can_dispatch) ? S_DISPATCH : ((is_branch) ? S_BRANCHSTALL : S_DISPATCH);
          end
          S_BRANCHSTALL : begin
             can_dispatch = (do_req_equeue & equeue_ready[curr_equeueidx])
-                         & (is_branch | is_store | (do_req_tag & ~tagfifo_dispatch_empty))
+                         & (is_store | (do_req_tag & ~tagfifo_dispatch_empty))
                          & (~ifq_empty)
                          & (cdb_branch & ~cdb_branch_taken);
             equeue_en[curr_equeueidx] = can_dispatch;
@@ -287,7 +287,8 @@ module dispatch (
    // If branch was taken then dispatch the instruction (that came after the
    // branch and has already been decoded), otherwise, discard it.
    always @(posedge clk) begin : dispatch_inst_branch_addr_reg
-      inst_addr_branch_r <= (reset) ? 'h0 : (is_branch) ? inst_addr_branch : inst_addr_branch_r;
+      inst_addr_branch_r <= (reset) ? 'h0 : ( (is_branch && state_r == S_DISPATCH   )
+                                           || (is_branch && state_r == S_BRANCHSTALL && cdb_branch) ) ? inst_addr_branch : inst_addr_branch_r;
    end
 
    regfile #(
@@ -347,11 +348,11 @@ module dispatch (
       end
 
       if (cdb_branch) begin
-         $display("@%6d CDB branch %s to addr:0x%x", $time, (cdb_branch_taken) ? "taken" : "not taken" , ifq_branch_addr);
+         $display("@%6d BRANCH %s to addr:0x%x", $time, (cdb_branch_taken) ? "taken" : "not taken" , ifq_branch_addr);
       end
 
       if (cdb_valid) begin
-         $display("@%6d CDB published tag:%2p data:%x", $time, cdb_tag, cdb_data);
+         $display("@%6d TAG %2p data:%x", $time, cdb_tag, cdb_data);
       end
 
       if (can_dispatch) begin

@@ -1,0 +1,2128 @@
+Release 9.2i - xst J.36
+Copyright (c) 1995-2007 Xilinx, Inc.  All rights reserved.
+--> Parameter TMPDIR set to ./xst/projnav.tmp
+CPU : 0.00 / 0.20 s | Elapsed : 0.00 / 0.00 s
+ 
+--> Parameter xsthdpdir set to ./xst
+CPU : 0.00 / 0.20 s | Elapsed : 0.00 / 0.00 s
+ 
+--> Reading design: cpu.prj
+
+TABLE OF CONTENTS
+  1) Synthesis Options Summary
+  2) HDL Compilation
+  3) Design Hierarchy Analysis
+  4) HDL Analysis
+  5) HDL Synthesis
+     5.1) HDL Synthesis Report
+  6) Advanced HDL Synthesis
+     6.1) Advanced HDL Synthesis Report
+  7) Low Level Synthesis
+  8) Partition Report
+  9) Final Report
+     9.1) Device utilization summary
+     9.2) Partition Resource Summary
+     9.3) TIMING REPORT
+
+
+=========================================================================
+*                      Synthesis Options Summary                        *
+=========================================================================
+---- Source Parameters
+Input File Name                    : "cpu.prj"
+Input Format                       : mixed
+Ignore Synthesis Constraint File   : NO
+
+---- Target Parameters
+Output File Name                   : "cpu"
+Output Format                      : NGC
+Target Device                      : xc3s500e-4-fg320
+
+---- Source Options
+Top Module Name                    : cpu
+Automatic FSM Extraction           : YES
+FSM Encoding Algorithm             : Auto
+Safe Implementation                : No
+FSM Style                          : lut
+RAM Extraction                     : Yes
+RAM Style                          : Auto
+ROM Extraction                     : Yes
+Mux Style                          : Auto
+Decoder Extraction                 : YES
+Priority Encoder Extraction        : YES
+Shift Register Extraction          : YES
+Logical Shifter Extraction         : YES
+XOR Collapsing                     : YES
+ROM Style                          : Auto
+Mux Extraction                     : YES
+Resource Sharing                   : YES
+Asynchronous To Synchronous        : NO
+Multiplier Style                   : auto
+Automatic Register Balancing       : No
+
+---- Target Options
+Add IO Buffers                     : YES
+Global Maximum Fanout              : 500
+Add Generic Clock Buffer(BUFG)     : 24
+Register Duplication               : YES
+Slice Packing                      : YES
+Optimize Instantiated Primitives   : NO
+Use Clock Enable                   : Yes
+Use Synchronous Set                : Yes
+Use Synchronous Reset              : Yes
+Pack IO Registers into IOBs        : auto
+Equivalent register Removal        : YES
+
+---- General Options
+Optimization Goal                  : Speed
+Optimization Effort                : 1
+Library Search Order               : cpu.lso
+Keep Hierarchy                     : NO
+RTL Output                         : Yes
+Global Optimization                : AllClockNets
+Read Cores                         : YES
+Write Timing Constraints           : NO
+Cross Clock Analysis               : NO
+Hierarchy Separator                : /
+Bus Delimiter                      : <>
+Case Specifier                     : maintain
+Slice Utilization Ratio            : 100
+BRAM Utilization Ratio             : 100
+Verilog 2001                       : YES
+Auto BRAM Packing                  : NO
+Slice Utilization Ratio Delta      : 5
+
+=========================================================================
+
+
+=========================================================================
+*                          HDL Compilation                              *
+=========================================================================
+Compiling vhdl file "D:/Profiles/b07885/Desktop/maestria/diseno micros/cobalt/src/hdl/src/execunits/div/divider_core.vhd" in Library work.
+Architecture behv of Entity divider_core is up to date.
+Compiling vhdl file "D:/Profiles/b07885/Desktop/maestria/diseno micros/cobalt/src/hdl/src/execunits/div/divider.vhd" in Library work.
+Architecture divid of Entity divider is up to date.
+Compiling verilog file "../../../../hdl/src/execunits/add/CLA_4bit.v" in library work
+Compiling verilog file "../../../../hdl/src/execunits/mult/multiplier.v" in library work
+Module <CLA_4bit> compiled
+Compiling verilog file "../../../../hdl/src/execunits/add/CLA_32bit.v" in library work
+Module <multiplier> compiled
+Compiling verilog file "dcache_mem.v" in library work
+Module <CLA_32bit> compiled
+Compiling verilog file "../../../../hdl/src/execunits/mult/multiplier_wrapper.v" in library work
+Module <dcache_mem> compiled
+Compiling verilog file "../../../../hdl/src/execunits/div/divider_wrapper.v" in library work
+Module <multiplier_wrapper> compiled
+Compiling verilog file "tagfifo.v" in library work
+Module <divider_wrapper> compiled
+Compiling verilog file "rst.v" in library work
+Module <tagfifo> compiled
+Compiling verilog file "regfile.v" in library work
+Module <rst> compiled
+Compiling verilog file "issueint.v" in library work
+Compiling verilog include file "globals.v"
+Module <regfile> compiled
+Compiling verilog file "icache_mem.v" in library work
+Module <issueint> compiled
+Compiling verilog file "dcache.v" in library work
+Module <icache_mem> compiled
+Compiling verilog file "issue.v" in library work
+Compiling verilog include file "globals.vh"
+Module <dcache> compiled
+Compiling verilog file "ifq.v" in library work
+Module <issue> compiled
+Compiling verilog file "icache.v" in library work
+Compiling verilog include file "globals.vh"
+Module <ifq> compiled
+Compiling verilog file "equeuemult.v" in library work
+Module <icache> compiled
+Compiling verilog file "equeuels.v" in library work
+Compiling verilog include file "globals.vh"
+Module <equeuemult> compiled
+Compiling verilog file "equeueint.v" in library work
+Module <equeuels> compiled
+Compiling verilog file "equeuediv.v" in library work
+Module <equeueint> compiled
+Compiling verilog file "dispatch.v" in library work
+Compiling verilog include file "globals.vh"
+Module <equeuediv> compiled
+Compiling verilog file "cpu.v" in library work
+Compiling verilog include file "globals.vh"
+Module <dispatch> compiled
+Module <cpu> compiled
+No errors in compilation
+Analysis of file <"cpu.prj"> succeeded.
+ 
+
+=========================================================================
+*                     Design Hierarchy Analysis                         *
+=========================================================================
+Analyzing hierarchy for module <cpu> in library <work>.
+
+Analyzing hierarchy for module <icache> in library <work> with parameters.
+	W_ADDR = 32
+	W_BYTEALIGN = 4
+	W_DATA = 128
+	W_ENTRY = 6
+
+Analyzing hierarchy for module <ifq> in library <work> with parameters.
+	N_ENTRY = 4
+	W_ENTRY = 2
+
+Analyzing hierarchy for module <dispatch> in library <work> with parameters.
+	EQ_DIV = 3
+	EQ_INT = 0
+	EQ_LS = 1
+	EQ_MULT = 2
+	EQ_NONE = 0
+	S_BRANCHSTALL = 1
+	S_DISPATCH = 0
+
+Analyzing hierarchy for module <equeueint> in library <work> with parameters.
+	N_SREG = "00000000000000000000000000000100"
+
+Analyzing hierarchy for module <equeuels> in library <work> with parameters.
+	N_SREG = "00000000000000000000000000000100"
+
+Analyzing hierarchy for module <equeuediv> in library <work> with parameters.
+	N_SREG = "00000000000000000000000000000100"
+
+Analyzing hierarchy for module <equeuemult> in library <work> with parameters.
+	N_SREG = "00000000000000000000000000000100"
+
+Analyzing hierarchy for module <issue> in library <work> with parameters.
+	SEL_DIV = 4
+	SEL_INT = 8
+	SEL_LS = 1
+	SEL_MULT = 2
+
+Analyzing hierarchy for module <regfile> in library <work> with parameters.
+	N_ENTRY = 32
+	W_ADDR = 5
+	W_DATA = 32
+
+Analyzing hierarchy for module <rst> in library <work> with parameters.
+	N_ENTRY = 32
+	W_ADDR = 5
+	W_DATA = 7
+	W_TAG = 6
+
+Analyzing hierarchy for module <tagfifo> in library <work> with parameters.
+	N_ENTRY = 64
+	W_ENTRY = 6
+	W_TAG = 6
+
+Analyzing hierarchy for module <issueint> in library <work>.
+
+Analyzing hierarchy for module <divider_wrapper> in library <work>.
+
+Analyzing hierarchy for module <multiplier_wrapper> in library <work>.
+
+Analyzing hierarchy for module <dcache> in library <work> with parameters.
+	W_ADDR = 7
+
+Analyzing hierarchy for module <CLA_32bit> in library <work>.
+
+Analyzing hierarchy for entity <divider> in library <work> (architecture <divid>) with generics.
+	tag_width = 6
+
+Analyzing hierarchy for module <CLA_4bit> in library <work>.
+
+Analyzing hierarchy for entity <divider_core> in library <work> (architecture <behv>).
+
+
+=========================================================================
+*                            HDL Analysis                               *
+=========================================================================
+Analyzing top module <cpu>.
+Module <cpu> is correct for synthesis.
+ 
+Analyzing module <icache> in library <work>.
+	W_ADDR = 32
+	W_BYTEALIGN = 4
+	W_DATA = 128
+	W_ENTRY = 6
+WARNING:Xst:2211 - "icache_mem.v" line 49: Instantiating black box module <icache_mem>.
+Module <icache> is correct for synthesis.
+ 
+Analyzing module <ifq> in library <work>.
+	N_ENTRY = 4
+	W_ENTRY = 2
+WARNING:Xst:905 - "ifq.v" line 84: The signals <icache_dout, rptr_r, do_bypass_mem, inst_from_mem_mux_out, inst_from_input_mux_out> are missing in the sensitivity list of always block.
+WARNING:Xst:905 - "ifq.v" line 127: The signals <wptr_r, icache_dout_valid, icache_req_r, icache_dout> are missing in the sensitivity list of always block.
+Module <ifq> is correct for synthesis.
+ 
+Analyzing module <dispatch> in library <work>.
+	EQ_DIV = 3
+	EQ_INT = 0
+	EQ_LS = 1
+	EQ_MULT = 2
+	EQ_NONE = 0
+	S_BRANCHSTALL = 1
+	S_DISPATCH = 0
+Module <dispatch> is correct for synthesis.
+ 
+Analyzing module <regfile> in library <work>.
+	N_ENTRY = 32
+	W_ADDR = 5
+	W_DATA = 32
+WARNING:Xst:905 - "regfile.v" line 34: The signals <rst_wen_onehot, cdb_wdata> are missing in the sensitivity list of always block.
+WARNING:Xst:905 - "regfile.v" line 46: The signals <dispatch_rsaddr, dispatch_rtaddr, debug_addr> are missing in the sensitivity list of always block.
+Module <regfile> is correct for synthesis.
+ 
+Analyzing module <rst> in library <work>.
+	N_ENTRY = 32
+	W_ADDR = 5
+	W_DATA = 7
+	W_TAG = 6
+WARNING:Xst:905 - "rst.v" line 45: The signals <dispatch_rsaddr, dispatch_rtaddr> are missing in the sensitivity list of always block.
+WARNING:Xst:905 - "rst.v" line 50: The signals <dispatch_addr, cdb_tag_addr, dispatch_valid, dispatch_tag, cdb_valid, cdb_tag_found> are missing in the sensitivity list of always block.
+WARNING:Xst:905 - "rst.v" line 72: The signals <cdb_tag> are missing in the sensitivity list of always block.
+Module <rst> is correct for synthesis.
+ 
+Analyzing module <tagfifo> in library <work>.
+	N_ENTRY = 64
+	W_ENTRY = 6
+	W_TAG = 6
+WARNING:Xst:905 - "tagfifo.v" line 35: The signals <rptr_r, is_empty, is_full> are missing in the sensitivity list of always block.
+INFO:Xst:1433 - Contents of array <mem_r> may be accessed with an index that exceeds the array size. This could cause simulation mismatch.
+WARNING:Xst:905 - "tagfifo.v" line 54: The signals <wptr_r, is_push, cdb_tag> are missing in the sensitivity list of always block.
+Module <tagfifo> is correct for synthesis.
+ 
+Analyzing module <equeueint> in library <work>.
+	N_SREG = 32'sb00000000000000000000000000000100
+WARNING:Xst:905 - "equeueint.v" line 145: The signals <inst_selected> are missing in the sensitivity list of always block.
+WARNING:Xst:905 - "equeueint.v" line 205: The signals <do_shift, inst_opcode_r, inst_rdtag_r, inst_rstag_r, inst_rttag_r, inst_rsdata_r, inst_rsvalid_r, cdb_data, inst_rtdata_r, inst_rtvalid_r> are missing in the sensitivity list of always block.
+Module <equeueint> is correct for synthesis.
+ 
+Analyzing module <equeuels> in library <work>.
+	N_SREG = 32'sb00000000000000000000000000000100
+WARNING:Xst:905 - "equeuels.v" line 148: The signals <inst_ready, issuels_done> are missing in the sensitivity list of always block.
+WARNING:Xst:905 - "equeuels.v" line 190: The signals <do_rs_update, inst_rsdata_r, inst_rsvalid_r, cdb_data, do_rt_update, inst_rtdata_r, inst_rtvalid_r> are missing in the sensitivity list of always block.
+Module <equeuels> is correct for synthesis.
+ 
+Analyzing module <equeuediv> in library <work>.
+	N_SREG = 32'sb00000000000000000000000000000100
+WARNING:Xst:905 - "equeuediv.v" line 137: The signals <inst_valid_r, inst_ready, inst_rdtag_r, inst_rsdata_r, inst_rtdata_r, inst_selected, issuediv_done> are missing in the sensitivity list of always block.
+WARNING:Xst:905 - "equeuediv.v" line 190: The signals <do_shift, inst_rdtag_r, inst_rstag_r, inst_rttag_r, inst_rsdata_r, cdb_data, do_rt_update, inst_rtdata_r, inst_rtvalid_r> are missing in the sensitivity list of always block.
+Module <equeuediv> is correct for synthesis.
+ 
+Analyzing module <equeuemult> in library <work>.
+	N_SREG = 32'sb00000000000000000000000000000100
+WARNING:Xst:905 - "equeuemult.v" line 141: The signals <inst_valid_r, inst_ready, inst_rdtag_r, inst_rsdata_r, inst_rtdata_r, inst_selected, issuemult_done> are missing in the sensitivity list of always block.
+WARNING:Xst:905 - "equeuemult.v" line 195: The signals <do_shift, inst_rdtag_r, inst_rstag_r, inst_rttag_r, inst_rsdata_r, cdb_data, do_rt_update, inst_rtdata_r, inst_rtvalid_r> are missing in the sensitivity list of always block.
+Module <equeuemult> is correct for synthesis.
+ 
+Analyzing module <issue> in library <work>.
+	SEL_DIV = 4
+	SEL_INT = 8
+	SEL_LS = 1
+	SEL_MULT = 2
+WARNING:Xst:905 - "issue.v" line 117: The signals <can_issue_mult, issuemult_rsdata, issuemult_rtdata, issuemult_rdtag, issuemult_tag_temp_r> are missing in the sensitivity list of always block.
+WARNING:Xst:905 - "issue.v" line 129: The signals <can_issue_div, can_issue_mult, mult_cdb_ctrl_r> are missing in the sensitivity list of always block.
+WARNING:Xst:905 - "issue.v" line 142: The signals <is_load_r, issuels_opcode_r, cdb_data_oreg_r> are missing in the sensitivity list of always block.
+WARNING:Xst:905 - "issue.v" line 155: The signals <issuels_opcode, issuels_rttag, issuemult_tag_temp_r, issuemult_out_temp_r, issuediv_tagout, issuediv_out, issueint_alubranch, issueint_out, issueint_tagout, issueint_alubranch_taken> are missing in the sensitivity list of always block.
+Module <issue> is correct for synthesis.
+ 
+Analyzing module <issueint> in library <work>.
+Module <issueint> is correct for synthesis.
+ 
+Analyzing module <CLA_32bit> in library <work>.
+Module <CLA_32bit> is correct for synthesis.
+ 
+Analyzing module <CLA_4bit> in library <work>.
+Module <CLA_4bit> is correct for synthesis.
+ 
+Analyzing module <divider_wrapper> in library <work>.
+Module <divider_wrapper> is correct for synthesis.
+ 
+Analyzing generic Entity <divider> in library <work> (Architecture <divid>).
+	tag_width = 6
+INFO:Xst:2679 - Register <rfd_array<5>> in unit <divider> has a constant value of 0 during circuit operation. The register is replaced by logic.
+INFO:Xst:2679 - Register <rfd_array<4>> in unit <divider> has a constant value of 0 during circuit operation. The register is replaced by logic.
+Entity <divider> analyzed. Unit <divider> generated.
+
+Analyzing Entity <divider_core> in library <work> (Architecture <behv>).
+Entity <divider_core> analyzed. Unit <divider_core> generated.
+
+Analyzing module <multiplier_wrapper> in library <work>.
+WARNING:Xst:2211 - "../../../../hdl/src/execunits/mult/multiplier.v" line 21: Instantiating black box module <multiplier>.
+Module <multiplier_wrapper> is correct for synthesis.
+ 
+Analyzing module <dcache> in library <work>.
+	W_ADDR = 7
+WARNING:Xst:2211 - "dcache_mem.v" line 30: Instantiating black box module <dcache_mem>.
+Module <dcache> is correct for synthesis.
+ 
+
+=========================================================================
+*                           HDL Synthesis                               *
+=========================================================================
+
+Performing bidirectional port resolution...
+
+Synthesizing Unit <ifq>.
+    Related source file is "ifq.v".
+WARNING:Xst:647 - Input <dispatch_branch_addr<1:0>> is never used.
+WARNING:Xst:646 - Signal <do_inc_wptr> is assigned but never used.
+WARNING:Xst:646 - Signal <line_from_mem> is assigned but never used.
+WARNING:Xst:646 - Signal <wptr_branch> is assigned but never used.
+WARNING:Xst:646 - Signal <inst_from_input_mux_out> is assigned but never used.
+WARNING:Xst:646 - Signal <is_full> is assigned but never used.
+WARNING:Xst:646 - Signal <rptr_branch> is assigned but never used.
+WARNING:Xst:646 - Signal <pcout_branch> is assigned but never used.
+WARNING:Xst:646 - Signal <do_inc_rptr> is assigned but never used.
+WARNING:Xst:646 - Signal <inst_from_mem_mux_out> is assigned but never used.
+WARNING:Xst:646 - Signal <line_from_input> is assigned but never used.
+WARNING:Xst:646 - Signal <will_be_empty> is assigned but never used.
+WARNING:Xst:646 - Signal <dispatch_req> is assigned but never used.
+WARNING:Xst:2734 - Property "use_dsp48" is not applicable for this technology.
+WARNING:Xst:2734 - Property "use_dsp48" is not applicable for this technology.
+WARNING:Xst:2734 - Property "use_dsp48" is not applicable for this technology.
+WARNING:Xst:2734 - Property "use_dsp48" is not applicable for this technology.
+    Found 128-bit 4-to-1 multiplexer for signal <$varindex0000> created at line 135.
+    Found 32-bit adder for signal <dispatch_pcout_plus4$add0000> created at line 120.
+    Found 1-bit register for signal <icache_req_r>.
+    Found 2-bit comparator equal for signal <is_empty$cmp_eq0000> created at line 49.
+    Found 1-bit xor2 for signal <is_empty$xor0000> created at line 49.
+    Found 512-bit register for signal <mem_r>.
+    Found 32-bit 4-to-1 multiplexer for signal <pcin>.
+    Found 32-bit adder for signal <pcin$share0000> created at line 77.
+    Found 32-bit register for signal <pcin_r>.
+    Found 32-bit 4-to-1 multiplexer for signal <pcout>.
+    Found 32-bit register for signal <pcout_r>.
+    Found 5-bit adder for signal <rptr$addsub0000> created at line 69.
+    Found 5-bit register for signal <rptr_r>.
+    Found 2-bit comparator equal for signal <will_be_full$cmp_eq0000> created at line 52.
+    Found 1-bit xor2 for signal <will_be_full$xor0000> created at line 52.
+    Found 5-bit adder for signal <wptr$addsub0000> created at line 70.
+    Found 5-bit register for signal <wptr_r>.
+INFO:Xst:738 - HDL ADVISOR - 512 flip-flops were inferred for signal <mem_r>. You may be trying to describe a RAM in a way that is incompatible with block and distributed RAM resources available on Xilinx devices, or with a specific template that is not supported. Please review the Xilinx resources documentation and the XST user manual for coding guidelines. Taking advantage of RAM resources will lead to improved device usage and reduced synthesis time.
+    Summary:
+	inferred 587 D-type flip-flop(s).
+	inferred   4 Adder/Subtractor(s).
+	inferred   2 Comparator(s).
+	inferred 384 Multiplexer(s).
+Unit <ifq> synthesized.
+
+
+Synthesizing Unit <equeueint>.
+    Related source file is "equeueint.v".
+WARNING:Xst:646 - Signal <valid_and_ready> is assigned but never used.
+WARNING:Xst:646 - Signal <selected> is assigned but never used.
+WARNING:Xst:1780 - Signal <equeueint_fake_reg_proc/i> is never used or assigned.
+WARNING:Xst:1780 - Signal <equeueint_inst_reg/i> is never used or assigned.
+WARNING:Xst:646 - Signal <valid_r<3:0>> is assigned but never used.
+    Found 6-bit comparator equal for signal <do_rs_update_0$cmp_eq0000> created at line 84.
+    Found 6-bit comparator equal for signal <do_rs_update_1$cmp_eq0000> created at line 84.
+    Found 6-bit comparator equal for signal <do_rs_update_2$cmp_eq0000> created at line 84.
+    Found 6-bit comparator equal for signal <do_rs_update_3$cmp_eq0000> created at line 84.
+    Found 6-bit comparator equal for signal <do_rs_update_4$cmp_eq0000> created at line 84.
+    Found 6-bit comparator equal for signal <do_rt_update_0$cmp_eq0000> created at line 85.
+    Found 6-bit comparator equal for signal <do_rt_update_1$cmp_eq0000> created at line 85.
+    Found 6-bit comparator equal for signal <do_rt_update_2$cmp_eq0000> created at line 85.
+    Found 6-bit comparator equal for signal <do_rt_update_3$cmp_eq0000> created at line 85.
+    Found 6-bit comparator equal for signal <do_rt_update_4$cmp_eq0000> created at line 85.
+    Found 24-bit register for signal <inst_opcode_r<3:0>>.
+    Found 24-bit register for signal <inst_rdtag_r<3:0>>.
+    Found 128-bit 4-to-1 multiplexer for signal <inst_rsdata>.
+    Found 128-bit register for signal <inst_rsdata_r<3:0>>.
+    Found 24-bit register for signal <inst_rstag_r<3:0>>.
+    Found 4-bit 4-to-1 multiplexer for signal <inst_rsvalid>.
+    Found 4-bit register for signal <inst_rsvalid_r<3:0>>.
+    Found 128-bit 4-to-1 multiplexer for signal <inst_rtdata>.
+    Found 128-bit register for signal <inst_rtdata_r<3:0>>.
+    Found 24-bit register for signal <inst_rttag_r<3:0>>.
+    Found 4-bit 4-to-1 multiplexer for signal <inst_rtvalid>.
+    Found 4-bit register for signal <inst_rtvalid_r<3:0>>.
+    Found 4-bit register for signal <inst_valid_r<3:0>>.
+    Summary:
+	inferred 364 D-type flip-flop(s).
+	inferred  10 Comparator(s).
+	inferred 264 Multiplexer(s).
+Unit <equeueint> synthesized.
+
+
+Synthesizing Unit <equeuels>.
+    Related source file is "equeuels.v".
+WARNING:Xst:646 - Signal <equeuels_oreg_assign/valid_and_ready> is assigned but never used.
+WARNING:Xst:646 - Signal <selected> is assigned but never used.
+WARNING:Xst:646 - Signal <equeuels_oreg_assign/valid_r> is assigned but never used.
+WARNING:Xst:646 - Signal <valid_r> is assigned but never used.
+    Found 6-bit comparator equal for signal <do_rs_update_0$cmp_eq0000> created at line 83.
+    Found 6-bit comparator equal for signal <do_rs_update_1$cmp_eq0000> created at line 83.
+    Found 6-bit comparator equal for signal <do_rs_update_2$cmp_eq0000> created at line 83.
+    Found 6-bit comparator equal for signal <do_rs_update_3$cmp_eq0000> created at line 83.
+    Found 6-bit comparator equal for signal <do_rs_update_4$cmp_eq0000> created at line 83.
+    Found 6-bit comparator equal for signal <do_rt_update_0$cmp_eq0000> created at line 84.
+    Found 6-bit comparator equal for signal <do_rt_update_1$cmp_eq0000> created at line 84.
+    Found 6-bit comparator equal for signal <do_rt_update_2$cmp_eq0000> created at line 84.
+    Found 6-bit comparator equal for signal <do_rt_update_3$cmp_eq0000> created at line 84.
+    Found 6-bit comparator equal for signal <do_rt_update_4$cmp_eq0000> created at line 84.
+    Found 128-bit register for signal <inst_imm_r<3:0>>.
+    Found 4-bit register for signal <inst_opcode_r<3:0>>.
+    Found 128-bit 4-to-1 multiplexer for signal <inst_rsdata>.
+    Found 128-bit register for signal <inst_rsdata_r<3:0>>.
+    Found 24-bit register for signal <inst_rstag_r<3:0>>.
+    Found 4-bit 4-to-1 multiplexer for signal <inst_rsvalid>.
+    Found 4-bit register for signal <inst_rsvalid_r<3:0>>.
+    Found 128-bit 4-to-1 multiplexer for signal <inst_rtdata>.
+    Found 128-bit register for signal <inst_rtdata_r<3:0>>.
+    Found 24-bit register for signal <inst_rttag_r<3:0>>.
+    Found 4-bit 4-to-1 multiplexer for signal <inst_rtvalid>.
+    Found 4-bit register for signal <inst_rtvalid_r<3:0>>.
+    Found 4-bit register for signal <inst_valid_r<3:0>>.
+    Summary:
+	inferred 448 D-type flip-flop(s).
+	inferred  10 Comparator(s).
+	inferred 264 Multiplexer(s).
+Unit <equeuels> synthesized.
+
+
+Synthesizing Unit <equeuediv>.
+    Related source file is "equeuediv.v".
+WARNING:Xst:646 - Signal <selected> is assigned but never used.
+WARNING:Xst:1780 - Signal <equeuediv_fake_reg_proc/i> is never used or assigned.
+WARNING:Xst:1780 - Signal <equeuediv_inst_reg/i> is never used or assigned.
+WARNING:Xst:646 - Signal <equeuediv_oreg_assign/valid_r> is assigned but never used.
+WARNING:Xst:646 - Signal <equeuediv_oreg_assign/valid_and_ready> is assigned but never used.
+WARNING:Xst:646 - Signal <valid_r> is assigned but never used.
+    Found 6-bit comparator equal for signal <do_rs_update_0$cmp_eq0000> created at line 76.
+    Found 6-bit comparator equal for signal <do_rs_update_1$cmp_eq0000> created at line 76.
+    Found 6-bit comparator equal for signal <do_rs_update_2$cmp_eq0000> created at line 76.
+    Found 6-bit comparator equal for signal <do_rs_update_3$cmp_eq0000> created at line 76.
+    Found 6-bit comparator equal for signal <do_rs_update_4$cmp_eq0000> created at line 76.
+    Found 6-bit comparator equal for signal <do_rt_update_0$cmp_eq0000> created at line 77.
+    Found 6-bit comparator equal for signal <do_rt_update_1$cmp_eq0000> created at line 77.
+    Found 6-bit comparator equal for signal <do_rt_update_2$cmp_eq0000> created at line 77.
+    Found 6-bit comparator equal for signal <do_rt_update_3$cmp_eq0000> created at line 77.
+    Found 6-bit comparator equal for signal <do_rt_update_4$cmp_eq0000> created at line 77.
+    Found 24-bit register for signal <inst_rdtag_r<3:0>>.
+    Found 128-bit 4-to-1 multiplexer for signal <inst_rsdata>.
+    Found 128-bit register for signal <inst_rsdata_r<3:0>>.
+    Found 24-bit register for signal <inst_rstag_r<3:0>>.
+    Found 4-bit 4-to-1 multiplexer for signal <inst_rsvalid>.
+    Found 4-bit register for signal <inst_rsvalid_r<3:0>>.
+    Found 128-bit 4-to-1 multiplexer for signal <inst_rtdata>.
+    Found 128-bit register for signal <inst_rtdata_r<3:0>>.
+    Found 24-bit register for signal <inst_rttag_r<3:0>>.
+    Found 4-bit 4-to-1 multiplexer for signal <inst_rtvalid>.
+    Found 4-bit register for signal <inst_rtvalid_r<3:0>>.
+    Found 4-bit register for signal <inst_valid_r<3:0>>.
+    Summary:
+	inferred 340 D-type flip-flop(s).
+	inferred  10 Comparator(s).
+	inferred 264 Multiplexer(s).
+Unit <equeuediv> synthesized.
+
+
+Synthesizing Unit <equeuemult>.
+    Related source file is "equeuemult.v".
+WARNING:Xst:646 - Signal <selected> is assigned but never used.
+WARNING:Xst:1780 - Signal <equeuemult_fake_reg_proc/i> is never used or assigned.
+WARNING:Xst:646 - Signal <equeuemult_oreg_assign/valid_and_ready> is assigned but never used.
+WARNING:Xst:646 - Signal <equeuemult_oreg_assign/valid_r> is assigned but never used.
+WARNING:Xst:646 - Signal <valid_r> is assigned but never used.
+    Found 6-bit comparator equal for signal <do_rs_update_0$cmp_eq0000> created at line 76.
+    Found 6-bit comparator equal for signal <do_rs_update_1$cmp_eq0000> created at line 76.
+    Found 6-bit comparator equal for signal <do_rs_update_2$cmp_eq0000> created at line 76.
+    Found 6-bit comparator equal for signal <do_rs_update_3$cmp_eq0000> created at line 76.
+    Found 6-bit comparator equal for signal <do_rs_update_4$cmp_eq0000> created at line 76.
+    Found 6-bit comparator equal for signal <do_rt_update_0$cmp_eq0000> created at line 77.
+    Found 6-bit comparator equal for signal <do_rt_update_1$cmp_eq0000> created at line 77.
+    Found 6-bit comparator equal for signal <do_rt_update_2$cmp_eq0000> created at line 77.
+    Found 6-bit comparator equal for signal <do_rt_update_3$cmp_eq0000> created at line 77.
+    Found 6-bit comparator equal for signal <do_rt_update_4$cmp_eq0000> created at line 77.
+    Found 24-bit register for signal <inst_rdtag_r<3:0>>.
+    Found 128-bit 4-to-1 multiplexer for signal <inst_rsdata>.
+    Found 128-bit register for signal <inst_rsdata_r<3:0>>.
+    Found 24-bit register for signal <inst_rstag_r<3:0>>.
+    Found 4-bit 4-to-1 multiplexer for signal <inst_rsvalid>.
+    Found 4-bit register for signal <inst_rsvalid_r<3:0>>.
+    Found 128-bit 4-to-1 multiplexer for signal <inst_rtdata>.
+    Found 128-bit register for signal <inst_rtdata_r<3:0>>.
+    Found 24-bit register for signal <inst_rttag_r<3:0>>.
+    Found 4-bit 4-to-1 multiplexer for signal <inst_rtvalid>.
+    Found 4-bit register for signal <inst_rtvalid_r<3:0>>.
+    Found 4-bit register for signal <inst_valid_r<3:0>>.
+    Summary:
+	inferred 340 D-type flip-flop(s).
+	inferred  10 Comparator(s).
+	inferred 264 Multiplexer(s).
+Unit <equeuemult> synthesized.
+
+
+Synthesizing Unit <regfile>.
+    Related source file is "regfile.v".
+WARNING:Xst:1780 - Signal <reg_file_write_proc/count> is never used or assigned.
+    Found 32-bit 32-to-1 multiplexer for signal <dispatch_rtdata>.
+    Found 32-bit 32-to-1 multiplexer for signal <debug_data>.
+    Found 32-bit 32-to-1 multiplexer for signal <dispatch_rsdata>.
+    Found 1024-bit register for signal <mem_r>.
+INFO:Xst:738 - HDL ADVISOR - 1024 flip-flops were inferred for signal <mem_r>. You may be trying to describe a RAM in a way that is incompatible with block and distributed RAM resources available on Xilinx devices, or with a specific template that is not supported. Please review the Xilinx resources documentation and the XST user manual for coding guidelines. Taking advantage of RAM resources will lead to improved device usage and reduced synthesis time.
+    Summary:
+	inferred 1024 D-type flip-flop(s).
+	inferred  96 Multiplexer(s).
+Unit <regfile> synthesized.
+
+
+Synthesizing Unit <rst>.
+    Related source file is "rst.v".
+WARNING:Xst:646 - Signal <rst_lookup_proc/tag_valid> is assigned but never used.
+WARNING:Xst:1872 - Variable <n_matches> is used but never assigned.
+WARNING:Xst:646 - Signal <rst_lookup_proc/n_matches> is assigned but never used.
+WARNING:Xst:646 - Signal <rst_write_proc/is_same_addr> is assigned but never used.
+WARNING:Xst:646 - Signal <rst_lookup_proc/tag> is assigned but never used.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0000> created at line 83.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0001> created at line 83.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0002> created at line 83.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0003> created at line 83.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0004> created at line 83.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0005> created at line 83.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0006> created at line 83.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0007> created at line 83.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0008> created at line 83.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0009> created at line 83.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0010> created at line 83.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0011> created at line 83.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0012> created at line 83.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0013> created at line 83.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0014> created at line 83.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0015> created at line 83.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0016> created at line 83.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0017> created at line 83.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0018> created at line 83.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0019> created at line 83.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0020> created at line 83.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0021> created at line 83.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0022> created at line 83.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0023> created at line 83.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0024> created at line 83.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0025> created at line 83.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0026> created at line 83.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0027> created at line 83.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0028> created at line 83.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0029> created at line 83.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0030> created at line 83.
+    Found 6-bit comparator equal for signal <cdb_tag_found$cmp_eq0031> created at line 83.
+    Found 224-bit register for signal <mem_r>.
+    Summary:
+	inferred 224 D-type flip-flop(s).
+	inferred  33 Comparator(s).
+	inferred  14 Multiplexer(s).
+Unit <rst> synthesized.
+
+
+Synthesizing Unit <tagfifo>.
+    Related source file is "tagfifo.v".
+WARNING:Xst:646 - Signal <is_pop> is assigned but never used.
+WARNING:Xst:646 - Signal <wptr_i> is assigned but never used.
+WARNING:Xst:1780 - Signal <rprt_i> is never used or assigned.
+WARNING:Xst:2734 - Property "use_dsp48" is not applicable for this technology.
+    Found 6-bit 64-to-1 multiplexer for signal <dispatch_tag>.
+    Found 6-bit 64-to-1 multiplexer for signal <$varindex0000> created at line 59.
+    Found 6-bit comparator equal for signal <is_empty$cmp_eq0000> created at line 44.
+    Found 1-bit xor2 for signal <is_empty$xor0000> created at line 44.
+    Found 384-bit register for signal <mem_r>.
+    Found 7-bit adder for signal <rptr$addsub0000> created at line 50.
+    Found 7-bit register for signal <rptr_r>.
+    Found 7-bit adder for signal <wptr$addsub0000> created at line 51.
+    Found 7-bit register for signal <wptr_r>.
+INFO:Xst:738 - HDL ADVISOR - 384 flip-flops were inferred for signal <mem_r>. You may be trying to describe a RAM in a way that is incompatible with block and distributed RAM resources available on Xilinx devices, or with a specific template that is not supported. Please review the Xilinx resources documentation and the XST user manual for coding guidelines. Taking advantage of RAM resources will lead to improved device usage and reduced synthesis time.
+    Summary:
+	inferred 398 D-type flip-flop(s).
+	inferred   2 Adder/Subtractor(s).
+	inferred   1 Comparator(s).
+	inferred  12 Multiplexer(s).
+Unit <tagfifo> synthesized.
+
+
+Synthesizing Unit <CLA_4bit>.
+    Related source file is "../../../../hdl/src/execunits/add/CLA_4bit.v".
+    Found 4-bit xor2 for signal <s>.
+    Found 4-bit xor2 for signal <p>.
+Unit <CLA_4bit> synthesized.
+
+
+Synthesizing Unit <divider_core>.
+    Related source file is "D:/Profiles/b07885/Desktop/maestria/diseno micros/cobalt/src/hdl/src/execunits/div/divider_core.vhd".
+WARNING:Xst:647 - Input <DATA_A<31:16>> is never used.
+WARNING:Xst:647 - Input <DATA_B<31:16>> is never used.
+WARNING:Xst:2734 - Property "use_dsp48" is not applicable for this technology.
+    Found 16-bit comparator greatequal for signal <Q_0$cmp_ge0000> created at line 192.
+    Found 16-bit comparator greatequal for signal <Q_1$cmp_ge0000> created at line 182.
+    Found 16-bit comparator greatequal for signal <Q_10$cmp_ge0000> created at line 92.
+    Found 16-bit comparator greatequal for signal <Q_11$cmp_ge0000> created at line 82.
+    Found 16-bit comparator greatequal for signal <Q_12$cmp_ge0000> created at line 72.
+    Found 16-bit comparator greatequal for signal <Q_13$cmp_ge0000> created at line 62.
+    Found 16-bit comparator greatequal for signal <Q_14$cmp_ge0000> created at line 52.
+    Found 16-bit comparator greatequal for signal <Q_15$cmp_ge0000> created at line 42.
+    Found 16-bit comparator greatequal for signal <Q_2$cmp_ge0000> created at line 172.
+    Found 16-bit comparator greatequal for signal <Q_3$cmp_ge0000> created at line 162.
+    Found 16-bit comparator greatequal for signal <Q_4$cmp_ge0000> created at line 152.
+    Found 16-bit comparator greatequal for signal <Q_5$cmp_ge0000> created at line 142.
+    Found 16-bit comparator greatequal for signal <Q_6$cmp_ge0000> created at line 132.
+    Found 16-bit comparator greatequal for signal <Q_7$cmp_ge0000> created at line 122.
+    Found 16-bit comparator greatequal for signal <Q_8$cmp_ge0000> created at line 112.
+    Found 16-bit comparator greatequal for signal <Q_9$cmp_ge0000> created at line 102.
+    Found 16-bit subtractor for signal <R$addsub0000> created at line 193.
+    Found 16-bit subtractor for signal <X$addsub0000> created at line 43.
+    Found 16-bit subtractor for signal <X$addsub0001> created at line 53.
+    Found 16-bit subtractor for signal <X$addsub0002> created at line 63.
+    Found 16-bit subtractor for signal <X$addsub0003> created at line 73.
+    Found 16-bit subtractor for signal <X$addsub0004> created at line 83.
+    Found 16-bit subtractor for signal <X$addsub0005> created at line 143.
+    Found 16-bit subtractor for signal <X$addsub0006> created at line 93.
+    Found 16-bit subtractor for signal <X$addsub0007> created at line 153.
+    Found 16-bit subtractor for signal <X$addsub0008> created at line 103.
+    Found 16-bit subtractor for signal <X$addsub0009> created at line 163.
+    Found 16-bit subtractor for signal <X$addsub0010> created at line 113.
+    Found 16-bit subtractor for signal <X$addsub0011> created at line 173.
+    Found 16-bit subtractor for signal <X$addsub0012> created at line 123.
+    Found 16-bit subtractor for signal <X$addsub0013> created at line 183.
+    Found 16-bit subtractor for signal <X$addsub0014> created at line 133.
+    Summary:
+	inferred  16 Adder/Subtractor(s).
+	inferred  16 Comparator(s).
+Unit <divider_core> synthesized.
+
+
+Synthesizing Unit <icache>.
+    Related source file is "icache.v".
+WARNING:Xst:647 - Input <ifq_pcin<31:10>> is never used.
+WARNING:Xst:647 - Input <ifq_pcin<3:0>> is never used.
+    Found 1-bit register for signal <dout_valid_r>.
+    Summary:
+	inferred   1 D-type flip-flop(s).
+Unit <icache> synthesized.
+
+
+Synthesizing Unit <dispatch>.
+    Related source file is "dispatch.v".
+WARNING:Xst:646 - Signal <tagfifo_dispatch_full> is assigned but never used.
+WARNING:Xst:646 - Signal <do_dispatch> is assigned but never used.
+WARNING:Xst:646 - Signal <inst_imm_signext> is assigned but never used.
+WARNING:Xst:646 - Signal <can_dispatch> is assigned but never used.
+WARNING:Xst:646 - Signal <inst_shamt> is assigned but never used.
+WARNING:Xst:646 - Signal <inst_imm_zeroext> is assigned but never used.
+INFO:Xst:2117 - HDL ADVISOR - Mux Selector <curr_equeueidx> of Case statement line 0 was re-encoded using one-hot encoding. The case statement will be optimized (default statement optimization), but this optimization may lead to design initialization problems. To ensure the design works safely, you can:
+   	- add an 'INIT' attribute on signal <curr_equeueidx> (optimization is then done without any risk)
+   	- use the attribute 'signal_encoding user' to avoid onehot optimization
+   	- use the attribute 'safe_implementation yes' to force XST to perform a safe (but less efficient) optimization
+    Using one-hot encoding for signal <curr_equeueidx>.
+WARNING:Xst:2734 - Property "use_dsp48" is not applicable for this technology.
+    Found 6-bit comparator equal for signal <equeue_rsvalid$cmp_eq0000> created at line 156.
+    Found 6-bit comparator equal for signal <equeue_rtvalid$cmp_eq0000> created at line 158.
+    Found 32-bit adder for signal <inst_addr_branch>.
+    Found 32-bit register for signal <inst_addr_branch_r>.
+    Found 1-bit register for signal <state_r>.
+    Summary:
+	inferred  33 D-type flip-flop(s).
+	inferred   1 Adder/Subtractor(s).
+	inferred   2 Comparator(s).
+Unit <dispatch> synthesized.
+
+
+Synthesizing Unit <multiplier_wrapper>.
+    Related source file is "../../../../hdl/src/execunits/mult/multiplier_wrapper.v".
+WARNING:Xst:647 - Input <issuemult_rsdata<31:16>> is never used.
+WARNING:Xst:647 - Input <issuemult_rtdata<31:16>> is never used.
+Unit <multiplier_wrapper> synthesized.
+
+
+Synthesizing Unit <dcache>.
+    Related source file is "dcache.v".
+WARNING:Xst:647 - Input <addr<31:7>> is never used.
+    Found 6-bit register for signal <tag_out>.
+    Found 1-bit register for signal <wen_r>.
+    Summary:
+	inferred   7 D-type flip-flop(s).
+Unit <dcache> synthesized.
+
+
+Synthesizing Unit <CLA_32bit>.
+    Related source file is "../../../../hdl/src/execunits/add/CLA_32bit.v".
+    Found 1-bit xor2 for signal <overflow>.
+Unit <CLA_32bit> synthesized.
+
+
+Synthesizing Unit <divider>.
+    Related source file is "D:/Profiles/b07885/Desktop/maestria/diseno micros/cobalt/src/hdl/src/execunits/div/divider.vhd".
+WARNING:Xst:646 - Signal <rfd_array<5:4>> is assigned but never used.
+    Found 6-bit register for signal <div_tag_out>.
+    Found 32-bit register for signal <div_rem_quo>.
+    Found 32-bit register for signal <divident>.
+    Found 32-bit register for signal <divisor>.
+    Found 1-bit register for signal <rfd>.
+    Found 4-bit register for signal <rfd_array<3:0>>.
+    Found 30-bit register for signal <tag_div>.
+    Summary:
+	inferred 137 D-type flip-flop(s).
+Unit <divider> synthesized.
+
+
+Synthesizing Unit <issueint>.
+    Related source file is "issueint.v".
+WARNING:Xst:647 - Input <clk> is never used.
+WARNING:Xst:647 - Input <reset> is never used.
+WARNING:Xst:647 - Input <issueint_ready> is never used.
+WARNING:Xst:2734 - Property "use_dsp48" is not applicable for this technology.
+    Found 32-bit comparator equal for signal <issueint_alubranch_taken$cmp_eq0000> created at line 52.
+    Found 32-bit comparator not equal for signal <issueint_alubranch_taken$cmp_ne0000> created at line 56.
+    Found 32-bit subtractor for signal <issueint_out$addsub0000> created at line 59.
+    Found 32-bit comparator less for signal <issueint_out$cmp_lt0000> created at line 71.
+    Found 32-bit 4-to-1 multiplexer for signal <rsdata_r>.
+    Found 32-bit 4-to-1 multiplexer for signal <rtdata_r>.
+    Summary:
+	inferred   1 Adder/Subtractor(s).
+	inferred   3 Comparator(s).
+	inferred  64 Multiplexer(s).
+Unit <issueint> synthesized.
+
+
+Synthesizing Unit <divider_wrapper>.
+    Related source file is "../../../../hdl/src/execunits/div/divider_wrapper.v".
+    Found 6-bit register for signal <rdtag_r>.
+    Found 32-bit register for signal <rsdata_r>.
+    Found 32-bit register for signal <rtdata_r>.
+    Summary:
+	inferred  70 D-type flip-flop(s).
+Unit <divider_wrapper> synthesized.
+
+
+Synthesizing Unit <issue>.
+    Related source file is "issue.v".
+WARNING:Xst:646 - Signal <cdb_mux_sel> is assigned but never used.
+WARNING:Xst:646 - Signal <issuemult_tagout> is assigned but never used.
+WARNING:Xst:646 - Signal <issuemult_out> is assigned but never used.
+WARNING:Xst:646 - Signal <issuels_tagout> is assigned but never used.
+WARNING:Xst:646 - Signal <cdb_slot_r<0>> is assigned but never used.
+    Register <div_cdb_ctrl_r<5>> equivalent to <cdb_slot_r<6>> has been removed
+WARNING:Xst:643 - "issue.v" line 118: The result of a 32x32-bit multiplication is partially used. Only the 32 least significant bits are used. If you are doing this on purpose, you may safely ignore this warning. Otherwise, make sure you are not losing information, leading to unexpected circuit behavior.
+    Found 32-bit adder for signal <$add0000> created at line 299.
+    Found 1-bit register for signal <cdb_branch_oreg_r>.
+    Found 1-bit register for signal <cdb_branch_taken_oreg_r>.
+    Found 32-bit register for signal <cdb_data_oreg_r>.
+    Found 6-bit register for signal <cdb_slot_r<6:1>>.
+    Found 6-bit register for signal <cdb_tag_oreg_r>.
+    Found 1-bit register for signal <cdb_valid_oreg_r>.
+    Found 5-bit register for signal <div_cdb_ctrl_r<4:0>>.
+    Found 1-bit xor2 for signal <int_before_ls>.
+    Found 1-bit register for signal <int_before_ls_r>.
+    Found 1-bit register for signal <is_load_r>.
+    Found 32x32-bit multiplier for signal <issuemult_out_temp_2$mult0001> created at line 118.
+    Found 96-bit register for signal <issuemult_out_temp_r>.
+    Found 96-bit register for signal <issuemult_tag_temp_r>.
+    Found 3-bit register for signal <mult_cdb_ctrl_r>.
+    Summary:
+	inferred 249 D-type flip-flop(s).
+	inferred   1 Adder/Subtractor(s).
+	inferred   1 Multiplier(s).
+Unit <issue> synthesized.
+
+
+Synthesizing Unit <cpu>.
+    Related source file is "cpu.v".
+WARNING:Xst:1780 - Signal <equeuemult_issuemult_opcode> is never used or assigned.
+WARNING:Xst:1780 - Signal <equeuediv_issuediv_opcode> is never used or assigned.
+WARNING:Xst:646 - Signal <issueint_carryout> is assigned but never used.
+WARNING:Xst:646 - Signal <issueint_overflow> is assigned but never used.
+Unit <cpu> synthesized.
+
+INFO:Xst:1767 - HDL ADVISOR - Resource sharing has identified that some arithmetic operations in this design can share the same physical resources for reduced device utilization. For improved clock frequency you may try to disable resource sharing.
+
+=========================================================================
+HDL Synthesis Report
+
+Macro Statistics
+# Multipliers                                          : 1
+ 32x32-bit multiplier                                  : 1
+# Adders/Subtractors                                   : 25
+ 16-bit subtractor                                     : 16
+ 32-bit adder                                          : 4
+ 32-bit subtractor                                     : 1
+ 5-bit adder                                           : 2
+ 7-bit adder                                           : 2
+# Registers                                            : 324
+ 1-bit register                                        : 80
+ 128-bit register                                      : 4
+ 32-bit register                                       : 83
+ 5-bit register                                        : 2
+ 6-bit register                                        : 121
+ 7-bit register                                        : 34
+# Comparators                                          : 97
+ 16-bit comparator greatequal                          : 16
+ 2-bit comparator equal                                : 2
+ 32-bit comparator equal                               : 1
+ 32-bit comparator less                                : 1
+ 32-bit comparator not equal                           : 1
+ 5-bit comparator equal                                : 1
+ 6-bit comparator equal                                : 75
+# Multiplexers                                         : 79
+ 1-bit 4-to-1 multiplexer                              : 32
+ 128-bit 4-to-1 multiplexer                            : 2
+ 32-bit 32-to-1 multiplexer                            : 3
+ 32-bit 4-to-1 multiplexer                             : 38
+ 6-bit 64-to-1 multiplexer                             : 2
+ 7-bit 32-to-1 multiplexer                             : 2
+# Xors                                                 : 45
+ 1-bit xor2                                            : 37
+ 4-bit xor2                                            : 8
+
+=========================================================================
+
+=========================================================================
+*                       Advanced HDL Synthesis                          *
+=========================================================================
+
+Loading device for application Rf_Device from file '3s500e.nph' in environment C:\Xilinx92i.
+WARNING:Xst:2404 -  FFs/Latches <issuemult_tag_temp_r_2<31:6>> (without init value) have a constant value of 0 in block <issue>.
+WARNING:Xst:2404 -  FFs/Latches <issuemult_tag_temp_r_1<31:6>> (without init value) have a constant value of 0 in block <issue>.
+WARNING:Xst:2677 - Node <issuemult_tag_temp_r_0_6> of sequential type is unconnected in block <issue>.
+WARNING:Xst:2677 - Node <issuemult_tag_temp_r_0_7> of sequential type is unconnected in block <issue>.
+WARNING:Xst:2677 - Node <issuemult_tag_temp_r_0_8> of sequential type is unconnected in block <issue>.
+WARNING:Xst:2677 - Node <issuemult_tag_temp_r_0_9> of sequential type is unconnected in block <issue>.
+WARNING:Xst:2677 - Node <issuemult_tag_temp_r_0_10> of sequential type is unconnected in block <issue>.
+WARNING:Xst:2677 - Node <issuemult_tag_temp_r_0_11> of sequential type is unconnected in block <issue>.
+WARNING:Xst:2677 - Node <issuemult_tag_temp_r_0_12> of sequential type is unconnected in block <issue>.
+WARNING:Xst:2677 - Node <issuemult_tag_temp_r_0_13> of sequential type is unconnected in block <issue>.
+WARNING:Xst:2677 - Node <issuemult_tag_temp_r_0_14> of sequential type is unconnected in block <issue>.
+WARNING:Xst:2677 - Node <issuemult_tag_temp_r_0_15> of sequential type is unconnected in block <issue>.
+WARNING:Xst:2677 - Node <issuemult_tag_temp_r_0_16> of sequential type is unconnected in block <issue>.
+WARNING:Xst:2677 - Node <issuemult_tag_temp_r_0_17> of sequential type is unconnected in block <issue>.
+WARNING:Xst:2677 - Node <issuemult_tag_temp_r_0_18> of sequential type is unconnected in block <issue>.
+WARNING:Xst:2677 - Node <issuemult_tag_temp_r_0_19> of sequential type is unconnected in block <issue>.
+WARNING:Xst:2677 - Node <issuemult_tag_temp_r_0_20> of sequential type is unconnected in block <issue>.
+WARNING:Xst:2677 - Node <issuemult_tag_temp_r_0_21> of sequential type is unconnected in block <issue>.
+WARNING:Xst:2677 - Node <issuemult_tag_temp_r_0_22> of sequential type is unconnected in block <issue>.
+WARNING:Xst:2677 - Node <issuemult_tag_temp_r_0_23> of sequential type is unconnected in block <issue>.
+WARNING:Xst:2677 - Node <issuemult_tag_temp_r_0_24> of sequential type is unconnected in block <issue>.
+WARNING:Xst:2677 - Node <issuemult_tag_temp_r_0_25> of sequential type is unconnected in block <issue>.
+WARNING:Xst:2677 - Node <issuemult_tag_temp_r_0_26> of sequential type is unconnected in block <issue>.
+WARNING:Xst:2677 - Node <issuemult_tag_temp_r_0_27> of sequential type is unconnected in block <issue>.
+WARNING:Xst:2677 - Node <issuemult_tag_temp_r_0_28> of sequential type is unconnected in block <issue>.
+WARNING:Xst:2677 - Node <issuemult_tag_temp_r_0_29> of sequential type is unconnected in block <issue>.
+WARNING:Xst:2677 - Node <issuemult_tag_temp_r_0_30> of sequential type is unconnected in block <issue>.
+WARNING:Xst:2677 - Node <issuemult_tag_temp_r_0_31> of sequential type is unconnected in block <issue>.
+INFO:Xst:2261 - The FF/Latch <cdb_slot_r_5> in Unit <issue> is equivalent to the following FF/Latch, which will be removed : <div_cdb_ctrl_r_4> 
+INFO:Xst:2261 - The FF/Latch <cdb_slot_r_4> in Unit <issue> is equivalent to the following FF/Latch, which will be removed : <div_cdb_ctrl_r_3> 
+WARNING:Xst:2677 - Node <inst_addr_branch_r_0> of sequential type is unconnected in block <dispatch>.
+WARNING:Xst:2677 - Node <inst_addr_branch_r_1> of sequential type is unconnected in block <dispatch>.
+WARNING:Xst:2677 - Node <rsdata_r_16> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <rsdata_r_17> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <rsdata_r_18> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <rsdata_r_19> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <rsdata_r_20> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <rsdata_r_21> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <rsdata_r_22> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <rsdata_r_23> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <rsdata_r_24> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <rsdata_r_25> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <rsdata_r_26> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <rsdata_r_27> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <rsdata_r_28> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <rsdata_r_29> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <rsdata_r_30> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <rsdata_r_31> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <rtdata_r_16> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <rtdata_r_17> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <rtdata_r_18> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <rtdata_r_19> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <rtdata_r_20> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <rtdata_r_21> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <rtdata_r_22> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <rtdata_r_23> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <rtdata_r_24> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <rtdata_r_25> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <rtdata_r_26> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <rtdata_r_27> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <rtdata_r_28> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <rtdata_r_29> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <rtdata_r_30> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <rtdata_r_31> of sequential type is unconnected in block <divider_wrapper>.
+WARNING:Xst:2677 - Node <divisor_16> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <divisor_17> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <divisor_18> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <divisor_19> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <divisor_20> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <divisor_21> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <divisor_22> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <divisor_23> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <divisor_24> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <divisor_25> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <divisor_26> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <divisor_27> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <divisor_28> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <divisor_29> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <divisor_30> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <divisor_31> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <divident_16> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <divident_17> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <divident_18> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <divident_19> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <divident_20> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <divident_21> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <divident_22> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <divident_23> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <divident_24> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <divident_25> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <divident_26> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <divident_27> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <divident_28> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <divident_29> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <divident_30> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <divident_31> of sequential type is unconnected in block <divider>.
+WARNING:Xst:2677 - Node <tag_out_0> of sequential type is unconnected in block <dcache>.
+WARNING:Xst:2677 - Node <tag_out_1> of sequential type is unconnected in block <dcache>.
+WARNING:Xst:2677 - Node <tag_out_2> of sequential type is unconnected in block <dcache>.
+WARNING:Xst:2677 - Node <tag_out_3> of sequential type is unconnected in block <dcache>.
+WARNING:Xst:2677 - Node <tag_out_4> of sequential type is unconnected in block <dcache>.
+WARNING:Xst:2677 - Node <tag_out_5> of sequential type is unconnected in block <dcache>.
+
+=========================================================================
+Advanced HDL Synthesis Report
+
+Macro Statistics
+# Multipliers                                          : 1
+ 32x32-bit multiplier                                  : 1
+# Adders/Subtractors                                   : 25
+ 15-bit subtractor                                     : 15
+ 16-bit subtractor                                     : 1
+ 32-bit adder                                          : 4
+ 32-bit subtractor                                     : 1
+ 5-bit adder                                           : 2
+ 7-bit adder                                           : 2
+# Registers                                            : 4142
+ Flip-Flops                                            : 4142
+# Comparators                                          : 97
+ 16-bit comparator greatequal                          : 16
+ 2-bit comparator equal                                : 2
+ 32-bit comparator equal                               : 1
+ 32-bit comparator less                                : 1
+ 32-bit comparator not equal                           : 1
+ 5-bit comparator equal                                : 1
+ 6-bit comparator equal                                : 75
+# Multiplexers                                         : 513
+ 1-bit 4-to-1 multiplexer                              : 480
+ 128-bit 4-to-1 multiplexer                            : 2
+ 32-bit 32-to-1 multiplexer                            : 3
+ 32-bit 4-to-1 multiplexer                             : 24
+ 6-bit 64-to-1 multiplexer                             : 2
+ 7-bit 32-to-1 multiplexer                             : 2
+# Xors                                                 : 45
+ 1-bit xor2                                            : 37
+ 4-bit xor2                                            : 8
+
+=========================================================================
+
+=========================================================================
+*                         Low Level Synthesis                           *
+=========================================================================
+WARNING:Xst:2677 - Node <dcache/tag_out_5> of sequential type is unconnected in block <issue>.
+WARNING:Xst:2677 - Node <dcache/tag_out_4> of sequential type is unconnected in block <issue>.
+WARNING:Xst:2677 - Node <dcache/tag_out_3> of sequential type is unconnected in block <issue>.
+WARNING:Xst:2677 - Node <dcache/tag_out_2> of sequential type is unconnected in block <issue>.
+WARNING:Xst:2677 - Node <dcache/tag_out_1> of sequential type is unconnected in block <issue>.
+WARNING:Xst:2677 - Node <dcache/tag_out_0> of sequential type is unconnected in block <issue>.
+WARNING:Xst:2677 - Node <wptr_r_0> of sequential type is unconnected in block <ifq>.
+WARNING:Xst:2677 - Node <wptr_r_1> of sequential type is unconnected in block <ifq>.
+WARNING:Xst:2677 - Node <Mmult_issuemult_out_temp_2_mult0001_submult_11> of sequential type is unconnected in block <issue>.
+
+Optimizing unit <cpu> ...
+
+Optimizing unit <ifq> ...
+WARNING:Xst:1710 - FF/Latch  <pcin_r_0> (without init value) has a constant value of 0 in block <ifq>.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch  <pcin_r_1> (without init value) has a constant value of 0 in block <ifq>.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch  <pcin_r_2> (without init value) has a constant value of 0 in block <ifq>.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch  <pcin_r_3> (without init value) has a constant value of 0 in block <ifq>.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch  <pcout_r_0> (without init value) has a constant value of 0 in block <ifq>.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch  <pcout_r_1> (without init value) has a constant value of 0 in block <ifq>.
+
+Optimizing unit <equeueint> ...
+
+Optimizing unit <equeuels> ...
+
+Optimizing unit <equeuediv> ...
+
+Optimizing unit <equeuemult> ...
+
+Optimizing unit <regfile> ...
+
+Optimizing unit <rst> ...
+
+Optimizing unit <tagfifo> ...
+
+Optimizing unit <divider_core> ...
+
+Optimizing unit <dispatch> ...
+
+Optimizing unit <divider> ...
+
+Optimizing unit <issueint> ...
+
+Optimizing unit <divider_wrapper> ...
+
+Optimizing unit <issue> ...
+WARNING:Xst:2677 - Node <ifq/pcout_r_31> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcout_r_30> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcout_r_29> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcout_r_28> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcout_r_27> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcout_r_26> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcout_r_25> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcout_r_24> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcout_r_23> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcout_r_22> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcout_r_21> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcout_r_20> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcout_r_19> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcout_r_18> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcout_r_17> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcout_r_16> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcout_r_15> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcout_r_14> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcout_r_13> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcout_r_12> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcout_r_11> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcout_r_10> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcin_r_31> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcin_r_30> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcin_r_29> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcin_r_28> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcin_r_27> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcin_r_26> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcin_r_25> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcin_r_24> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcin_r_23> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcin_r_22> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcin_r_21> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcin_r_20> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcin_r_19> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcin_r_18> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcin_r_17> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcin_r_16> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcin_r_15> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcin_r_14> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcin_r_13> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcin_r_12> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcin_r_11> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/pcin_r_10> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_2_106> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_2_105> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_2_104> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_2_74> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_2_73> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_2_72> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_2_42> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_2_41> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_2_40> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_2_10> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_2_9> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_2_8> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_1_106> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_1_105> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_1_104> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_1_74> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_1_73> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_1_72> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_1_42> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_1_41> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_1_40> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_1_10> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_1_9> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_1_8> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_3_106> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_3_105> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_3_104> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_3_74> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_3_73> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_3_72> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_3_42> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_3_41> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_3_40> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_3_10> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_3_9> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_3_8> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_0_106> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_0_105> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_0_104> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_0_74> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_0_73> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_0_72> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_0_42> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_0_41> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_0_40> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_0_10> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_0_9> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <ifq/mem_r_0_8> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_3_31> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_3_30> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_3_29> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_3_28> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_3_27> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_3_26> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_3_25> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_3_24> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_3_23> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_3_22> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_3_21> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_3_20> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_3_19> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_3_18> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_3_17> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_3_16> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_3_15> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_3_14> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_3_13> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_3_12> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_3_11> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_3_10> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_3_9> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_3_8> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_3_7> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_2_31> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_2_30> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_2_29> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_2_28> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_2_27> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_2_26> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_2_25> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_2_24> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_2_23> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_2_22> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_2_21> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_2_20> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_2_19> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_2_18> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_2_17> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_2_16> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_2_15> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_2_14> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_2_13> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_2_12> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_2_11> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_2_10> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_2_9> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_2_8> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_2_7> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_1_31> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_1_30> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_1_29> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_1_28> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_1_27> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_1_26> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_1_25> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_1_24> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_1_23> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_1_22> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_1_21> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_1_20> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_1_19> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_1_18> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_1_17> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_1_16> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_1_15> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_1_14> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_1_13> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_1_12> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_1_11> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_1_10> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_1_9> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_1_8> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_1_7> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_0_31> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_0_30> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_0_29> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_0_28> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_0_27> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_0_26> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_0_25> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_0_24> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_0_23> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_0_22> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_0_21> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_0_20> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_0_19> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_0_18> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_0_17> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_0_16> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_0_15> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_0_14> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_0_13> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_0_12> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_0_11> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_0_10> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_0_9> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_0_8> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_rsdata_r_0_7> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_3_31> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_3_30> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_3_29> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_3_28> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_3_27> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_3_26> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_3_25> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_3_24> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_3_23> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_3_22> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_3_21> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_3_20> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_3_19> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_3_18> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_3_17> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_3_16> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_3_15> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_3_14> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_3_13> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_3_12> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_3_11> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_3_10> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_3_9> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_3_8> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_3_7> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_2_31> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_2_30> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_2_29> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_2_28> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_2_27> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_2_26> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_2_25> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_2_24> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_2_23> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_2_22> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_2_21> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_2_20> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_2_19> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_2_18> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_2_17> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_2_16> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_2_15> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_2_14> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_2_13> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_2_12> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_2_11> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_2_10> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_2_9> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_2_8> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_2_7> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_1_31> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_1_30> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_1_29> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_1_28> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_1_27> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_1_26> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_1_25> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_1_24> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_1_23> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_1_22> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_1_21> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_1_20> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_1_19> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_1_18> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_1_17> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_1_16> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_1_15> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_1_14> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_1_13> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_1_12> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_1_11> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_1_10> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_1_9> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_1_8> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_1_7> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_0_31> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_0_30> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_0_29> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_0_28> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_0_27> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_0_26> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_0_25> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_0_24> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_0_23> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_0_22> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_0_21> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_0_20> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_0_19> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_0_18> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_0_17> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_0_16> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_0_15> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_0_14> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_0_13> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_0_12> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_0_11> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_0_10> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_0_9> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_0_8> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuels/inst_imm_r_0_7> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_0_31> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_0_30> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_0_29> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_0_28> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_0_27> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_0_26> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_0_25> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_0_24> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_0_23> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_0_22> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_0_21> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_0_20> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_0_19> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_0_18> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_0_17> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_0_16> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_1_31> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_1_30> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_1_29> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_1_28> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_1_27> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_1_26> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_1_25> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_1_24> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_1_23> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_1_22> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_1_21> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_1_20> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_1_19> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_1_18> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_1_17> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_1_16> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_2_31> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_2_30> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_2_29> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_2_28> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_2_27> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_2_26> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_2_25> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_2_24> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_2_23> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_2_22> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_2_21> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_2_20> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_2_19> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_2_18> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_2_17> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_2_16> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_3_31> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_3_30> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_3_29> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_3_28> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_3_27> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_3_26> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_3_25> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_3_24> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_3_23> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_3_22> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_3_21> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_3_20> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_3_19> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_3_18> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_3_17> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rtdata_r_3_16> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_0_31> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_0_30> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_0_29> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_0_28> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_0_27> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_0_26> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_0_25> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_0_24> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_0_23> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_0_22> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_0_21> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_0_20> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_0_19> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_0_18> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_0_17> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_0_16> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_2_31> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_2_30> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_2_29> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_2_28> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_2_27> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_2_26> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_2_25> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_2_24> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_2_23> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_2_22> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_2_21> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_2_20> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_2_19> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_2_18> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_2_17> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_2_16> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_3_31> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_3_30> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_3_29> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_3_28> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_3_27> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_3_26> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_3_25> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_3_24> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_3_23> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_3_22> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_3_21> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_3_20> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_3_19> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_3_18> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_3_17> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_3_16> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_1_31> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_1_30> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_1_29> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_1_28> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_1_27> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_1_26> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_1_25> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_1_24> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_1_23> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_1_22> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_1_21> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_1_20> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_1_19> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_1_18> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_1_17> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <equeuediv/inst_rsdata_r_1_16> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <dispatch/inst_addr_branch_r_31> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <dispatch/inst_addr_branch_r_30> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <dispatch/inst_addr_branch_r_29> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <dispatch/inst_addr_branch_r_28> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <dispatch/inst_addr_branch_r_27> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <dispatch/inst_addr_branch_r_26> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <dispatch/inst_addr_branch_r_25> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <dispatch/inst_addr_branch_r_24> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <dispatch/inst_addr_branch_r_23> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <dispatch/inst_addr_branch_r_22> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <dispatch/inst_addr_branch_r_21> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <dispatch/inst_addr_branch_r_20> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <dispatch/inst_addr_branch_r_19> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <dispatch/inst_addr_branch_r_18> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <dispatch/inst_addr_branch_r_17> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <dispatch/inst_addr_branch_r_16> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <dispatch/inst_addr_branch_r_15> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <dispatch/inst_addr_branch_r_14> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <dispatch/inst_addr_branch_r_13> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <dispatch/inst_addr_branch_r_12> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <dispatch/inst_addr_branch_r_11> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <dispatch/inst_addr_branch_r_10> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <dispatch/inst_addr_branch_r_1> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <dispatch/inst_addr_branch_r_0> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rsdata_r_16> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rsdata_r_17> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rsdata_r_18> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rsdata_r_19> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rsdata_r_20> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rsdata_r_21> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rsdata_r_22> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rsdata_r_23> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rsdata_r_24> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rsdata_r_25> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rsdata_r_26> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rsdata_r_27> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rsdata_r_28> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rsdata_r_29> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rsdata_r_30> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rsdata_r_31> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rtdata_r_16> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rtdata_r_17> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rtdata_r_18> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rtdata_r_19> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rtdata_r_20> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rtdata_r_21> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rtdata_r_22> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rtdata_r_23> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rtdata_r_24> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rtdata_r_25> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rtdata_r_26> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rtdata_r_27> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rtdata_r_28> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rtdata_r_29> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rtdata_r_30> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/rtdata_r_31> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divident_31> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divident_30> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divident_29> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divident_28> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divident_27> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divident_26> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divident_25> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divident_24> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divident_23> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divident_22> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divident_21> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divident_20> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divident_19> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divident_18> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divident_17> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divident_16> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divisor_31> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divisor_30> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divisor_29> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divisor_28> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divisor_27> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divisor_26> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divisor_25> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divisor_24> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divisor_23> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divisor_22> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divisor_21> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divisor_20> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divisor_19> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divisor_18> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divisor_17> of sequential type is unconnected in block <cpu>.
+WARNING:Xst:2677 - Node <issue/divider_wrapper/divider/divisor_16> of sequential type is unconnected in block <cpu>.
+
+Mapping all equations...
+WARNING:Xst:2170 - Unit cpu : the following signal(s) form a combinatorial loop: dispatch_equeueint_en, dispatch/N151, ifq_icache_ren, N15236, dispatch/_old_can_dispatch_202_map62, dispatch_ifq_ren, ifq/_old_dispatch_req_2, ifq/rptr<2>.
+Building and optimizing final netlist ...
+INFO:Xst:2261 - The FF/Latch <icache/dout_valid_r> in Unit <cpu> is equivalent to the following FF/Latch, which will be removed : <ifq/icache_req_r> 
+Found area constraint ratio of 100 (+ 5) on block cpu, actual ratio is 109.
+Optimizing block <cpu> to meet ratio 100 (+ 5) of 4656 slices :
+WARNING:Xst:2254 - Area constraint could not be met for block <cpu>, final ratio is 107.
+FlipFlop issue/divider_wrapper/divider/divident_0 has been replicated 1 time(s)
+FlipFlop issue/divider_wrapper/divider/divident_1 has been replicated 1 time(s)
+FlipFlop issue/divider_wrapper/divider/divident_10 has been replicated 1 time(s)
+FlipFlop issue/divider_wrapper/divider/divident_11 has been replicated 1 time(s)
+FlipFlop issue/divider_wrapper/divider/divident_12 has been replicated 1 time(s)
+FlipFlop issue/divider_wrapper/divider/divident_13 has been replicated 1 time(s)
+FlipFlop issue/divider_wrapper/divider/divident_14 has been replicated 1 time(s)
+FlipFlop issue/divider_wrapper/divider/divident_2 has been replicated 1 time(s)
+FlipFlop issue/divider_wrapper/divider/divident_3 has been replicated 1 time(s)
+FlipFlop issue/divider_wrapper/divider/divident_4 has been replicated 1 time(s)
+FlipFlop issue/divider_wrapper/divider/divident_5 has been replicated 1 time(s)
+FlipFlop issue/divider_wrapper/divider/divident_6 has been replicated 1 time(s)
+FlipFlop issue/divider_wrapper/divider/divident_7 has been replicated 1 time(s)
+FlipFlop issue/divider_wrapper/divider/divident_8 has been replicated 1 time(s)
+FlipFlop issue/divider_wrapper/divider/divident_9 has been replicated 1 time(s)
+
+Final Macro Processing ...
+
+Processing Unit <cpu> :
+	Found 4-bit shift register for signal <issue/divider_wrapper/divider/tag_div_4_5>.
+	Found 4-bit shift register for signal <issue/divider_wrapper/divider/tag_div_4_4>.
+	Found 4-bit shift register for signal <issue/divider_wrapper/divider/tag_div_4_3>.
+	Found 4-bit shift register for signal <issue/divider_wrapper/divider/tag_div_4_2>.
+	Found 4-bit shift register for signal <issue/divider_wrapper/divider/tag_div_4_1>.
+	Found 4-bit shift register for signal <issue/divider_wrapper/divider/tag_div_4_0>.
+INFO:Xst:741 - HDL ADVISOR - A 4-bit shift register was found for signal <issue/divider_wrapper/divider/rfd_array_3> and currently occupies 4 logic cells (2 slices). Removing the set/reset logic would take advantage of SRL16 (and derived) primitives and reduce this to 1 logic cells (1 slices). Evaluate if the set/reset can be removed for this simple shift register. The majority of simple pipeline structures do not need to be set/reset operationally.
+Unit <cpu> processed.
+
+=========================================================================
+Final Register Report
+
+Macro Statistics
+# Registers                                            : 3610
+ Flip-Flops                                            : 3610
+# Shift Registers                                      : 6
+ 4-bit shift register                                  : 6
+
+=========================================================================
+
+=========================================================================
+*                          Partition Report                             *
+=========================================================================
+
+Partition Implementation Status
+-------------------------------
+
+  No Partitions were found in this design.
+
+-------------------------------
+
+=========================================================================
+*                            Final Report                               *
+=========================================================================
+Final Results
+RTL Top Level Output File Name     : cpu.ngr
+Top Level Output File Name         : cpu
+Output Format                      : NGC
+Optimization Goal                  : Speed
+Keep Hierarchy                     : NO
+
+Design Statistics
+# IOs                              : 39
+
+Cell Usage :
+# BELS                             : 11444
+#      BUF                         : 8
+#      GND                         : 1
+#      INV                         : 16
+#      LUT1                        : 7
+#      LUT2                        : 204
+#      LUT3                        : 4403
+#      LUT3_D                      : 7
+#      LUT3_L                      : 4
+#      LUT4                        : 3010
+#      LUT4_D                      : 4
+#      LUT4_L                      : 19
+#      MULT_AND                    : 26
+#      MUXCY                       : 600
+#      MUXF5                       : 1783
+#      MUXF6                       : 594
+#      MUXF7                       : 297
+#      MUXF8                       : 134
+#      VCC                         : 1
+#      XORCY                       : 326
+# FlipFlops/Latches                : 3616
+#      FD                          : 193
+#      FDC                         : 4
+#      FDE                         : 91
+#      FDPE                        : 1
+#      FDR                         : 1180
+#      FDRE                        : 1786
+#      FDRS                        : 88
+#      FDS                         : 7
+#      FDSE                        : 266
+# Shift Registers                  : 6
+#      SRL16                       : 6
+# Clock Buffers                    : 1
+#      BUFGP                       : 1
+# IO Buffers                       : 38
+#      IBUF                        : 6
+#      OBUF                        : 32
+# MULTs                            : 3
+#      MULT18X18SIO                : 3
+# Others                           : 3
+#      dcache_mem                  : 1
+#      icache_mem                  : 1
+#      multiplier                  : 1
+=========================================================================
+
+Device utilization summary:
+---------------------------
+
+Selected Device : 3s500efg320-4 
+
+ Number of Slices:                    5031  out of   4656   108% (*) 
+ Number of Slice Flip Flops:          3616  out of   9312    38%  
+ Number of 4 input LUTs:              7680  out of   9312    82%  
+    Number used as logic:             7674
+    Number used as Shift registers:      6
+ Number of IOs:                         39
+ Number of bonded IOBs:                 39  out of    232    16%  
+ Number of MULT18X18SIOs:                3  out of     20    15%  
+ Number of GCLKs:                        1  out of     24     4%  
+
+WARNING:Xst:1336 -  (*) More than 100% of Device resources are used
+
+---------------------------
+Partition Resource Summary:
+---------------------------
+
+  No Partitions were found in this design.
+
+---------------------------
+
+
+=========================================================================
+TIMING REPORT
+
+NOTE: THESE TIMING NUMBERS ARE ONLY A SYNTHESIS ESTIMATE.
+      FOR ACCURATE TIMING INFORMATION PLEASE REFER TO THE TRACE REPORT
+      GENERATED AFTER PLACE-and-ROUTE.
+
+Clock Information:
+------------------
+-----------------------------------+------------------------+-------+
+Clock Signal                       | Clock buffer(FF name)  | Load  |
+-----------------------------------+------------------------+-------+
+clk                                | BUFGP                  | 3622  |
+-----------------------------------+------------------------+-------+
+
+Asynchronous Control Signals Information:
+----------------------------------------
+-----------------------------------+------------------------------------------------+-------+
+Control Signal                     | Buffer(FF name)                                | Load  |
+-----------------------------------+------------------------------------------------+-------+
+reset_IBUF_1(reset_IBUF_1:O)       | NONE(issue/divider_wrapper/divider/rfd_array_1)| 5     |
+-----------------------------------+------------------------------------------------+-------+
+
+Timing Summary:
+---------------
+Speed Grade: -4
+
+   Minimum period: 76.298ns (Maximum Frequency: 13.106MHz)
+   Minimum input arrival time before clock: 18.447ns
+   Maximum output required time after clock: 21.167ns
+   Maximum combinational path delay: 17.674ns
+
+Timing Detail:
+--------------
+All values displayed in nanoseconds (ns)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'clk'
+  Clock period: 76.298ns (frequency: 13.106MHz)
+  Total number of paths / destination ports: 1226884288015738700000000000 / 5848
+-------------------------------------------------------------------------
+Delay:               76.298ns (Levels of Logic = 246)
+  Source:            issue/divider_wrapper/divider/divisor_15 (FF)
+  Destination:       issue/divider_wrapper/divider/div_rem_quo_31 (FF)
+  Source Clock:      clk rising
+  Destination Clock: clk rising
+
+  Data Path: issue/divider_wrapper/divider/divisor_15 to issue/divider_wrapper/divider/div_rem_quo_31
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDE:C->Q              5   0.591   0.712  issue/divider_wrapper/divider/divisor_15 (issue/divider_wrapper/divider/divisor_15)
+     LUT2:I1->O            1   0.704   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_15_cmp_ge0000_lut<0> (issue/divider_wrapper/divider/div/N51)
+     MUXCY:S->O            1   0.464   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_15_cmp_ge0000_cy<0> (issue/divider_wrapper/divider/div/Mcompar_Q_15_cmp_ge0000_cy<0>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_15_cmp_ge0000_cy<1> (issue/divider_wrapper/divider/div/Mcompar_Q_15_cmp_ge0000_cy<1>)
+     MUXCY:CI->O          16   0.459   1.069  issue/divider_wrapper/divider/div/Mcompar_Q_15_cmp_ge0000_cy<2> (issue/divider_wrapper/divider/div/Mcompar_Q_15_cmp_ge0000_cy<2>)
+     LUT3:I2->O           15   0.704   1.052  issue/divider_wrapper/divider/div/Mcompar_Q_15_cmp_ge0000_cy<4>1_1 (issue/divider_wrapper/divider/div/Mcompar_Q_15_cmp_ge0000_cy<4>1)
+     LUT3:I2->O            3   0.704   0.531  issue/divider_wrapper/divider/div/X_mux0000<0>1 (issue/divider_wrapper/divider/div/X_mux0000<0>)
+     MUXCY:DI->O           1   0.888   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_14_cmp_ge0000_cy<1> (issue/divider_wrapper/divider/div/Mcompar_Q_14_cmp_ge0000_cy<1>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_14_cmp_ge0000_cy<2> (issue/divider_wrapper/divider/div/Mcompar_Q_14_cmp_ge0000_cy<2>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_14_cmp_ge0000_cy<3> (issue/divider_wrapper/divider/div/Mcompar_Q_14_cmp_ge0000_cy<3>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_14_cmp_ge0000_cy<4> (issue/divider_wrapper/divider/div/Mcompar_Q_14_cmp_ge0000_cy<4>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_14_cmp_ge0000_cy<5> (issue/divider_wrapper/divider/div/Mcompar_Q_14_cmp_ge0000_cy<5>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_14_cmp_ge0000_cy<6> (issue/divider_wrapper/divider/div/Mcompar_Q_14_cmp_ge0000_cy<6>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_14_cmp_ge0000_cy<7> (issue/divider_wrapper/divider/div/Mcompar_Q_14_cmp_ge0000_cy<7>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_14_cmp_ge0000_cy<8> (issue/divider_wrapper/divider/div/Mcompar_Q_14_cmp_ge0000_cy<8>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_14_cmp_ge0000_cy<9> (issue/divider_wrapper/divider/div/Mcompar_Q_14_cmp_ge0000_cy<9>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_14_cmp_ge0000_cy<10> (issue/divider_wrapper/divider/div/Mcompar_Q_14_cmp_ge0000_cy<10>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_14_cmp_ge0000_cy<11> (issue/divider_wrapper/divider/div/Mcompar_Q_14_cmp_ge0000_cy<11>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_14_cmp_ge0000_cy<12> (issue/divider_wrapper/divider/div/Mcompar_Q_14_cmp_ge0000_cy<12>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_14_cmp_ge0000_cy<13> (issue/divider_wrapper/divider/div/Mcompar_Q_14_cmp_ge0000_cy<13>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_14_cmp_ge0000_cy<14> (issue/divider_wrapper/divider/div/Mcompar_Q_14_cmp_ge0000_cy<14>)
+     MUXCY:CI->O          45   0.459   1.301  issue/divider_wrapper/divider/div/Mcompar_Q_14_cmp_ge0000_cy<15> (issue/divider_wrapper/divider/div/Q_14_cmp_ge0000)
+     LUT3:I2->O            3   0.704   0.531  issue/divider_wrapper/divider/div/X_mux0001<0>1 (issue/divider_wrapper/divider/div/X_mux0001<0>)
+     MUXCY:DI->O           1   0.888   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_13_cmp_ge0000_cy<1> (issue/divider_wrapper/divider/div/Mcompar_Q_13_cmp_ge0000_cy<1>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_13_cmp_ge0000_cy<2> (issue/divider_wrapper/divider/div/Mcompar_Q_13_cmp_ge0000_cy<2>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_13_cmp_ge0000_cy<3> (issue/divider_wrapper/divider/div/Mcompar_Q_13_cmp_ge0000_cy<3>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_13_cmp_ge0000_cy<4> (issue/divider_wrapper/divider/div/Mcompar_Q_13_cmp_ge0000_cy<4>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_13_cmp_ge0000_cy<5> (issue/divider_wrapper/divider/div/Mcompar_Q_13_cmp_ge0000_cy<5>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_13_cmp_ge0000_cy<6> (issue/divider_wrapper/divider/div/Mcompar_Q_13_cmp_ge0000_cy<6>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_13_cmp_ge0000_cy<7> (issue/divider_wrapper/divider/div/Mcompar_Q_13_cmp_ge0000_cy<7>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_13_cmp_ge0000_cy<8> (issue/divider_wrapper/divider/div/Mcompar_Q_13_cmp_ge0000_cy<8>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_13_cmp_ge0000_cy<9> (issue/divider_wrapper/divider/div/Mcompar_Q_13_cmp_ge0000_cy<9>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_13_cmp_ge0000_cy<10> (issue/divider_wrapper/divider/div/Mcompar_Q_13_cmp_ge0000_cy<10>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_13_cmp_ge0000_cy<11> (issue/divider_wrapper/divider/div/Mcompar_Q_13_cmp_ge0000_cy<11>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_13_cmp_ge0000_cy<12> (issue/divider_wrapper/divider/div/Mcompar_Q_13_cmp_ge0000_cy<12>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_13_cmp_ge0000_cy<13> (issue/divider_wrapper/divider/div/Mcompar_Q_13_cmp_ge0000_cy<13>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_13_cmp_ge0000_cy<14> (issue/divider_wrapper/divider/div/Mcompar_Q_13_cmp_ge0000_cy<14>)
+     MUXCY:CI->O          45   0.459   1.301  issue/divider_wrapper/divider/div/Mcompar_Q_13_cmp_ge0000_cy<15> (issue/divider_wrapper/divider/div/Q_13_cmp_ge0000)
+     LUT3:I2->O            3   0.704   0.531  issue/divider_wrapper/divider/div/X_mux0002<0>1 (issue/divider_wrapper/divider/div/X_mux0002<0>)
+     MUXCY:DI->O           1   0.888   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_12_cmp_ge0000_cy<1> (issue/divider_wrapper/divider/div/Mcompar_Q_12_cmp_ge0000_cy<1>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_12_cmp_ge0000_cy<2> (issue/divider_wrapper/divider/div/Mcompar_Q_12_cmp_ge0000_cy<2>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_12_cmp_ge0000_cy<3> (issue/divider_wrapper/divider/div/Mcompar_Q_12_cmp_ge0000_cy<3>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_12_cmp_ge0000_cy<4> (issue/divider_wrapper/divider/div/Mcompar_Q_12_cmp_ge0000_cy<4>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_12_cmp_ge0000_cy<5> (issue/divider_wrapper/divider/div/Mcompar_Q_12_cmp_ge0000_cy<5>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_12_cmp_ge0000_cy<6> (issue/divider_wrapper/divider/div/Mcompar_Q_12_cmp_ge0000_cy<6>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_12_cmp_ge0000_cy<7> (issue/divider_wrapper/divider/div/Mcompar_Q_12_cmp_ge0000_cy<7>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_12_cmp_ge0000_cy<8> (issue/divider_wrapper/divider/div/Mcompar_Q_12_cmp_ge0000_cy<8>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_12_cmp_ge0000_cy<9> (issue/divider_wrapper/divider/div/Mcompar_Q_12_cmp_ge0000_cy<9>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_12_cmp_ge0000_cy<10> (issue/divider_wrapper/divider/div/Mcompar_Q_12_cmp_ge0000_cy<10>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_12_cmp_ge0000_cy<11> (issue/divider_wrapper/divider/div/Mcompar_Q_12_cmp_ge0000_cy<11>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_12_cmp_ge0000_cy<12> (issue/divider_wrapper/divider/div/Mcompar_Q_12_cmp_ge0000_cy<12>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_12_cmp_ge0000_cy<13> (issue/divider_wrapper/divider/div/Mcompar_Q_12_cmp_ge0000_cy<13>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_12_cmp_ge0000_cy<14> (issue/divider_wrapper/divider/div/Mcompar_Q_12_cmp_ge0000_cy<14>)
+     MUXCY:CI->O          45   0.459   1.301  issue/divider_wrapper/divider/div/Mcompar_Q_12_cmp_ge0000_cy<15> (issue/divider_wrapper/divider/div/Q_12_cmp_ge0000)
+     LUT3:I2->O            3   0.704   0.531  issue/divider_wrapper/divider/div/X_mux0003<0>1 (issue/divider_wrapper/divider/div/X_mux0003<0>)
+     MUXCY:DI->O           1   0.888   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_11_cmp_ge0000_cy<1> (issue/divider_wrapper/divider/div/Mcompar_Q_11_cmp_ge0000_cy<1>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_11_cmp_ge0000_cy<2> (issue/divider_wrapper/divider/div/Mcompar_Q_11_cmp_ge0000_cy<2>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_11_cmp_ge0000_cy<3> (issue/divider_wrapper/divider/div/Mcompar_Q_11_cmp_ge0000_cy<3>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_11_cmp_ge0000_cy<4> (issue/divider_wrapper/divider/div/Mcompar_Q_11_cmp_ge0000_cy<4>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_11_cmp_ge0000_cy<5> (issue/divider_wrapper/divider/div/Mcompar_Q_11_cmp_ge0000_cy<5>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_11_cmp_ge0000_cy<6> (issue/divider_wrapper/divider/div/Mcompar_Q_11_cmp_ge0000_cy<6>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_11_cmp_ge0000_cy<7> (issue/divider_wrapper/divider/div/Mcompar_Q_11_cmp_ge0000_cy<7>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_11_cmp_ge0000_cy<8> (issue/divider_wrapper/divider/div/Mcompar_Q_11_cmp_ge0000_cy<8>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_11_cmp_ge0000_cy<9> (issue/divider_wrapper/divider/div/Mcompar_Q_11_cmp_ge0000_cy<9>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_11_cmp_ge0000_cy<10> (issue/divider_wrapper/divider/div/Mcompar_Q_11_cmp_ge0000_cy<10>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_11_cmp_ge0000_cy<11> (issue/divider_wrapper/divider/div/Mcompar_Q_11_cmp_ge0000_cy<11>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_11_cmp_ge0000_cy<12> (issue/divider_wrapper/divider/div/Mcompar_Q_11_cmp_ge0000_cy<12>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_11_cmp_ge0000_cy<13> (issue/divider_wrapper/divider/div/Mcompar_Q_11_cmp_ge0000_cy<13>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_11_cmp_ge0000_cy<14> (issue/divider_wrapper/divider/div/Mcompar_Q_11_cmp_ge0000_cy<14>)
+     MUXCY:CI->O          45   0.459   1.301  issue/divider_wrapper/divider/div/Mcompar_Q_11_cmp_ge0000_cy<15> (issue/divider_wrapper/divider/div/Q_11_cmp_ge0000)
+     LUT3:I2->O            3   0.704   0.531  issue/divider_wrapper/divider/div/X_mux0004<0>1 (issue/divider_wrapper/divider/div/X_mux0004<0>)
+     MUXCY:DI->O           1   0.888   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_10_cmp_ge0000_cy<1> (issue/divider_wrapper/divider/div/Mcompar_Q_10_cmp_ge0000_cy<1>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_10_cmp_ge0000_cy<2> (issue/divider_wrapper/divider/div/Mcompar_Q_10_cmp_ge0000_cy<2>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_10_cmp_ge0000_cy<3> (issue/divider_wrapper/divider/div/Mcompar_Q_10_cmp_ge0000_cy<3>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_10_cmp_ge0000_cy<4> (issue/divider_wrapper/divider/div/Mcompar_Q_10_cmp_ge0000_cy<4>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_10_cmp_ge0000_cy<5> (issue/divider_wrapper/divider/div/Mcompar_Q_10_cmp_ge0000_cy<5>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_10_cmp_ge0000_cy<6> (issue/divider_wrapper/divider/div/Mcompar_Q_10_cmp_ge0000_cy<6>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_10_cmp_ge0000_cy<7> (issue/divider_wrapper/divider/div/Mcompar_Q_10_cmp_ge0000_cy<7>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_10_cmp_ge0000_cy<8> (issue/divider_wrapper/divider/div/Mcompar_Q_10_cmp_ge0000_cy<8>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_10_cmp_ge0000_cy<9> (issue/divider_wrapper/divider/div/Mcompar_Q_10_cmp_ge0000_cy<9>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_10_cmp_ge0000_cy<10> (issue/divider_wrapper/divider/div/Mcompar_Q_10_cmp_ge0000_cy<10>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_10_cmp_ge0000_cy<11> (issue/divider_wrapper/divider/div/Mcompar_Q_10_cmp_ge0000_cy<11>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_10_cmp_ge0000_cy<12> (issue/divider_wrapper/divider/div/Mcompar_Q_10_cmp_ge0000_cy<12>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_10_cmp_ge0000_cy<13> (issue/divider_wrapper/divider/div/Mcompar_Q_10_cmp_ge0000_cy<13>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_10_cmp_ge0000_cy<14> (issue/divider_wrapper/divider/div/Mcompar_Q_10_cmp_ge0000_cy<14>)
+     MUXCY:CI->O          45   0.459   1.301  issue/divider_wrapper/divider/div/Mcompar_Q_10_cmp_ge0000_cy<15> (issue/divider_wrapper/divider/div/Q_10_cmp_ge0000)
+     LUT3:I2->O            3   0.704   0.531  issue/divider_wrapper/divider/div/X_mux0005<0>1 (issue/divider_wrapper/divider/div/X_mux0005<0>)
+     MUXCY:DI->O           1   0.888   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_9_cmp_ge0000_cy<1> (issue/divider_wrapper/divider/div/Mcompar_Q_9_cmp_ge0000_cy<1>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_9_cmp_ge0000_cy<2> (issue/divider_wrapper/divider/div/Mcompar_Q_9_cmp_ge0000_cy<2>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_9_cmp_ge0000_cy<3> (issue/divider_wrapper/divider/div/Mcompar_Q_9_cmp_ge0000_cy<3>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_9_cmp_ge0000_cy<4> (issue/divider_wrapper/divider/div/Mcompar_Q_9_cmp_ge0000_cy<4>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_9_cmp_ge0000_cy<5> (issue/divider_wrapper/divider/div/Mcompar_Q_9_cmp_ge0000_cy<5>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_9_cmp_ge0000_cy<6> (issue/divider_wrapper/divider/div/Mcompar_Q_9_cmp_ge0000_cy<6>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_9_cmp_ge0000_cy<7> (issue/divider_wrapper/divider/div/Mcompar_Q_9_cmp_ge0000_cy<7>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_9_cmp_ge0000_cy<8> (issue/divider_wrapper/divider/div/Mcompar_Q_9_cmp_ge0000_cy<8>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_9_cmp_ge0000_cy<9> (issue/divider_wrapper/divider/div/Mcompar_Q_9_cmp_ge0000_cy<9>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_9_cmp_ge0000_cy<10> (issue/divider_wrapper/divider/div/Mcompar_Q_9_cmp_ge0000_cy<10>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_9_cmp_ge0000_cy<11> (issue/divider_wrapper/divider/div/Mcompar_Q_9_cmp_ge0000_cy<11>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_9_cmp_ge0000_cy<12> (issue/divider_wrapper/divider/div/Mcompar_Q_9_cmp_ge0000_cy<12>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_9_cmp_ge0000_cy<13> (issue/divider_wrapper/divider/div/Mcompar_Q_9_cmp_ge0000_cy<13>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_9_cmp_ge0000_cy<14> (issue/divider_wrapper/divider/div/Mcompar_Q_9_cmp_ge0000_cy<14>)
+     MUXCY:CI->O          45   0.459   1.301  issue/divider_wrapper/divider/div/Mcompar_Q_9_cmp_ge0000_cy<15> (issue/divider_wrapper/divider/div/Q_9_cmp_ge0000)
+     LUT3:I2->O            3   0.704   0.531  issue/divider_wrapper/divider/div/X_mux0006<0>1 (issue/divider_wrapper/divider/div/X_mux0006<0>)
+     MUXCY:DI->O           1   0.888   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_8_cmp_ge0000_cy<1> (issue/divider_wrapper/divider/div/Mcompar_Q_8_cmp_ge0000_cy<1>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_8_cmp_ge0000_cy<2> (issue/divider_wrapper/divider/div/Mcompar_Q_8_cmp_ge0000_cy<2>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_8_cmp_ge0000_cy<3> (issue/divider_wrapper/divider/div/Mcompar_Q_8_cmp_ge0000_cy<3>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_8_cmp_ge0000_cy<4> (issue/divider_wrapper/divider/div/Mcompar_Q_8_cmp_ge0000_cy<4>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_8_cmp_ge0000_cy<5> (issue/divider_wrapper/divider/div/Mcompar_Q_8_cmp_ge0000_cy<5>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_8_cmp_ge0000_cy<6> (issue/divider_wrapper/divider/div/Mcompar_Q_8_cmp_ge0000_cy<6>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_8_cmp_ge0000_cy<7> (issue/divider_wrapper/divider/div/Mcompar_Q_8_cmp_ge0000_cy<7>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_8_cmp_ge0000_cy<8> (issue/divider_wrapper/divider/div/Mcompar_Q_8_cmp_ge0000_cy<8>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_8_cmp_ge0000_cy<9> (issue/divider_wrapper/divider/div/Mcompar_Q_8_cmp_ge0000_cy<9>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_8_cmp_ge0000_cy<10> (issue/divider_wrapper/divider/div/Mcompar_Q_8_cmp_ge0000_cy<10>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_8_cmp_ge0000_cy<11> (issue/divider_wrapper/divider/div/Mcompar_Q_8_cmp_ge0000_cy<11>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_8_cmp_ge0000_cy<12> (issue/divider_wrapper/divider/div/Mcompar_Q_8_cmp_ge0000_cy<12>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_8_cmp_ge0000_cy<13> (issue/divider_wrapper/divider/div/Mcompar_Q_8_cmp_ge0000_cy<13>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_8_cmp_ge0000_cy<14> (issue/divider_wrapper/divider/div/Mcompar_Q_8_cmp_ge0000_cy<14>)
+     MUXCY:CI->O          45   0.459   1.301  issue/divider_wrapper/divider/div/Mcompar_Q_8_cmp_ge0000_cy<15> (issue/divider_wrapper/divider/div/Q_8_cmp_ge0000)
+     LUT3:I2->O            3   0.704   0.531  issue/divider_wrapper/divider/div/X_mux0007<0>1 (issue/divider_wrapper/divider/div/X_mux0007<0>)
+     MUXCY:DI->O           1   0.888   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_7_cmp_ge0000_cy<1> (issue/divider_wrapper/divider/div/Mcompar_Q_7_cmp_ge0000_cy<1>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_7_cmp_ge0000_cy<2> (issue/divider_wrapper/divider/div/Mcompar_Q_7_cmp_ge0000_cy<2>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_7_cmp_ge0000_cy<3> (issue/divider_wrapper/divider/div/Mcompar_Q_7_cmp_ge0000_cy<3>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_7_cmp_ge0000_cy<4> (issue/divider_wrapper/divider/div/Mcompar_Q_7_cmp_ge0000_cy<4>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_7_cmp_ge0000_cy<5> (issue/divider_wrapper/divider/div/Mcompar_Q_7_cmp_ge0000_cy<5>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_7_cmp_ge0000_cy<6> (issue/divider_wrapper/divider/div/Mcompar_Q_7_cmp_ge0000_cy<6>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_7_cmp_ge0000_cy<7> (issue/divider_wrapper/divider/div/Mcompar_Q_7_cmp_ge0000_cy<7>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_7_cmp_ge0000_cy<8> (issue/divider_wrapper/divider/div/Mcompar_Q_7_cmp_ge0000_cy<8>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_7_cmp_ge0000_cy<9> (issue/divider_wrapper/divider/div/Mcompar_Q_7_cmp_ge0000_cy<9>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_7_cmp_ge0000_cy<10> (issue/divider_wrapper/divider/div/Mcompar_Q_7_cmp_ge0000_cy<10>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_7_cmp_ge0000_cy<11> (issue/divider_wrapper/divider/div/Mcompar_Q_7_cmp_ge0000_cy<11>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_7_cmp_ge0000_cy<12> (issue/divider_wrapper/divider/div/Mcompar_Q_7_cmp_ge0000_cy<12>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_7_cmp_ge0000_cy<13> (issue/divider_wrapper/divider/div/Mcompar_Q_7_cmp_ge0000_cy<13>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_7_cmp_ge0000_cy<14> (issue/divider_wrapper/divider/div/Mcompar_Q_7_cmp_ge0000_cy<14>)
+     MUXCY:CI->O          45   0.459   1.301  issue/divider_wrapper/divider/div/Mcompar_Q_7_cmp_ge0000_cy<15> (issue/divider_wrapper/divider/div/Q_7_cmp_ge0000)
+     LUT3:I2->O            3   0.704   0.531  issue/divider_wrapper/divider/div/X_mux0008<0>1 (issue/divider_wrapper/divider/div/X_mux0008<0>)
+     MUXCY:DI->O           1   0.888   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_6_cmp_ge0000_cy<1> (issue/divider_wrapper/divider/div/Mcompar_Q_6_cmp_ge0000_cy<1>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_6_cmp_ge0000_cy<2> (issue/divider_wrapper/divider/div/Mcompar_Q_6_cmp_ge0000_cy<2>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_6_cmp_ge0000_cy<3> (issue/divider_wrapper/divider/div/Mcompar_Q_6_cmp_ge0000_cy<3>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_6_cmp_ge0000_cy<4> (issue/divider_wrapper/divider/div/Mcompar_Q_6_cmp_ge0000_cy<4>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_6_cmp_ge0000_cy<5> (issue/divider_wrapper/divider/div/Mcompar_Q_6_cmp_ge0000_cy<5>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_6_cmp_ge0000_cy<6> (issue/divider_wrapper/divider/div/Mcompar_Q_6_cmp_ge0000_cy<6>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_6_cmp_ge0000_cy<7> (issue/divider_wrapper/divider/div/Mcompar_Q_6_cmp_ge0000_cy<7>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_6_cmp_ge0000_cy<8> (issue/divider_wrapper/divider/div/Mcompar_Q_6_cmp_ge0000_cy<8>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_6_cmp_ge0000_cy<9> (issue/divider_wrapper/divider/div/Mcompar_Q_6_cmp_ge0000_cy<9>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_6_cmp_ge0000_cy<10> (issue/divider_wrapper/divider/div/Mcompar_Q_6_cmp_ge0000_cy<10>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_6_cmp_ge0000_cy<11> (issue/divider_wrapper/divider/div/Mcompar_Q_6_cmp_ge0000_cy<11>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_6_cmp_ge0000_cy<12> (issue/divider_wrapper/divider/div/Mcompar_Q_6_cmp_ge0000_cy<12>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_6_cmp_ge0000_cy<13> (issue/divider_wrapper/divider/div/Mcompar_Q_6_cmp_ge0000_cy<13>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_6_cmp_ge0000_cy<14> (issue/divider_wrapper/divider/div/Mcompar_Q_6_cmp_ge0000_cy<14>)
+     MUXCY:CI->O          45   0.459   1.301  issue/divider_wrapper/divider/div/Mcompar_Q_6_cmp_ge0000_cy<15> (issue/divider_wrapper/divider/div/Q_6_cmp_ge0000)
+     LUT3:I2->O            3   0.704   0.531  issue/divider_wrapper/divider/div/X_mux0009<0>1 (issue/divider_wrapper/divider/div/X_mux0009<0>)
+     MUXCY:DI->O           1   0.888   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_5_cmp_ge0000_cy<1> (issue/divider_wrapper/divider/div/Mcompar_Q_5_cmp_ge0000_cy<1>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_5_cmp_ge0000_cy<2> (issue/divider_wrapper/divider/div/Mcompar_Q_5_cmp_ge0000_cy<2>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_5_cmp_ge0000_cy<3> (issue/divider_wrapper/divider/div/Mcompar_Q_5_cmp_ge0000_cy<3>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_5_cmp_ge0000_cy<4> (issue/divider_wrapper/divider/div/Mcompar_Q_5_cmp_ge0000_cy<4>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_5_cmp_ge0000_cy<5> (issue/divider_wrapper/divider/div/Mcompar_Q_5_cmp_ge0000_cy<5>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_5_cmp_ge0000_cy<6> (issue/divider_wrapper/divider/div/Mcompar_Q_5_cmp_ge0000_cy<6>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_5_cmp_ge0000_cy<7> (issue/divider_wrapper/divider/div/Mcompar_Q_5_cmp_ge0000_cy<7>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_5_cmp_ge0000_cy<8> (issue/divider_wrapper/divider/div/Mcompar_Q_5_cmp_ge0000_cy<8>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_5_cmp_ge0000_cy<9> (issue/divider_wrapper/divider/div/Mcompar_Q_5_cmp_ge0000_cy<9>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_5_cmp_ge0000_cy<10> (issue/divider_wrapper/divider/div/Mcompar_Q_5_cmp_ge0000_cy<10>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_5_cmp_ge0000_cy<11> (issue/divider_wrapper/divider/div/Mcompar_Q_5_cmp_ge0000_cy<11>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_5_cmp_ge0000_cy<12> (issue/divider_wrapper/divider/div/Mcompar_Q_5_cmp_ge0000_cy<12>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_5_cmp_ge0000_cy<13> (issue/divider_wrapper/divider/div/Mcompar_Q_5_cmp_ge0000_cy<13>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_5_cmp_ge0000_cy<14> (issue/divider_wrapper/divider/div/Mcompar_Q_5_cmp_ge0000_cy<14>)
+     MUXCY:CI->O          45   0.459   1.301  issue/divider_wrapper/divider/div/Mcompar_Q_5_cmp_ge0000_cy<15> (issue/divider_wrapper/divider/div/Q_5_cmp_ge0000)
+     LUT3:I2->O            3   0.704   0.531  issue/divider_wrapper/divider/div/X_mux0010<0>1 (issue/divider_wrapper/divider/div/X_mux0010<0>)
+     MUXCY:DI->O           1   0.888   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_4_cmp_ge0000_cy<1> (issue/divider_wrapper/divider/div/Mcompar_Q_4_cmp_ge0000_cy<1>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_4_cmp_ge0000_cy<2> (issue/divider_wrapper/divider/div/Mcompar_Q_4_cmp_ge0000_cy<2>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_4_cmp_ge0000_cy<3> (issue/divider_wrapper/divider/div/Mcompar_Q_4_cmp_ge0000_cy<3>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_4_cmp_ge0000_cy<4> (issue/divider_wrapper/divider/div/Mcompar_Q_4_cmp_ge0000_cy<4>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_4_cmp_ge0000_cy<5> (issue/divider_wrapper/divider/div/Mcompar_Q_4_cmp_ge0000_cy<5>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_4_cmp_ge0000_cy<6> (issue/divider_wrapper/divider/div/Mcompar_Q_4_cmp_ge0000_cy<6>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_4_cmp_ge0000_cy<7> (issue/divider_wrapper/divider/div/Mcompar_Q_4_cmp_ge0000_cy<7>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_4_cmp_ge0000_cy<8> (issue/divider_wrapper/divider/div/Mcompar_Q_4_cmp_ge0000_cy<8>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_4_cmp_ge0000_cy<9> (issue/divider_wrapper/divider/div/Mcompar_Q_4_cmp_ge0000_cy<9>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_4_cmp_ge0000_cy<10> (issue/divider_wrapper/divider/div/Mcompar_Q_4_cmp_ge0000_cy<10>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_4_cmp_ge0000_cy<11> (issue/divider_wrapper/divider/div/Mcompar_Q_4_cmp_ge0000_cy<11>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_4_cmp_ge0000_cy<12> (issue/divider_wrapper/divider/div/Mcompar_Q_4_cmp_ge0000_cy<12>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_4_cmp_ge0000_cy<13> (issue/divider_wrapper/divider/div/Mcompar_Q_4_cmp_ge0000_cy<13>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_4_cmp_ge0000_cy<14> (issue/divider_wrapper/divider/div/Mcompar_Q_4_cmp_ge0000_cy<14>)
+     MUXCY:CI->O          45   0.459   1.301  issue/divider_wrapper/divider/div/Mcompar_Q_4_cmp_ge0000_cy<15> (issue/divider_wrapper/divider/div/Q_4_cmp_ge0000)
+     LUT3:I2->O            3   0.704   0.531  issue/divider_wrapper/divider/div/X_mux0011<0>1 (issue/divider_wrapper/divider/div/X_mux0011<0>)
+     MUXCY:DI->O           1   0.888   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_3_cmp_ge0000_cy<1> (issue/divider_wrapper/divider/div/Mcompar_Q_3_cmp_ge0000_cy<1>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_3_cmp_ge0000_cy<2> (issue/divider_wrapper/divider/div/Mcompar_Q_3_cmp_ge0000_cy<2>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_3_cmp_ge0000_cy<3> (issue/divider_wrapper/divider/div/Mcompar_Q_3_cmp_ge0000_cy<3>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_3_cmp_ge0000_cy<4> (issue/divider_wrapper/divider/div/Mcompar_Q_3_cmp_ge0000_cy<4>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_3_cmp_ge0000_cy<5> (issue/divider_wrapper/divider/div/Mcompar_Q_3_cmp_ge0000_cy<5>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_3_cmp_ge0000_cy<6> (issue/divider_wrapper/divider/div/Mcompar_Q_3_cmp_ge0000_cy<6>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_3_cmp_ge0000_cy<7> (issue/divider_wrapper/divider/div/Mcompar_Q_3_cmp_ge0000_cy<7>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_3_cmp_ge0000_cy<8> (issue/divider_wrapper/divider/div/Mcompar_Q_3_cmp_ge0000_cy<8>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_3_cmp_ge0000_cy<9> (issue/divider_wrapper/divider/div/Mcompar_Q_3_cmp_ge0000_cy<9>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_3_cmp_ge0000_cy<10> (issue/divider_wrapper/divider/div/Mcompar_Q_3_cmp_ge0000_cy<10>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_3_cmp_ge0000_cy<11> (issue/divider_wrapper/divider/div/Mcompar_Q_3_cmp_ge0000_cy<11>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_3_cmp_ge0000_cy<12> (issue/divider_wrapper/divider/div/Mcompar_Q_3_cmp_ge0000_cy<12>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_3_cmp_ge0000_cy<13> (issue/divider_wrapper/divider/div/Mcompar_Q_3_cmp_ge0000_cy<13>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_3_cmp_ge0000_cy<14> (issue/divider_wrapper/divider/div/Mcompar_Q_3_cmp_ge0000_cy<14>)
+     MUXCY:CI->O          45   0.459   1.301  issue/divider_wrapper/divider/div/Mcompar_Q_3_cmp_ge0000_cy<15> (issue/divider_wrapper/divider/div/Q_3_cmp_ge0000)
+     LUT3:I2->O            3   0.704   0.531  issue/divider_wrapper/divider/div/X_mux0012<0>1 (issue/divider_wrapper/divider/div/X_mux0012<0>)
+     MUXCY:DI->O           1   0.888   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_2_cmp_ge0000_cy<1> (issue/divider_wrapper/divider/div/Mcompar_Q_2_cmp_ge0000_cy<1>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_2_cmp_ge0000_cy<2> (issue/divider_wrapper/divider/div/Mcompar_Q_2_cmp_ge0000_cy<2>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_2_cmp_ge0000_cy<3> (issue/divider_wrapper/divider/div/Mcompar_Q_2_cmp_ge0000_cy<3>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_2_cmp_ge0000_cy<4> (issue/divider_wrapper/divider/div/Mcompar_Q_2_cmp_ge0000_cy<4>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_2_cmp_ge0000_cy<5> (issue/divider_wrapper/divider/div/Mcompar_Q_2_cmp_ge0000_cy<5>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_2_cmp_ge0000_cy<6> (issue/divider_wrapper/divider/div/Mcompar_Q_2_cmp_ge0000_cy<6>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_2_cmp_ge0000_cy<7> (issue/divider_wrapper/divider/div/Mcompar_Q_2_cmp_ge0000_cy<7>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_2_cmp_ge0000_cy<8> (issue/divider_wrapper/divider/div/Mcompar_Q_2_cmp_ge0000_cy<8>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_2_cmp_ge0000_cy<9> (issue/divider_wrapper/divider/div/Mcompar_Q_2_cmp_ge0000_cy<9>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_2_cmp_ge0000_cy<10> (issue/divider_wrapper/divider/div/Mcompar_Q_2_cmp_ge0000_cy<10>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_2_cmp_ge0000_cy<11> (issue/divider_wrapper/divider/div/Mcompar_Q_2_cmp_ge0000_cy<11>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_2_cmp_ge0000_cy<12> (issue/divider_wrapper/divider/div/Mcompar_Q_2_cmp_ge0000_cy<12>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_2_cmp_ge0000_cy<13> (issue/divider_wrapper/divider/div/Mcompar_Q_2_cmp_ge0000_cy<13>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_2_cmp_ge0000_cy<14> (issue/divider_wrapper/divider/div/Mcompar_Q_2_cmp_ge0000_cy<14>)
+     MUXCY:CI->O          45   0.459   1.301  issue/divider_wrapper/divider/div/Mcompar_Q_2_cmp_ge0000_cy<15> (issue/divider_wrapper/divider/div/Q_2_cmp_ge0000)
+     LUT3:I2->O            3   0.704   0.531  issue/divider_wrapper/divider/div/X_mux0013<0>1 (issue/divider_wrapper/divider/div/X_mux0013<0>)
+     MUXCY:DI->O           1   0.888   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_1_cmp_ge0000_cy<1> (issue/divider_wrapper/divider/div/Mcompar_Q_1_cmp_ge0000_cy<1>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_1_cmp_ge0000_cy<2> (issue/divider_wrapper/divider/div/Mcompar_Q_1_cmp_ge0000_cy<2>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_1_cmp_ge0000_cy<3> (issue/divider_wrapper/divider/div/Mcompar_Q_1_cmp_ge0000_cy<3>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_1_cmp_ge0000_cy<4> (issue/divider_wrapper/divider/div/Mcompar_Q_1_cmp_ge0000_cy<4>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_1_cmp_ge0000_cy<5> (issue/divider_wrapper/divider/div/Mcompar_Q_1_cmp_ge0000_cy<5>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_1_cmp_ge0000_cy<6> (issue/divider_wrapper/divider/div/Mcompar_Q_1_cmp_ge0000_cy<6>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_1_cmp_ge0000_cy<7> (issue/divider_wrapper/divider/div/Mcompar_Q_1_cmp_ge0000_cy<7>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_1_cmp_ge0000_cy<8> (issue/divider_wrapper/divider/div/Mcompar_Q_1_cmp_ge0000_cy<8>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_1_cmp_ge0000_cy<9> (issue/divider_wrapper/divider/div/Mcompar_Q_1_cmp_ge0000_cy<9>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_1_cmp_ge0000_cy<10> (issue/divider_wrapper/divider/div/Mcompar_Q_1_cmp_ge0000_cy<10>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_1_cmp_ge0000_cy<11> (issue/divider_wrapper/divider/div/Mcompar_Q_1_cmp_ge0000_cy<11>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_1_cmp_ge0000_cy<12> (issue/divider_wrapper/divider/div/Mcompar_Q_1_cmp_ge0000_cy<12>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_1_cmp_ge0000_cy<13> (issue/divider_wrapper/divider/div/Mcompar_Q_1_cmp_ge0000_cy<13>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_1_cmp_ge0000_cy<14> (issue/divider_wrapper/divider/div/Mcompar_Q_1_cmp_ge0000_cy<14>)
+     MUXCY:CI->O          46   0.459   1.302  issue/divider_wrapper/divider/div/Mcompar_Q_1_cmp_ge0000_cy<15> (issue/divider_wrapper/divider/div/Q_1_cmp_ge0000)
+     LUT3:I2->O            1   0.704   0.420  issue/divider_wrapper/divider/div/X_mux0014<0>1 (issue/divider_wrapper/divider/div/X_mux0014<0>)
+     MUXCY:DI->O           1   0.888   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_0_cmp_ge0000_cy<1> (issue/divider_wrapper/divider/div/Mcompar_Q_0_cmp_ge0000_cy<1>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_0_cmp_ge0000_cy<2> (issue/divider_wrapper/divider/div/Mcompar_Q_0_cmp_ge0000_cy<2>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_0_cmp_ge0000_cy<3> (issue/divider_wrapper/divider/div/Mcompar_Q_0_cmp_ge0000_cy<3>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_0_cmp_ge0000_cy<4> (issue/divider_wrapper/divider/div/Mcompar_Q_0_cmp_ge0000_cy<4>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_0_cmp_ge0000_cy<5> (issue/divider_wrapper/divider/div/Mcompar_Q_0_cmp_ge0000_cy<5>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_0_cmp_ge0000_cy<6> (issue/divider_wrapper/divider/div/Mcompar_Q_0_cmp_ge0000_cy<6>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_0_cmp_ge0000_cy<7> (issue/divider_wrapper/divider/div/Mcompar_Q_0_cmp_ge0000_cy<7>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_0_cmp_ge0000_cy<8> (issue/divider_wrapper/divider/div/Mcompar_Q_0_cmp_ge0000_cy<8>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_0_cmp_ge0000_cy<9> (issue/divider_wrapper/divider/div/Mcompar_Q_0_cmp_ge0000_cy<9>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_0_cmp_ge0000_cy<10> (issue/divider_wrapper/divider/div/Mcompar_Q_0_cmp_ge0000_cy<10>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_0_cmp_ge0000_cy<11> (issue/divider_wrapper/divider/div/Mcompar_Q_0_cmp_ge0000_cy<11>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_0_cmp_ge0000_cy<12> (issue/divider_wrapper/divider/div/Mcompar_Q_0_cmp_ge0000_cy<12>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_0_cmp_ge0000_cy<13> (issue/divider_wrapper/divider/div/Mcompar_Q_0_cmp_ge0000_cy<13>)
+     MUXCY:CI->O           1   0.059   0.000  issue/divider_wrapper/divider/div/Mcompar_Q_0_cmp_ge0000_cy<14> (issue/divider_wrapper/divider/div/Mcompar_Q_0_cmp_ge0000_cy<14>)
+     MUXCY:CI->O          17   0.459   1.130  issue/divider_wrapper/divider/div/Mcompar_Q_0_cmp_ge0000_cy<15> (issue/divider_wrapper/divider/div/Q_0_cmp_ge0000)
+     LUT2:I1->O            1   0.704   0.000  issue/divider_wrapper/divider/div/Q_0_mux00011 (issue/divider_wrapper/divider/result<0>)
+     FDE:D                     0.308          issue/divider_wrapper/divider/div_rem_quo_0
+    ----------------------------------------
+    Total                     76.298ns (46.263ns logic, 30.036ns route)
+                                       (60.6% logic, 39.4% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'clk'
+  Total number of paths / destination ports: 863553 / 6345
+-------------------------------------------------------------------------
+Offset:              18.447ns (Levels of Logic = 14)
+  Source:            icache/icache_mem:douta<5> (PAD)
+  Destination:       ifq/pcin_r_9 (FF)
+  Destination Clock: clk rising
+
+  Data Path: icache/icache_mem:douta<5> to ifq/pcin_r_9
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+    icache_mem:douta<5>    2   0.000   0.526  icache/icache_mem (icache_ifq_dout<5>)
+     LUT3:I1->O            1   0.704   0.000  ifq/Mmux__old_inst_from_input_mux_out_12_427 (ifq/N571)
+     MUXF5:I0->O           1   0.321   0.424  ifq/Mmux__old_inst_from_input_mux_out_12_2_f5_26 (ifq/_old_inst_from_input_mux_out_12<5>)
+     LUT4:I3->O            5   0.704   0.808  ifq/bypass_mux_out<5>1 (ifq_dispatch_inst<5>)
+     LUT4:I0->O            4   0.704   0.622  dispatch/curr_equeueidx_and00011 (dispatch/curr_equeueidx_and0001)
+     LUT4:I2->O            1   0.704   0.455  dispatch/curr_equeueidx<0>29 (dispatch/curr_equeueidx<0>_map11)
+     LUT3:I2->O            2   0.704   0.622  dispatch/curr_equeueidx<0>30 (dispatch/curr_equeueidx<0>)
+     LUT2:I0->O            2   0.704   0.526  dispatch/equeue_en_0_mux00001 (dispatch_equeueint_en)
+     LUT4:I1->O            1   0.704   0.455  dispatch/_old_can_dispatch_202234 (dispatch/_old_can_dispatch_202_map62)
+     LUT4:I2->O            2   0.704   0.526  dispatch/_old_can_dispatch_202278 (dispatch/N151)
+     LUT4:I1->O            6   0.704   0.748  dispatch/ifq_ren (dispatch_ifq_ren)
+     LUT3:I1->O           12   0.704   1.136  ifq/_old_dispatch_req_21 (ifq/_old_dispatch_req_2)
+     LUT4:I0->O            2   0.704   0.451  ifq/rptr<4> (ifq/rptr<4>)
+     LUT4:I3->O            2   0.704   0.451  ifq/icache_req_SW0 (N14955)
+     LUT4:I3->O            6   0.704   0.669  ifq/Mmux_pcin1011 (ifq/N0)
+     FDRE:CE                   0.555          ifq/pcin_r_9
+    ----------------------------------------
+    Total                     18.447ns (10.028ns logic, 8.419ns route)
+                                       (54.4% logic, 45.6% route)
+
+=========================================================================
+Timing constraint: Default OFFSET OUT AFTER for Clock 'clk'
+  Total number of paths / destination ports: 18293 / 111
+-------------------------------------------------------------------------
+Offset:              21.167ns (Levels of Logic = 14)
+  Source:            ifq/wptr_r_3 (FF)
+  Destination:       icache/icache_mem:ena (PAD)
+  Source Clock:      clk rising
+
+  Data Path: ifq/wptr_r_3 to icache/icache_mem:ena
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDR:C->Q            122   0.591   1.466  ifq/wptr_r_3 (ifq/wptr_r_3)
+     LUT4:I0->O            3   0.704   0.566  ifq/is_empty_SW0 (N14953)
+     LUT3:I2->O           32   0.704   1.437  ifq/is_empty (ifq/is_empty)
+     LUT4:I0->O            5   0.704   0.808  ifq/bypass_mux_out<5>1 (ifq_dispatch_inst<5>)
+     LUT4:I0->O            4   0.704   0.622  dispatch/curr_equeueidx_and00011 (dispatch/curr_equeueidx_and0001)
+     LUT4:I2->O            1   0.704   0.455  dispatch/curr_equeueidx<0>29 (dispatch/curr_equeueidx<0>_map11)
+     LUT3:I2->O            2   0.704   0.622  dispatch/curr_equeueidx<0>30 (dispatch/curr_equeueidx<0>)
+     LUT2:I0->O            2   0.704   0.526  dispatch/equeue_en_0_mux00001 (dispatch_equeueint_en)
+     LUT4:I1->O            1   0.704   0.455  dispatch/_old_can_dispatch_202234 (dispatch/_old_can_dispatch_202_map62)
+     LUT4:I2->O            2   0.704   0.526  dispatch/_old_can_dispatch_202278 (dispatch/N151)
+     LUT4:I1->O            6   0.704   0.748  dispatch/ifq_ren (dispatch_ifq_ren)
+     LUT3:I1->O           12   0.704   1.136  ifq/_old_dispatch_req_21 (ifq/_old_dispatch_req_2)
+     LUT4:I0->O            2   0.704   0.451  ifq/rptr<4> (ifq/rptr<4>)
+     LUT4:I3->O            2   0.704   0.482  ifq/icache_req_SW0 (N14955)
+     LUT3:I2->O            1   0.704   0.420  ifq/icache_req (ifq_icache_ren)
+    icache_mem:ena             0.000          icache/icache_mem
+    ----------------------------------------
+    Total                     21.167ns (10.447ns logic, 10.720ns route)
+                                       (49.4% logic, 50.6% route)
+
+=========================================================================
+Timing constraint: Default path analysis
+  Total number of paths / destination ports: 2567 / 42
+-------------------------------------------------------------------------
+Delay:               17.674ns (Levels of Logic = 14)
+  Source:            icache/icache_mem:douta<5> (PAD)
+  Destination:       icache/icache_mem:ena (PAD)
+
+  Data Path: icache/icache_mem:douta<5> to icache/icache_mem:ena
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+    icache_mem:douta<5>    2   0.000   0.526  icache/icache_mem (icache_ifq_dout<5>)
+     LUT3:I1->O            1   0.704   0.000  ifq/Mmux__old_inst_from_input_mux_out_12_427 (ifq/N571)
+     MUXF5:I0->O           1   0.321   0.424  ifq/Mmux__old_inst_from_input_mux_out_12_2_f5_26 (ifq/_old_inst_from_input_mux_out_12<5>)
+     LUT4:I3->O            5   0.704   0.808  ifq/bypass_mux_out<5>1 (ifq_dispatch_inst<5>)
+     LUT4:I0->O            4   0.704   0.622  dispatch/curr_equeueidx_and00011 (dispatch/curr_equeueidx_and0001)
+     LUT4:I2->O            1   0.704   0.455  dispatch/curr_equeueidx<0>29 (dispatch/curr_equeueidx<0>_map11)
+     LUT3:I2->O            2   0.704   0.622  dispatch/curr_equeueidx<0>30 (dispatch/curr_equeueidx<0>)
+     LUT2:I0->O            2   0.704   0.526  dispatch/equeue_en_0_mux00001 (dispatch_equeueint_en)
+     LUT4:I1->O            1   0.704   0.455  dispatch/_old_can_dispatch_202234 (dispatch/_old_can_dispatch_202_map62)
+     LUT4:I2->O            2   0.704   0.526  dispatch/_old_can_dispatch_202278 (dispatch/N151)
+     LUT4:I1->O            6   0.704   0.748  dispatch/ifq_ren (dispatch_ifq_ren)
+     LUT3:I1->O           12   0.704   1.136  ifq/_old_dispatch_req_21 (ifq/_old_dispatch_req_2)
+     LUT4:I0->O            2   0.704   0.451  ifq/rptr<4> (ifq/rptr<4>)
+     LUT4:I3->O            2   0.704   0.482  ifq/icache_req_SW0 (N14955)
+     LUT3:I2->O            1   0.704   0.420  ifq/icache_req (ifq_icache_ren)
+    icache_mem:ena             0.000          icache/icache_mem
+    ----------------------------------------
+    Total                     17.674ns (9.473ns logic, 8.201ns route)
+                                       (53.6% logic, 46.4% route)
+
+=========================================================================
+CPU : 134.34 / 134.55 s | Elapsed : 134.00 / 134.00 s
+ 
+--> 
+
+Total memory usage is 295316 kilobytes
+
+Number of errors   :    0 (   0 filtered)
+Number of warnings :  727 (   0 filtered)
+Number of infos    :   12 (   0 filtered)
+

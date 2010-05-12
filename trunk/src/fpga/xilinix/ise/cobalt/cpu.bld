@@ -1,0 +1,16 @@
+Release 9.2i ngdbuild J.36
+Copyright (c) 1995-2007 Xilinx, Inc.  All rights reserved.
+
+Command Line: C:\Xilinx92i\bin\nt\ngdbuild.exe -ise
+D:/Profiles/b07885/Desktop/maestria/diseno
+micros/cobalt/src/fpga/xilinix/ise/cobalt/cobalt.ise -intstyle ise -dd _ngo -sd
+D:/Profiles/b07885/Desktop/maestria/diseno
+micros/cobalt/src/fpga/xilinix/coregen -nt timestamp -i -p xc3s500e-fg320-4
+cpu.ngc cpu.ngd
+
+Reading NGO file "D:/Profiles/b07885/Desktop/maestria/diseno
+micros/cobalt/src/fpga/xilinix/ise/cobalt/cpu.ngc" ...
+ERROR:NgdBuild:933 - Cannot read file
+   'D:/Profiles/b07885/Desktop/maestria/diseno
+   micros/cobalt/src/fpga/xilinix/coregen/icache_mem.ngc'. Try recreating the
+   file before continuing 

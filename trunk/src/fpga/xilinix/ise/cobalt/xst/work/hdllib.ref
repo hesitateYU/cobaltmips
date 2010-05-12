@@ -1,0 +1,25 @@
+MO icache_mem NULL icache_mem.v vlg03/icache__mem.bin 1273703150
+MO equeuediv NULL equeuediv.v vlg65/equeuediv.bin 1273703150
+AR divider divid "D:/Profiles/b07885/Desktop/maestria/diseno micros/cobalt/src/hdl/src/execunits/div/divider.vhd" sub00/vhpl03 1273703153
+MO equeuels NULL equeuels.v vlg15/equeuels.bin 1273703150
+MO regfile NULL regfile.v vlg72/regfile.bin 1273703150
+EN divider_core NULL "D:/Profiles/b07885/Desktop/maestria/diseno micros/cobalt/src/hdl/src/execunits/div/divider_core.vhd" sub00/vhpl00 1273703150
+MO tagfifo NULL tagfifo.v vlg1C/tagfifo.bin 1273703150
+EN divider NULL "D:/Profiles/b07885/Desktop/maestria/diseno micros/cobalt/src/hdl/src/execunits/div/divider.vhd" sub00/vhpl02 1273703152
+MO cpu NULL cpu.v vlg50/cpu.bin 1273703150
+MO rst NULL rst.v vlg55/rst.bin 1273703150
+MO multiplier NULL ../../../../hdl/src/execunits/mult/multiplier.v vlg7B/multiplier.bin 1273703150
+MO icache NULL icache.v vlg65/icache.bin 1273703150
+MO dispatch NULL dispatch.v vlg0C/dispatch.bin 1273703150
+MO dcache NULL dcache.v vlg5C/dcache.bin 1273703150
+MO CLA_4bit NULL ../../../../hdl/src/execunits/add/CLA_4bit.v vlg4E/_c_l_a__4bit.bin 1273703150
+AR divider_core behv "D:/Profiles/b07885/Desktop/maestria/diseno micros/cobalt/src/hdl/src/execunits/div/divider_core.vhd" sub00/vhpl01 1273703151
+MO equeueint NULL equeueint.v vlg79/equeueint.bin 1273703150
+MO equeuemult NULL equeuemult.v vlg4C/equeuemult.bin 1273703150
+MO ifq NULL ifq.v vlg30/ifq.bin 1273703150
+MO multiplier_wrapper NULL ../../../../hdl/src/execunits/mult/multiplier_wrapper.v vlg73/multiplier__wrapper.bin 1273703150
+MO issueint NULL issueint.v vlg20/issueint.bin 1273703150
+MO CLA_32bit NULL ../../../../hdl/src/execunits/add/CLA_32bit.v vlg33/_c_l_a__32bit.bin 1273703150
+MO dcache_mem NULL dcache_mem.v vlg0A/dcache__mem.bin 1273703150
+MO issue NULL issue.v vlg69/issue.bin 1273703150
+MO divider_wrapper NULL ../../../../hdl/src/execunits/div/divider_wrapper.v vlg43/divider__wrapper.bin 1273703150

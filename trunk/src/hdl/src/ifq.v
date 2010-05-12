@@ -71,8 +71,8 @@ module ifq (
       // When no branch/jump, read 1 cache line (4 instructions at a time) from icache.
       pcout_branch = {dispatch_branch_addr[31:2], 2'h0};
       pcin_branch  = {dispatch_branch_addr[31:4], 4'h0};
-      pcout = (dispatch_branch_valid) ? pcout_branch : ( (do_inc_rptr) ? pcout_r + 4 : pcout_r );
-      pcin  = (dispatch_branch_valid) ? pcin_branch  : ( (icache_req)  ? pcin_r + 16 : pcin_r );
+      pcout = (dispatch_branch_valid) ? pcout_branch      : ( (do_inc_rptr) ? pcout_r + 4 : pcout_r );
+      pcin  = (dispatch_branch_valid) ? pcin_branch  + 16 : ( (icache_req)  ? pcin_r + 16 : pcin_r );
    end
 
    // Internal mux signals, one coming form memory and the other coming
@@ -112,7 +112,7 @@ module ifq (
       //       For now, we never set icache_abort.
       //
       icache_abort = dispatch_branch_valid & icache_req_r;
-      icache_pcin  = (dispatch_branch_valid) ? {dispatch_branch_addr[31:4], 4'h0} : pcin_r;
+      icache_pcin  = (dispatch_branch_valid) ? pcin_branch : pcin_r;
       icache_ren   = icache_req;
 
       dispatch_pcout_plus4 = (dispatch_branch_valid) ? pcout : pcout_r + 4;

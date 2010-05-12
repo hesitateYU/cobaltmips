@@ -195,12 +195,6 @@ module equeuels (
          inst_rttag [i] = (do_shift[i]) ? inst_rttag_r [i + 1] : inst_rttag_r [i];
          inst_imm   [i] = (do_shift[i]) ? inst_imm_r   [i + 1] : inst_imm_r   [i];
 
-         case ({do_shift[i], do_rs_update[i]})
-            2'b00:        begin inst_rtdata[i] = inst_rtdata_r[i];                                               end
-            2'b01, 2'b11: begin inst_rtdata[i] = cdb_data; end
-            2'b10:        begin inst_rtdata[i] = inst_rtdata_r[i+1];                                             end
-         endcase
-
          // Select if data is taken from CDB (update) or the previous register
          // (shift).
          case ({do_shift[i], do_rs_update[i]})

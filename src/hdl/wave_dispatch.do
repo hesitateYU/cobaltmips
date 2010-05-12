@@ -157,7 +157,7 @@ add wave -noupdate -format Literal /tb_top/cpu/equeuels/do_rt_update
 add wave -noupdate -format Literal /tb_top/cpu/equeuels/inst_opcode_r
 add wave -noupdate -format Literal /tb_top/cpu/equeuels/inst_rtvalid_r
 add wave -noupdate -format Literal /tb_top/cpu/equeuels/inst_rsvalid_r
-add wave -noupdate -format Literal -radix unsigned /tb_top/cpu/equeuels/inst_rsdata_r
+add wave -noupdate -format Literal -radix unsigned -expand /tb_top/cpu/equeuels/inst_rsdata_r
 add wave -noupdate -format Literal -radix unsigned /tb_top/cpu/equeuels/inst_rtdata_r
 add wave -noupdate -format Literal -radix unsigned /tb_top/cpu/equeuels/inst_rstag_r
 add wave -noupdate -format Literal -radix unsigned /tb_top/cpu/equeuels/inst_rttag_r
@@ -195,7 +195,7 @@ add wave -noupdate -format Literal -radix unsigned /tb_top/cpu/issue/divider_wra
 add wave -noupdate -format Logic -radix unsigned /tb_top/cpu/issue/divider_wrapper/divider/div_rfd
 add wave -noupdate -format Literal -radix hexadecimal /tb_top/cpu/issue/divider_wrapper/divider/div_res
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 4} {3251315 ps} 0}
+WaveRestoreCursors {{Cursor 4} {6990354 ps} 0}
 configure wave -namecolwidth 178
 configure wave -valuecolwidth 80
 configure wave -justifyvalue left
@@ -210,4 +210,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ps
 update
-WaveRestoreZoom {3231968 ps} {3372166 ps}
+WaveRestoreZoom {6964912 ps} {7105110 ps}

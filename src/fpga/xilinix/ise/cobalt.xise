@@ -15,77 +15,123 @@
   <version xil_pn:ise_version="11.1" xil_pn:schema_version="2"/>
 
   <files>
-    <file xil_pn:name="../source/pipeline/cpu_2_tb.vhd" xil_pn:type="FILE_VHDL">
+    <file xil_pn:name="../../../hdl/src/issue.v" xil_pn:type="FILE_VERILOG">
       <association xil_pn:name="BehavioralSimulation"/>
-      <association xil_pn:name="PostRouteSimulation"/>
-      <association xil_pn:name="PostMapSimulation"/>
-      <association xil_pn:name="PostTranslateSimulation"/>
+      <association xil_pn:name="Implementation"/>
+      <library xil_pn:name="verilog"/>
     </file>
-    <file xil_pn:name="../source/cobalt_code.v" xil_pn:type="FILE_VERILOG">
+    <file xil_pn:name="../../../hdl/src/issueint.v" xil_pn:type="FILE_VERILOG">
+      <association xil_pn:name="BehavioralSimulation"/>
+      <association xil_pn:name="Implementation"/>
+      <library xil_pn:name="verilog"/>
+    </file>
+    <file xil_pn:name="../../../hdl/src/regfile.v" xil_pn:type="FILE_VERILOG">
+      <library xil_pn:name="verilog"/>
+    </file>
+    <file xil_pn:name="../../../hdl/src/rst.v" xil_pn:type="FILE_VERILOG">
+      <library xil_pn:name="verilog"/>
+    </file>
+    <file xil_pn:name="../../../hdl/src/tagfifo.v" xil_pn:type="FILE_VERILOG">
+      <library xil_pn:name="verilog"/>
+    </file>
+    <file xil_pn:name="../../../hdl/src/cpu.v" xil_pn:type="FILE_VERILOG">
+      <association xil_pn:name="BehavioralSimulation"/>
+      <association xil_pn:name="Implementation"/>
+      <library xil_pn:name="verilog"/>
+    </file>
+    <file xil_pn:name="../../../hdl/src/dcache.v" xil_pn:type="FILE_VERILOG">
+      <association xil_pn:name="BehavioralSimulation"/>
+      <association xil_pn:name="Implementation"/>
+      <library xil_pn:name="verilog"/>
+    </file>
+    <file xil_pn:name="../../../hdl/src/dcache_mem.v" xil_pn:type="FILE_VERILOG">
+      <association xil_pn:name="BehavioralSimulation"/>
+      <association xil_pn:name="Implementation"/>
+      <library xil_pn:name="verilog"/>
+    </file>
+    <file xil_pn:name="../../../hdl/src/dispatch.v" xil_pn:type="FILE_VERILOG">
+      <library xil_pn:name="verilog"/>
+    </file>
+    <file xil_pn:name="../../../hdl/src/equeuediv.v" xil_pn:type="FILE_VERILOG">
+      <association xil_pn:name="BehavioralSimulation"/>
+      <association xil_pn:name="Implementation"/>
+      <library xil_pn:name="verilog"/>
+    </file>
+    <file xil_pn:name="../../../hdl/src/equeueint.v" xil_pn:type="FILE_VERILOG">
+      <association xil_pn:name="BehavioralSimulation"/>
+      <association xil_pn:name="Implementation"/>
+      <library xil_pn:name="verilog"/>
+    </file>
+    <file xil_pn:name="../../../hdl/src/equeuels.v" xil_pn:type="FILE_VERILOG">
+      <association xil_pn:name="BehavioralSimulation"/>
+      <association xil_pn:name="Implementation"/>
+      <library xil_pn:name="verilog"/>
+    </file>
+    <file xil_pn:name="../../../hdl/src/equeuemult.v" xil_pn:type="FILE_VERILOG">
+      <association xil_pn:name="BehavioralSimulation"/>
+      <association xil_pn:name="Implementation"/>
+      <library xil_pn:name="verilog"/>
+    </file>
+    <file xil_pn:name="../../../hdl/src/globals.vh" xil_pn:type="FILE_VERILOG">
+      <association xil_pn:name="BehavioralSimulation"/>
+      <association xil_pn:name="Implementation"/>
+      <library xil_pn:name="verilog"/>
+    </file>
+    <file xil_pn:name="../../../hdl/src/icache.v" xil_pn:type="FILE_VERILOG">
+      <association xil_pn:name="BehavioralSimulation"/>
+      <association xil_pn:name="Implementation"/>
+      <library xil_pn:name="verilog"/>
+    </file>
+    <file xil_pn:name="../../../hdl/src/icache_mem.v" xil_pn:type="FILE_VERILOG">
+      <association xil_pn:name="BehavioralSimulation"/>
+      <association xil_pn:name="Implementation"/>
+      <library xil_pn:name="verilog"/>
+    </file>
+    <file xil_pn:name="../../../hdl/src/ifq.v" xil_pn:type="FILE_VERILOG">
+      <library xil_pn:name="verilog"/>
+    </file>
+    <file xil_pn:name="../../../hdl/src/execunits/add/CLA_4bit.v" xil_pn:type="FILE_VERILOG">
+      <association xil_pn:name="BehavioralSimulation"/>
+      <association xil_pn:name="Implementation"/>
+      <library xil_pn:name="verilog"/>
+    </file>
+    <file xil_pn:name="../../../hdl/src/execunits/add/CLA_32bit.v" xil_pn:type="FILE_VERILOG">
+      <association xil_pn:name="BehavioralSimulation"/>
+      <association xil_pn:name="Implementation"/>
+      <library xil_pn:name="verilog"/>
+    </file>
+    <file xil_pn:name="../../../hdl/src/execunits/div/divider.vhd" xil_pn:type="FILE_VHDL">
       <association xil_pn:name="BehavioralSimulation"/>
       <association xil_pn:name="Implementation"/>
     </file>
-    <file xil_pn:name="../source/cobalt_top.vhd" xil_pn:type="FILE_VHDL">
+    <file xil_pn:name="../../../hdl/src/execunits/div/divider_core.vhd" xil_pn:type="FILE_VHDL">
       <association xil_pn:name="BehavioralSimulation"/>
       <association xil_pn:name="Implementation"/>
     </file>
-    <file xil_pn:name="../source/pipeline/ALU.vhd" xil_pn:type="FILE_VHDL">
+    <file xil_pn:name="../../../hdl/src/execunits/div/divider_wrapper.v" xil_pn:type="FILE_VERILOG">
       <association xil_pn:name="BehavioralSimulation"/>
       <association xil_pn:name="Implementation"/>
+      <library xil_pn:name="verilog"/>
     </file>
-    <file xil_pn:name="../source/pipeline/CPU_2.vhd" xil_pn:type="FILE_VHDL">
+    <file xil_pn:name="../../../hdl/src/execunits/mult/multiplier.v" xil_pn:type="FILE_VERILOG">
       <association xil_pn:name="BehavioralSimulation"/>
       <association xil_pn:name="Implementation"/>
+      <library xil_pn:name="verilog"/>
     </file>
-    <file xil_pn:name="../source/pipeline/data_mem_dp.vhd" xil_pn:type="FILE_VHDL">
+    <file xil_pn:name="../../../hdl/src/execunits/mult/multiplier_wrapper.v" xil_pn:type="FILE_VERILOG">
       <association xil_pn:name="BehavioralSimulation"/>
       <association xil_pn:name="Implementation"/>
-    </file>
-    <file xil_pn:name="../source/pipeline/instruction_mem.vhd" xil_pn:type="FILE_VHDL">
-      <association xil_pn:name="BehavioralSimulation"/>
-      <association xil_pn:name="Implementation"/>
-    </file>
-    <file xil_pn:name="../source/pipeline/reg_file.vhd" xil_pn:type="FILE_VHDL">
-      <association xil_pn:name="BehavioralSimulation"/>
-      <association xil_pn:name="Implementation"/>
-    </file>
-    <file xil_pn:name="../source/picoblze/bbfifo_16x8.v" xil_pn:type="FILE_VERILOG">
-      <association xil_pn:name="BehavioralSimulation"/>
-      <association xil_pn:name="Implementation"/>
-    </file>
-    <file xil_pn:name="../source/picoblze/kcpsm3.v" xil_pn:type="FILE_VERILOG">
-      <association xil_pn:name="BehavioralSimulation"/>
-      <association xil_pn:name="Implementation"/>
-    </file>
-    <file xil_pn:name="../source/picoblze/kcuart_rx.v" xil_pn:type="FILE_VERILOG">
-      <association xil_pn:name="BehavioralSimulation"/>
-      <association xil_pn:name="Implementation"/>
-    </file>
-    <file xil_pn:name="../source/picoblze/kcuart_tx.v" xil_pn:type="FILE_VERILOG">
-      <association xil_pn:name="BehavioralSimulation"/>
-      <association xil_pn:name="Implementation"/>
-    </file>
-    <file xil_pn:name="../source/picoblze/uart_rx.v" xil_pn:type="FILE_VERILOG">
-      <association xil_pn:name="BehavioralSimulation"/>
-      <association xil_pn:name="Implementation"/>
-    </file>
-    <file xil_pn:name="../source/picoblze/uart_tx.v" xil_pn:type="FILE_VERILOG">
-      <association xil_pn:name="BehavioralSimulation"/>
-      <association xil_pn:name="Implementation"/>
-    </file>
-    <file xil_pn:name="../source/cobalt.ucf" xil_pn:type="FILE_UCF">
-      <association xil_pn:name="Implementation"/>
+      <library xil_pn:name="verilog"/>
     </file>
   </files>
 
   <properties>
-    <property xil_pn:name="Auto Implementation Top" xil_pn:value="false"/>
     <property xil_pn:name="Constraints Entry" xil_pn:value="Constraints Editor"/>
     <property xil_pn:name="Device" xil_pn:value="xc3s500e"/>
     <property xil_pn:name="Device Family" xil_pn:value="Spartan3E"/>
     <property xil_pn:name="Fitter Report Format" xil_pn:value="HTML"/>
-    <property xil_pn:name="Implementation Top" xil_pn:value="Architecture|cobalt_top|Behavioral"/>
-    <property xil_pn:name="Implementation Top Instance Path" xil_pn:value="/cobalt_top"/>
+    <property xil_pn:name="Implementation Top" xil_pn:value="Module|cpu"/>
+    <property xil_pn:name="Implementation Top Instance Path" xil_pn:value="/cpu"/>
     <property xil_pn:name="PROP_DesignName" xil_pn:value="cobalt"/>
     <property xil_pn:name="Package" xil_pn:value="fg320"/>
     <property xil_pn:name="Preferred Language" xil_pn:value="Verilog"/>
@@ -96,14 +142,12 @@
     <property xil_pn:name="Verbose Property Persistence" xil_pn:value="false"/>
   </properties>
 
-  <bindings>
-    <binding xil_pn:location="/cobalt_top" xil_pn:name="../source/cobalt.ucf"/>
-  </bindings>
+  <bindings/>
 
   <libraries/>
 
   <partitions>
-    <partition xil_pn:name="/cobalt_top"/>
+    <partition xil_pn:name="/cpu"/>
   </partitions>
 
 </project>

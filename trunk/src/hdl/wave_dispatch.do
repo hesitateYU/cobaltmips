@@ -145,9 +145,9 @@ add wave -noupdate -divider {equeuels interface}
 add wave -noupdate -color {Medium Slate Blue} -format Logic -radix unsigned /tb_top/cpu/dispatch/equeuels_ready
 add wave -noupdate -color Coral -format Logic -radix unsigned /tb_top/cpu/dispatch/equeuels_en
 add wave -noupdate -color Magenta -format Logic -radix unsigned /tb_top/cpu/dispatch/equeuels_opcode
-add wave -noupdate -format Literal /tb_top/cpu/equeuels/inst_valid_r
 add wave -noupdate -format Literal /tb_top/cpu/equeuels/do_shift
 add wave -noupdate -format Literal /tb_top/cpu/equeuels/inst_valid
+add wave -noupdate -format Literal /tb_top/cpu/equeuels/inst_valid_r
 add wave -noupdate -format Literal -radix unsigned /tb_top/cpu/equeuels/inst_ready
 add wave -noupdate -format Literal /tb_top/cpu/equeuels/inst_selected
 add wave -noupdate -format Logic /tb_top/cpu/equeuels/issuels_done
@@ -195,7 +195,7 @@ add wave -noupdate -format Literal -radix unsigned /tb_top/cpu/issue/divider_wra
 add wave -noupdate -format Logic -radix unsigned /tb_top/cpu/issue/divider_wrapper/divider/div_rfd
 add wave -noupdate -format Literal -radix hexadecimal /tb_top/cpu/issue/divider_wrapper/divider/div_res
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 4} {289357 ps} 0}
+WaveRestoreCursors {{Cursor 4} {3251315 ps} 0}
 configure wave -namecolwidth 178
 configure wave -valuecolwidth 80
 configure wave -justifyvalue left
@@ -210,4 +210,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ps
 update
-WaveRestoreZoom {263157 ps} {403355 ps}
+WaveRestoreZoom {3231968 ps} {3372166 ps}
